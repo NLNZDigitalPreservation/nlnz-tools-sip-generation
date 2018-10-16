@@ -1,0 +1,98 @@
+plugins {
+    // required for jacoco test coverage checks
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
+project.ext {
+    // TODO Will need tasks associated with jacoco to actually use these limits
+    // TODO Generally the goal here is to have code coverage in the 80--90% range
+    // but it may be better to approach this with a more directed focus
+    // (i.e. increase code coverage when new functionality is added)
+    // TODO Write unit tests!
+    codeCoverageLimits = [
+            'instruction': 0.0, // currently at 0.0%
+            'branch'     : 0.0, // currently at 0.0%
+            'line'       : 0.0, // currently at 0.0%
+            'complexity' : 0.0, // currently at 0.0%
+            'method'     : 0.0, // currently at 0.0%
+            'class'      : 0.0  // currently at 0.0%
+    ]
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+// run the findBugs checks with 'gradle check' or 'gradle findBugsMain' or 'gradle findBugsTest'
+apply plugin: 'findbugs'
+
+// run the pmd source code analyzer with 'gradle check' or 'gradle pmdMain' or 'gradle pmdTest'
+apply plugin: 'pmd' // source code analyzer
+
+setVersion(project.ext.versionNumber)
+
+dependencies {
+    // We use the latest groovy 2.x version for building this library
+    // compile 'org.codehaus.groovy:groovy-all:2.4.+'
+    compile localGroovy()
+
+    // Use the latest version
+    compile "com.google.guava:guava:+"
+    // Use the latest version
+    compile "org.apache.commons:commons-lang3:+"
+    compile "commons-io:commons-io:2.+"
+
+    compileOnly 'org.slf4j:slf4j-api:1.7.+'
+
+    // We use the awesome Spock testing and specification framework
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4', {
+        // Avoid this error:
+        // ... Caused by: java.lang.ExceptionInInitializerError ...
+        //     Caused by: groovy.lang.GroovyRuntimeException: Conflicting module versions. Module [groovy-all is loaded in version 2.4.7 and you are trying to load version 2.4.1
+        exclude group: 'org.codehaus.groovy', module: 'groovy-all'
+    }
+    // latest version
+    testCompile 'junit:junit:4.12'
+
+    // latest version
+    testCompile 'org.mockito:mockito-all:1.10.19'
+
+    // use sl4j logging for tests
+    testCompile 'org.slf4j:slf4j-log4j12:1.7.+'
+
+}
+
+jar {
+    includeEmptyDirs = false
+}
+
+task jarSources(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    includeEmptyDirs = false
+
+    from sourceSets.main.allSource
+}
+
+tasks.withType(FindBugs) {
+    // Unfortunately FindBugs will find a lot of problems with Groovy classes. We could filter out groovy source files,
+    // but since FindBugs operates on .class files, that filtering will be ineffective. Currently there are no java
+    // classes but that could change in the future.
+    // See https://stackoverflow.com/questions/22037499/using-excludes-config-in-findbugs-and-checkstyle-plugin-in-gradle
+    exclude '**/*.groovy'
+    classes = classes.filter {
+        !(it.path.contains(new File("classes/groovy/main").path) || it.path.contains(new File("classes/groovy/test").path))
+    }
+}
+
+// We want to force a specific version as part of our dependency resolution
+//configurations.all {
+//    resolutionStrategy {
+//        force 'org.codehaus.groovy:groovy-all:2.4.+'
+//    }
+//}
+
+artifacts {
+    publishableArtifacts jar, jarSources
+}
+
+build.dependsOn jar, jarSources

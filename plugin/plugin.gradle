@@ -1,0 +1,66 @@
+plugins {
+    // required for jacoco test coverage checks
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
+project.ext {
+    // TODO Will need tasks associated with jacoco to actually use these limits
+    // TODO Generally the goal here is to have code coverage in the 80--90% range
+    // but it may be better to approach this with a more directed focus
+    // (i.e. increase code coverage when new functionality is added)
+    // TODO Write unit tests!
+    codeCoverageLimits = [
+            'instruction': 0.0, // currently at 0.0%
+            'branch'     : 0.0, // currently at 0.0%
+            'line'       : 0.0, // currently at 0.0%
+            'complexity' : 0.0, // currently at 0.0%
+            'method'     : 0.0, // currently at 0.0%
+            'class'      : 0.0  // currently at 0.0%
+    ]
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+// run the findBugs checks with 'gradle check' or 'gradle findBugsMain' or 'gradle findBugsTest'
+apply plugin: 'findbugs'
+
+// run the pmd source code analyzer with 'gradle check' or 'gradle pmdMain' or 'gradle pmdTest'
+apply plugin: 'pmd' // source code analyzer
+
+setVersion(project.ext.versionNumber)
+
+dependencies {
+    compile project(':nznl-tools-sip-generation-core')
+
+    compile gradleApi()
+}
+
+jar {
+    includeEmptyDirs = false
+}
+
+task jarSources(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    includeEmptyDirs = false
+
+    from sourceSets.main.allSource
+}
+
+tasks.withType(FindBugs) {
+    // Unfortunately FindBugs will find a lot of problems with Groovy classes. We could filter out groovy source files,
+    // but since FindBugs operates on .class files, that filtering will be ineffective. Currently there are no java
+    // classes but that could change in the future.
+    // See https://stackoverflow.com/questions/22037499/using-excludes-config-in-findbugs-and-checkstyle-plugin-in-gradle
+    exclude '**/*.groovy'
+    classes = classes.filter {
+        !it.path.contains(new File("classes/groovy/main").path)
+    }
+}
+
+artifacts {
+    publishableArtifacts jar, jarSources
+}
+
+build.dependsOn jar, jarSources

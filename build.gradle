@@ -1,0 +1,24 @@
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    group 'nz.govt.natlib.tools.sip.generation'
+    description = 'National Library of New Zealand Modernisation (m11n) automation tools'
+
+    project.ext {
+        vendor = "National Library of New Zealand"
+
+        versionNumber = "1.0.0-SNAPSHOT"
+    }
+
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+
+    configurations {
+        publishableArtifacts
+    }
+
+}
