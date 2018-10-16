@@ -1,5 +1,5 @@
 rootProject.name = 'nznl-tools-sip-generation'
-include ":core", ":plugin"
+include ":core", ":gradle-plugin"
 
 // Correctly refer to the children build files
 rootProject.children.each { child ->

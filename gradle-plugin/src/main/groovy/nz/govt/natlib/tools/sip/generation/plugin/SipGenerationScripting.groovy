@@ -4,7 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * Modernisation (m11n) scripting plugin.
+ * SIP generation scripting plugin.
  */
 class SipGenerationScripting implements Plugin<Project> {
     Project project

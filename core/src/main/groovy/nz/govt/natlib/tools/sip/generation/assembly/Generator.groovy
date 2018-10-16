@@ -5,4 +5,7 @@ import groovy.transform.Canonical
 @Canonical
 class Generator {
 
+    void generateSIP() {
+        println("SIP generated")
+    }
 }

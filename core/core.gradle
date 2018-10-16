@@ -24,7 +24,7 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 
 // run the findBugs checks with 'gradle check' or 'gradle findBugsMain' or 'gradle findBugsTest'
-apply plugin: 'findbugs'
+//apply plugin: 'findbugs'
 
 // run the pmd source code analyzer with 'gradle check' or 'gradle pmdMain' or 'gradle pmdTest'
 apply plugin: 'pmd' // source code analyzer
@@ -73,16 +73,20 @@ task jarSources(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-tasks.withType(FindBugs) {
-    // Unfortunately FindBugs will find a lot of problems with Groovy classes. We could filter out groovy source files,
-    // but since FindBugs operates on .class files, that filtering will be ineffective. Currently there are no java
-    // classes but that could change in the future.
-    // See https://stackoverflow.com/questions/22037499/using-excludes-config-in-findbugs-and-checkstyle-plugin-in-gradle
-    exclude '**/*.groovy'
-    classes = classes.filter {
-        !(it.path.contains(new File("classes/groovy/main").path) || it.path.contains(new File("classes/groovy/test").path))
-    }
-}
+//tasks.withType(FindBugs) {
+//    // Unfortunately FindBugs will find a lot of problems with Groovy classes. We could filter out groovy source files,
+//    // but since FindBugs operates on .class files, that filtering will be ineffective. Currently there are no java
+//    // classes but that could change in the future.
+//    // See https://stackoverflow.com/questions/22037499/using-excludes-config-in-findbugs-and-checkstyle-plugin-in-gradle
+//    // In order for Java classes to see Groovy classes easily, we compile them all together with the Groovy compiler
+//    // in the same source tree (src/main/groovy). This means we can't use the path to determine if the .class file
+//    // came from a Groovy or Java source. The net effect is that FindBugs won't work with a mixed heritage of
+//    // Java and Groovy classes. So we remove the FindBugs plugin for now.
+//    exclude '**/*.groovy'
+//    classes = classes.filter {
+//        !(it.path.contains(new File("classes/groovy/main").path) || it.path.contains(new File("classes/groovy/test").path))
+//    }
+//}
 
 // We want to force a specific version as part of our dependency resolution
 //configurations.all {
