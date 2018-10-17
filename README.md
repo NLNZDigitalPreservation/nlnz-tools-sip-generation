@@ -1,5 +1,7 @@
 # National Library of New Zealand Tools SIP Generation
 
+Tools for building SIPs for ingestion into the Rosetta archive system.
+
 ## Synopsis
 
 This repository contains classes used to build SIPs for ingestion into the Rosetta archive system.
