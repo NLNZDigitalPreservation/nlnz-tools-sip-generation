@@ -1,0 +1,273 @@
+<mets:mets xmlns:mets="http://www.loc.gov/METS/">
+    <mets:dmdSec ID="ie-dmd">
+        <mets:mdWrap MDTYPE="DC">
+            <mets:xmlData>
+                <dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <dc:title>test-title</dc:title>
+                    <dc:date>2018</dc:date>
+                    <dcterms:available>11</dcterms:available>
+                    <dc:coverage>23</dc:coverage>
+                </dc:record>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+    <mets:amdSec ID="ie-amd">
+        <mets:techMD ID="ie-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalIECharacteristics">
+                            <record>
+                                <key id="IEEntityType">test-ie-entity-type</key>
+                            </record>
+                        </section>
+                        <section id="objectIdentifier">
+                            <record>
+                                <key id="objectIdentifierType">test-object-identifier-type</key>
+                                <key id="objectIdentifierValue">test-object-identifier-value</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="ie-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="accessRightsPolicy">
+                            <record>
+                                <key id="policyId">test-policy-id</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="ie-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="ie-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="rep1-amd">
+        <mets:techMD ID="rep1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalRepCharacteristics">
+                            <record>
+                                <key id="preservationType">test-preservation-type</key>
+                                <key id="usageType">test-usage-type</key>
+                                <key id="DigitalOriginal">true</key>
+                                <key id="RevisionNumber">1</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="rep1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="rep1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="rep1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid1-1-amd">
+        <mets:techMD ID="fid1-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">test-file-label-1</key>
+                                <key id="fileMIMEType">test-file-mime-type</key>
+                                <key id="fileCreationDate">2018-11-23 01:02:03</key>
+                                <key id="fileModificationDate">2018-11-23 02:03:04</key>
+                                <key id="fileOriginalName">test-file-original-name-1</key>
+                                <key id="fileOriginalPath">test-file-original-path-1</key>
+                                <key id="fileSizeBytes">123456</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">test-file-fixity-type</key>
+                                <key id="fixityValue">test-file-fixity-value</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid1-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid1-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid1-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid2-1-amd">
+        <mets:techMD ID="fid2-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">test-file-label-2</key>
+                                <key id="fileMIMEType">test-file-mime-type</key>
+                                <key id="fileCreationDate">2018-11-23 01:02:03</key>
+                                <key id="fileModificationDate">2018-11-23 02:03:04</key>
+                                <key id="fileOriginalName">test-file-original-name-2</key>
+                                <key id="fileOriginalPath">test-file-original-path-2</key>
+                                <key id="fileSizeBytes">123456</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">test-file-fixity-type</key>
+                                <key id="fixityValue">test-file-fixity-value</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid2-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid2-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid2-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid3-1-amd">
+        <mets:techMD ID="fid3-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">test-file-label-3</key>
+                                <key id="fileMIMEType">test-file-mime-type</key>
+                                <key id="fileCreationDate">2018-11-23 01:02:03</key>
+                                <key id="fileModificationDate">2018-11-23 02:03:04</key>
+                                <key id="fileOriginalName">test-file-original-name-3</key>
+                                <key id="fileOriginalPath">test-file-original-path-3</key>
+                                <key id="fileSizeBytes">123456</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">test-file-fixity-type</key>
+                                <key id="fixityValue">test-file-fixity-value</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid3-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid3-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid3-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:fileSec>
+        <mets:fileGrp ID="rep1" ADMID="rep1-amd">
+            <mets:file ID="fid1-1" ADMID="fid1-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="test-file-original-name-1" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid2-1" ADMID="fid2-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="test-file-original-name-2" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid3-1" ADMID="fid3-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="test-file-original-name-3" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+    </mets:fileSec>
+    <mets:structMap ID="rep1-1" TYPE="PHYSICAL">
+        <mets:div LABEL="Test-preservation-type">
+            <mets:div LABEL="Table of Contents">
+                <mets:div LABEL="test-file-label-1" TYPE="FILE">
+                    <mets:fptr FILEID="fid1-1"/>
+                </mets:div>
+                <mets:div LABEL="test-file-label-2" TYPE="FILE">
+                    <mets:fptr FILEID="fid2-1"/>
+                </mets:div>
+                <mets:div LABEL="test-file-label-3" TYPE="FILE">
+                    <mets:fptr FILEID="fid3-1"/>
+                </mets:div>
+            </mets:div>
+        </mets:div>
+    </mets:structMap>
+</mets:mets>

@@ -1,0 +1,747 @@
+<mets:mets xmlns:mets="http://www.loc.gov/METS/">
+    <mets:dmdSec ID="ie-dmd">
+        <mets:mdWrap MDTYPE="DC">
+            <mets:xmlData>
+                <dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <dc:title>Auckland City Harbour News</dc:title>
+                    <dc:date>2015</dc:date>
+                    <dcterms:available>7</dcterms:available>
+                    <dc:coverage>29</dc:coverage>
+                </dc:record>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+    <mets:amdSec ID="ie-amd">
+        <mets:techMD ID="ie-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalIECharacteristics">
+                            <record>
+                                <key id="IEEntityType">NewspaperIE</key>
+                            </record>
+                        </section>
+                        <section id="objectIdentifier">
+                            <record>
+                                <key id="objectIdentifierType">ALMAMMS</key>
+                                <key id="objectIdentifierValue">9917982663502836</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="ie-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="accessRightsPolicy">
+                            <record>
+                                <key id="policyId">200</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="ie-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="ie-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="rep1-amd">
+        <mets:techMD ID="rep1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalRepCharacteristics">
+                            <record>
+                                <key id="preservationType">PRESERVATION_MASTER</key>
+                                <key id="usageType">VIEW</key>
+                                <key id="DigitalOriginal">true</key>
+                                <key id="RevisionNumber">1</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="rep1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="rep1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="rep1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid1-1-amd">
+        <mets:techMD ID="fid1-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">001</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-001.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-001.pdf</key>
+                                <key id="fileSizeBytes">1036040</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">e9c6a70cd194cb38c11e56499beee282</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid1-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid1-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid1-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid2-1-amd">
+        <mets:techMD ID="fid2-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">002</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-002.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-002.pdf</key>
+                                <key id="fileSizeBytes">1994161</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">b1e5d4fec2d3af18f668572cd462e9a9</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid2-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid2-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid2-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid3-1-amd">
+        <mets:techMD ID="fid3-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">003</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-003.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-003.pdf</key>
+                                <key id="fileSizeBytes">959538</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">c451f1dd464f6eef8056feb15e3cc776</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid3-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid3-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid3-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid4-1-amd">
+        <mets:techMD ID="fid4-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">004</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-004.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-004.pdf</key>
+                                <key id="fileSizeBytes">622311</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">48e1806d6ba489194f5d6cfcfef0a271</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid4-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid4-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid4-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid5-1-amd">
+        <mets:techMD ID="fid5-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">005</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-005.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-005.pdf</key>
+                                <key id="fileSizeBytes">911138</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">6e5d649be82dbc4e890226e962acefb0</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid5-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid5-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid5-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid6-1-amd">
+        <mets:techMD ID="fid6-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">006</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-006.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-006.pdf</key>
+                                <key id="fileSizeBytes">602971</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">9891552032ee74973ec39a2e3dc3a83d</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid6-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid6-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid6-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid7-1-amd">
+        <mets:techMD ID="fid7-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">007</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-007.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-007.pdf</key>
+                                <key id="fileSizeBytes">711682</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">ce5221d0d45e4d4625c4c4490fc0bde1</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid7-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid7-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid7-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid8-1-amd">
+        <mets:techMD ID="fid8-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">008</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-008.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-008.pdf</key>
+                                <key id="fileSizeBytes">208233</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">d40f46210ea9ead5aa354734cb1f6a71</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid8-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid8-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid8-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid9-1-amd">
+        <mets:techMD ID="fid9-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">009</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-009.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-009.pdf</key>
+                                <key id="fileSizeBytes">298934</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">efccfbb8a1474096e4ea3848ba7d2340</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid9-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid9-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid9-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid10-1-amd">
+        <mets:techMD ID="fid10-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">010</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-010.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-010.pdf</key>
+                                <key id="fileSizeBytes">461769</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">93ca4188d763dc7057ec6cf20e6332a2</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid10-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid10-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid10-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid11-1-amd">
+        <mets:techMD ID="fid11-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">011</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-011.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-011.pdf</key>
+                                <key id="fileSizeBytes">199684</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">621990466c25bf910b114472a230d3fd</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid11-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid11-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid11-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:amdSec ID="fid12-1-amd">
+        <mets:techMD ID="fid12-1-amd-tech">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
+                        <section id="generalFileCharacteristics">
+                            <record>
+                                <key id="label">012</key>
+                                <key id="fileCreationDate">2015-07-29 00:00:00</key>
+                                <key id="fileModificationDate">2015-07-29 00:00:00</key>
+                                <key id="fileOriginalName">AHNED1-20150729-012.pdf</key>
+                                <key id="fileOriginalPath">AHNED1-20150729-012.pdf</key>
+                                <key id="fileSizeBytes">2410038</key>
+                            </record>
+                        </section>
+                        <section id="fileFixity">
+                            <record>
+                                <key id="fixityType">MD5</key>
+                                <key id="fixityValue">1f2d11ca06e302b7c1295815a20c86cd</key>
+                            </record>
+                        </section>
+                    </dnx>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:techMD>
+        <mets:rightsMD ID="fid12-1-amd-rights">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:sourceMD ID="fid12-1-amd-source">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:sourceMD>
+        <mets:digiprovMD ID="fid12-1-amd-digiprov">
+            <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="dnx">
+                <mets:xmlData>
+                    <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx"/>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:fileSec>
+        <mets:fileGrp ID="rep1" ADMID="rep1-amd">
+            <mets:file ID="fid1-1" ADMID="fid1-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-001.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid2-1" ADMID="fid2-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-002.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid3-1" ADMID="fid3-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-003.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid4-1" ADMID="fid4-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-004.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid5-1" ADMID="fid5-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-005.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid6-1" ADMID="fid6-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-006.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid7-1" ADMID="fid7-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-007.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid8-1" ADMID="fid8-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-008.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid9-1" ADMID="fid9-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-009.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid10-1" ADMID="fid10-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-010.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid11-1" ADMID="fid11-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-011.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="fid12-1" ADMID="fid12-1-amd">
+                <mets:FLocat LOCTYPE="URL" xlin:href="AHNED1-20150729-012.pdf" xmlns:xlin="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+    </mets:fileSec>
+    <mets:structMap ID="rep1-1" TYPE="PHYSICAL">
+        <mets:div LABEL="Preservation Master">
+            <mets:div LABEL="Table of Contents">
+                <mets:div LABEL="001" TYPE="FILE">
+                    <mets:fptr FILEID="fid1-1"/>
+                </mets:div>
+                <mets:div LABEL="002" TYPE="FILE">
+                    <mets:fptr FILEID="fid2-1"/>
+                </mets:div>
+                <mets:div LABEL="003" TYPE="FILE">
+                    <mets:fptr FILEID="fid3-1"/>
+                </mets:div>
+                <mets:div LABEL="004" TYPE="FILE">
+                    <mets:fptr FILEID="fid4-1"/>
+                </mets:div>
+                <mets:div LABEL="005" TYPE="FILE">
+                    <mets:fptr FILEID="fid5-1"/>
+                </mets:div>
+                <mets:div LABEL="006" TYPE="FILE">
+                    <mets:fptr FILEID="fid6-1"/>
+                </mets:div>
+                <mets:div LABEL="007" TYPE="FILE">
+                    <mets:fptr FILEID="fid7-1"/>
+                </mets:div>
+                <mets:div LABEL="008" TYPE="FILE">
+                    <mets:fptr FILEID="fid8-1"/>
+                </mets:div>
+                <mets:div LABEL="009" TYPE="FILE">
+                    <mets:fptr FILEID="fid9-1"/>
+                </mets:div>
+                <mets:div LABEL="010" TYPE="FILE">
+                    <mets:fptr FILEID="fid10-1"/>
+                </mets:div>
+                <mets:div LABEL="011" TYPE="FILE">
+                    <mets:fptr FILEID="fid11-1"/>
+                </mets:div>
+                <mets:div LABEL="012" TYPE="FILE">
+                    <mets:fptr FILEID="fid12-1"/>
+                </mets:div>
+            </mets:div>
+        </mets:div>
+    </mets:structMap>
+</mets:mets>
