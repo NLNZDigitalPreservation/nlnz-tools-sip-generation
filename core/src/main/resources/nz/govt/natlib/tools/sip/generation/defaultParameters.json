@@ -1,9 +1,0 @@
-{
-  "comment" : [
-    "These are the defaults for SIP generation",
-    "TODO Would this be better served as an XML file?"
-  ],
-  "mets-xml-file-defaults" : {
-
-  }
-}
