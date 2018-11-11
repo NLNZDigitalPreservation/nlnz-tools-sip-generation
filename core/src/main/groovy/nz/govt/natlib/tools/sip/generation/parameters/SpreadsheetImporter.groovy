@@ -1,16 +1,18 @@
 package nz.govt.natlib.tools.sip.generation.parameters
 
-import nz.govt.natlib.tools.sip.generation.SipGenerationException
+import groovy.util.logging.Slf4j
+import nz.govt.natlib.tools.sip.SipProcessingException
 
 import java.util.regex.Pattern
 
+@Slf4j
 class SpreadsheetImporter {
 
     static Spreadsheet extractSpreadsheet(File spreadsheetSourceFile, String idColumnName, String separator = ",",
                                           boolean allowDuplicateIds = false, boolean allowRowsWithoutIds = false)
-            throws SipGenerationException {
+            throws SipProcessingException {
         if (!spreadsheetSourceFile.exists() || !spreadsheetSourceFile.isFile()) {
-            throw new SipGenerationException("Spreasheet-source-file=${spreadsheetSourceFile.getCanonicalPath()} does not exist or is not a file. Extraction cannot continue")
+            throw new SipProcessingException("Spreasheet-source-file=${spreadsheetSourceFile.getCanonicalPath()} does not exist or is not a file. Extraction cannot continue")
         }
         return extractSpreadsheet(spreadsheetSourceFile.newInputStream(), idColumnName, separator, allowDuplicateIds,
                 allowRowsWithoutIds)
@@ -18,7 +20,7 @@ class SpreadsheetImporter {
 
     static Spreadsheet extractSpreadsheet(InputStream inputStream, String idColumnName, String separator = ",",
                                           boolean allowDuplicateIds = false, boolean allowRowsWithoutIds = false)
-            throws SipGenerationException {
+            throws SipProcessingException {
         List<Map<String, String>> spreadsheetRows = [ ]
         int lineCounter = 0
         List<String> columnHeaders = [ ]
