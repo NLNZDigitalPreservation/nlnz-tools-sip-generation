@@ -1,9 +1,11 @@
 package nz.govt.natlib.tools.sip.generation.parameters
 
+import groovy.json.JsonException
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import groovy.transform.Canonical
 import groovy.util.logging.Slf4j
-import nz.govt.natlib.tools.sip.generation.SipGenerationException
+import nz.govt.natlib.tools.sip.SipProcessingException
 
 @Slf4j
 @Canonical
@@ -16,8 +18,40 @@ class Spreadsheet {
     boolean allowRowsWithoutIds
     List<Map<String, String>> rows = [ ]
 
+    static Spreadsheet fromJson(String idColumnName, File jsonFile, boolean allowDuplicateIds = false,
+                                boolean allowRowsWithoutIds = false) throws SipProcessingException {
+        return fromJson(idColumnName, jsonFile.text, allowDuplicateIds, allowRowsWithoutIds)
+    }
+
+    static Spreadsheet fromJson(String idColumnName, String jsonString, boolean allowDuplicateIds = false,
+                                boolean allowRowsWithoutIds = false) throws SipProcessingException {
+        JsonSlurper jsonSlurper = new JsonSlurper()
+        def parsedJson
+        try {
+            parsedJson = jsonSlurper.parseText(jsonString)
+        } catch (IllegalArgumentException | JsonException e) {
+            throw new SipProcessingException("Unable to parse JSON-text='${jsonString}'")
+        }
+        // We assume the JSON is the same structure as produced by {@link #asJsonString}.
+        List<Map<String, Map<String, String>>> jsonList = (List<Map<String, Map<String, String>>>) parsedJson
+
+        List<Map<String, String>> rowsForCreation = [ ]
+        try {
+            jsonList.each { Map<String, Map<String, String>> idToRowMap ->
+                // Generally there is only 1 key in the map, but there could be multiple
+                idToRowMap.each { String key, Map<String, String> rowKeyValueMap ->
+                    rowsForCreation.add(rowKeyValueMap)
+                }
+            }
+        } catch (IllegalArgumentException | MissingMethodException e) {
+            throw new SipProcessingException("Unable to convert to proper input format: JSON-text='${jsonString}'")
+        }
+
+        return new Spreadsheet(idColumnName, rowsForCreation, allowDuplicateIds, allowRowsWithoutIds)
+    }
+
     Spreadsheet(String idColumnName, List<Map<String, String>> rows, boolean allowDuplicateIds = false,
-                boolean allowRowsWithoutIds = false) {
+                boolean allowRowsWithoutIds = false) throws SipProcessingException {
         if (idColumnName == null || idColumnName.isEmpty()) {
             throw new IllegalArgumentException("idColumnName='${idColumnName}' cannot be null or empty.")
         }
@@ -29,7 +63,7 @@ class Spreadsheet {
         this.allowRowsWithoutIds = allowRowsWithoutIds
         this.rows = rows
         if (!isValid(true, true)) {
-            throw new SipGenerationException("Spreadsheet is invalid. See warnings in log.")
+            throw new SipProcessingException("Spreadsheet is invalid. See warnings in log.")
         }
     }
 
@@ -64,7 +98,7 @@ class Spreadsheet {
             if (showRowsWithoutIds) {
                 log.warn("Rows without values corresponding to column-name='${idColumnName}':")
                 rowsWithoutIds.each { Map<String, String> row ->
-                    log.warn("    ${rowString(null, row, false)}")
+                    log.warn("    ${rowString((String) null, row, false)}")
                 }
             }
         }
@@ -104,6 +138,17 @@ class Spreadsheet {
             }
         }
         return rowsWithoutIdsList
+    }
+
+    List<Map<String, String>> mapsForId(String id) {
+        List<Map<String, String>> mapsForId = []
+        rows.each { Map<String, String> row ->
+            String rowId = row.get(idColumnName)
+            if (rowId != null && rowId == id) {
+                mapsForId.add(row)
+            }
+        }
+        return mapsForId
     }
 
     String rowString(String columnId, Map<String, String> row, boolean withColumnId) {

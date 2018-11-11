@@ -4,8 +4,6 @@ import nz.govt.natlib.tools.sip.generation.parameters.Spreadsheet
 import nz.govt.natlib.tools.sip.generation.parameters.SpreadsheetImporter
 
 import static org.hamcrest.core.Is.is
-import static org.hamcrest.Matchers.comparesEqualTo;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertEquals
 import static org.junit.Assert.assertFalse
 import static org.junit.Assert.assertNotNull
@@ -38,7 +36,7 @@ class SpreadsheetImporterTest {
         Spreadsheet loadedSpreadsheet = SpreadsheetImporter.extractSpreadsheet(spreadsheetInputStream,
                 "column-1", "|")
 
-        assertThat("All lines read in", loadedSpreadsheet.rows.size(), comparesEqualTo(new Integer(3)))
+        assertThat("All lines read in", new Integer(loadedSpreadsheet.rows.size()), is(3))
         assertThat("Same idColumnName", testSpreadsheet1.idColumnName, is(loadedSpreadsheet.idColumnName))
         compareSpreadsheets(testSpreadsheet1, loadedSpreadsheet)
     }
@@ -58,11 +56,15 @@ class SpreadsheetImporterTest {
         assertThat("Same number of entries", actualMap.size(), is(expectedMap.size()))
 
         actualMap.each { String key, String value ->
-            assertThat("Same entry as actual", expectedMap, hasEntry(key, value))
+            assertTrue("Same entry as actual for key=${key}, value=${value}", mapHasEntry(expectedMap, key, value))
         }
 
         expectedMap.each { String key, String value ->
-            assertThat("Same entries as expected", actualMap, hasEntry(key, value))
+            assertTrue("Same entries as expected for key=${key}, value=${value}", mapHasEntry(actualMap, key, value))
         }
+    }
+
+    boolean mapHasEntry(Map<String, String> map, String key, String value) {
+        return map.get(key) == value
     }
 }

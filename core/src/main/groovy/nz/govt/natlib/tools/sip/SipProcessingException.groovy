@@ -1,23 +1,23 @@
-package nz.govt.natlib.tools.sip.generation
+package nz.govt.natlib.tools.sip
 
-class SipGenerationException extends Exception {
-    SipGenerationException() {
+class SipProcessingException extends Exception {
+    SipProcessingException() {
         super()
     }
 
-    SipGenerationException(String message) {
+    SipProcessingException(String message) {
         super(message)
     }
 
-    SipGenerationException(String message, Throwable cause) {
+    SipProcessingException(String message, Throwable cause) {
         super(message, cause)
     }
 
-    SipGenerationException(Throwable cause) {
+    SipProcessingException(Throwable cause) {
         super(cause)
     }
 
-    protected SipGenerationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected SipProcessingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace)
     }
 }
