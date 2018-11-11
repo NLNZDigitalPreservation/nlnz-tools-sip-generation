@@ -6,7 +6,7 @@ allprojects {
 }
 
 subprojects {
-    group 'nz.govt.natlib.tools.sip.generation'
+    group 'nz.govt.natlib.tools'
     description = 'National Library of New Zealand Modernisation (m11n) automation tools'
 
     project.ext {

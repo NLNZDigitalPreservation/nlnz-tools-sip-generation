@@ -32,7 +32,7 @@ apply plugin: 'pmd' // source code analyzer
 setVersion(project.ext.versionNumber)
 
 dependencies {
-    compile project(':nlnz-tools-sip-generation-core')
+    compile project(':sip-generation-core')
 
     compile gradleApi()
 }
