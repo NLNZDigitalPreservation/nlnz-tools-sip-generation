@@ -1,0 +1,11 @@
+# Based on https://docs.cucumber.io/
+#
+@tag
+Feature: Standard source file scenarios are handled
+
+   Standard source file scenarios are handled.
+
+   Scenario: The publication issue has multiple PDF pages with the filename ending in a page number
+     Given The publication has PDF pages with filenames that have a page number
+     When the publication issue is processed
+     Then the SIP metadata has the PDF pages ordered by page number

@@ -1,0 +1,28 @@
+[
+  {
+    "test-mms-id-one": {
+      "Title": "Test Publication One",
+      "Collector_folder": "Test_Publication_One",
+      "names_dict": "TST",
+      "edition_dict": "PB1",
+      "Ingest_Status_Pilot_PIL_Standard_STA_Standard_Complex_STC_Supplement_SUP_Oneoff_ONE_Technical Issues_TEC": "STA",
+      "Frequency": "",
+      "Entity_Periodic _PER_serial Supplement_SS_oneoff_ONE": "PER",
+      "Magazine": "0",
+      "Name": "Test Publication One",
+      "MMSID": "test-mms-id-one",
+      "ISSN online": "",
+      "Bib ID": "test-pub-one-bib-id",
+      "Access condition": "100-P",
+      "Date catalogued": "09/11/2018",
+      "Cataloguer": "Kurt",
+      "Access": "200",
+      "Notes": "",
+      "first_issue_starting_page": "",
+      "last_issue_starting_page": "",
+      "has_volume_md": "0",
+      "has_issue_md": "0",
+      "has_number_md": "0"
+    }
+  }
+]
