@@ -1,5 +1,6 @@
 package nz.govt.natlib.tools.sip
 
+import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -52,14 +53,28 @@ class SipTestHelper {
     static final String TEST_SIP_XML_ACHN_ACTUAL_FILENAME = "test-sip-auckland-city-harbour-news-2015-07-29-actual.xml"
     static final String TEST_SIP_XML_ACHN_EXPECTED_FILENAME = "test-sip-auckland-city-harbour-news-2015-07-29-actual.xml"
 
+
+    /**
+     * Returns the contents of the file from the given filename and resources folder.
+     * Make an attempt to open the file as a resource.
+     * If that fails, try to open the file with the path resourcesFolder/filename. This should be relative
+     * to the current working directory if the the resourcesFolder is a relative path.
+     *
+     * @param filename
+     * @param resourcesFolder
+     * @return
+     */
     static String getTextFromResourceOrFile(String filename, String resourcesFolder = RESOURCES_FOLDER) {
-        String resourcePath = "${resourcesFolder}/filename"
-        String localPath = "src/test/resources/${resourcesFolder}"
+        String resourcePath = "${resourcesFolder}/${filename}"
+        String localPath = "src/test/resources/${resourcePath}"
 
         String text
         InputStream inputStream = SipTestHelper.class.getResourceAsStream(filename)
         if (inputStream == null) {
-            File inputFile = new File("${localPath}/${resourcePath}")
+            File inputFile = new File(localPath)
+            if (!inputFile.exists()) {
+                inputFile = new File(new File(""), localPath)
+            }
             text = inputFile.text
         } else {
             text = inputStream.text
@@ -67,7 +82,34 @@ class SipTestHelper {
         return text
     }
 
-    static Sip sipOne() {
+    /**
+     * Returns the file from the given filename and resources folder.
+     * Make an attempt to open the file as a resource.
+     * If that fails, try to open the file with the path resourcesFolder/filename. This should be relative
+     * to the current working directory if the resourcesFolder is a relative path.
+     *
+     * @param filename
+     * @param resourcesFolder
+     * @return
+     */
+    static File getFileFromResourceOrFile(String filename, String resourcesFolder = RESOURCES_FOLDER) {
+        String resourcePath = "${resourcesFolder}/${filename}"
+        String localPath = "src/test/resources/${resourcePath}"
+
+        URL resourceURL = SipTestHelper.class.getResource(filename)
+        File resourceFile
+        if (resourceURL != null) {
+            resourceFile = resourceURL.getFile()
+        }
+        if (resourceFile != null && (resourceFile.isFile() || resourceFile.isDirectory())) {
+            return resourceFile
+        } else {
+            File returnFile = new File(localPath)
+            return returnFile
+        }
+    }
+
+    static Sip sipOneWithoutFiles() {
         Sip sip = new Sip()
 
         sip.title = SIP_TITLE
@@ -87,6 +129,12 @@ class SipTestHelper {
         sip.revisionNumber = SIP_REVISION_NUMBER
 
         sip.fileWrappers = [ ]
+
+        return sip
+    }
+
+    static Sip sipOne() {
+        Sip sip = sipOneWithoutFiles()
 
         int fileIndex = 1
         while (fileIndex < 4) {

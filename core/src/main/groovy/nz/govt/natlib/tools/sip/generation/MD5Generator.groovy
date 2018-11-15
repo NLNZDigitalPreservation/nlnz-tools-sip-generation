@@ -9,6 +9,7 @@ import java.security.MessageDigest
 @Slf4j
 class MD5Generator {
     static int DEFAULT_MD5_DIGEST_BUFFER_LENGTH = 4096
+    static String MD5_ALGORITHM = "MD5"
 
     static String generateOrReadMD5HashFile(File sourceFile, boolean overwriteIfAlreadyExists) throws SipProcessingException {
         String md5Hash
@@ -43,10 +44,19 @@ class MD5Generator {
 
     static String calculateMd5Hash(File file) throws SipProcessingException {
         if (isValidSourceFile(file)) {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5")
+            MessageDigest messageDigest = MessageDigest.getInstance(MD5_ALGORITHM)
             file.eachByte(DEFAULT_MD5_DIGEST_BUFFER_LENGTH) { byte[] buffer, Integer length ->
                 messageDigest.update(buffer, 0, length)
             }
+            return messageDigest.digest().encodeHex() as String
+        }
+        return null
+    }
+
+    static String calculateMd5Hash(String string) throws SipProcessingException {
+        if (string != null && string.length() > 0) {
+            MessageDigest messageDigest = MessageDigest.getInstance(MD5_ALGORITHM)
+            messageDigest.update(string.getBytes())
             return messageDigest.digest().encodeHex() as String
         }
         return null
