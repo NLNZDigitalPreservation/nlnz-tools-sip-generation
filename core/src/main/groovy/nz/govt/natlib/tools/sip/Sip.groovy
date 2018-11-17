@@ -1,7 +1,6 @@
 package nz.govt.natlib.tools.sip
 
 import groovy.transform.Canonical
-
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

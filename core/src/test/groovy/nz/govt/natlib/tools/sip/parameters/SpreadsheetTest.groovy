@@ -10,13 +10,10 @@ import static org.junit.Assert.assertTrue
 import static org.junit.Assert.assertFalse
 
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.runners.MockitoJUnitRunner
 
 /**
  * Tests {@link nz.govt.natlib.tools.sip.generation.parameters.Spreadsheet}.
  */
-@RunWith(MockitoJUnitRunner.class)
 class SpreadsheetTest {
     static Map<String, String> ROW_SAMPLE_ONE = [ 'column-1': 'row1', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
     static Map<String, String> ROW_SAMPLE_TWO = [ 'column-1': 'row2', 'column 2': 'another' ]

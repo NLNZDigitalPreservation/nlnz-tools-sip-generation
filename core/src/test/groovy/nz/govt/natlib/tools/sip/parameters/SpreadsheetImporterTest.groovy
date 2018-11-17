@@ -4,23 +4,14 @@ import nz.govt.natlib.tools.sip.generation.parameters.Spreadsheet
 import nz.govt.natlib.tools.sip.generation.parameters.SpreadsheetImporter
 
 import static org.hamcrest.core.Is.is
-import static org.junit.Assert.assertEquals
-import static org.junit.Assert.assertFalse
-import static org.junit.Assert.assertNotNull
-import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
-import static org.mockito.Mockito.when
 
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.runners.MockitoJUnitRunner
 
 /**
  * Tests {@link SpreadsheetImporter}.
  */
-@RunWith(MockitoJUnitRunner.class)
 class SpreadsheetImporterTest {
     static TEST_SPREADSHEET_1_MAP = [
             [ 'column-1': 'row1', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ],

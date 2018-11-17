@@ -12,7 +12,6 @@ import static org.junit.Assert.assertThat
  * Tests the {@link Sip}.
  */
 class SipTest {
-
     Sip testSip
 
     @Test
