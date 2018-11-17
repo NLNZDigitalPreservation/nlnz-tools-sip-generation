@@ -5,8 +5,8 @@ import com.google.common.net.MediaType
 enum MediaMimeType {
     APPLICATION_PDF("pdf", MediaType.PDF)
 
-    private String filenameExtension
-    private MediaType mediaType
+    String filenameExtension
+    MediaType mediaType
 
     MediaMimeType(String filenameExtension, MediaType mediaType) {
         this.filenameExtension = filenameExtension

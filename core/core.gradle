@@ -57,6 +57,10 @@ dependencies {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
 
+    // latest version
+    testCompile 'org.powermock:powermock-module-junit4:1.7.4'
+    testCompile 'org.powermock:powermock-api-mockito2:1.7.4'
+
     // Use gson for comparing JSON strings
     testCompile 'com.google.code.gson:gson:2.8.5'
 

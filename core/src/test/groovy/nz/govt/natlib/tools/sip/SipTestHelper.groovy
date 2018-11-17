@@ -1,6 +1,5 @@
 package nz.govt.natlib.tools.sip
 
-import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -53,6 +52,9 @@ class SipTestHelper {
     static final String TEST_SIP_XML_ACHN_ACTUAL_FILENAME = "test-sip-auckland-city-harbour-news-2015-07-29-actual.xml"
     static final String TEST_SIP_XML_ACHN_EXPECTED_FILENAME = "test-sip-auckland-city-harbour-news-2015-07-29-actual.xml"
 
+    static final String TEST_PDF_FILE_1_FILENAME = "test-pdf-1.pdf"
+    static final String TEST_PDF_FILE_1_MD5_HASH = "b8b673eeaa076ff19501318a27f85e9c"
+    static final Long TEST_PDF_FILE_1_SIZE = 11438L
 
     /**
      * Returns the contents of the file from the given filename and resources folder.
@@ -99,7 +101,7 @@ class SipTestHelper {
         URL resourceURL = SipTestHelper.class.getResource(filename)
         File resourceFile
         if (resourceURL != null) {
-            resourceFile = resourceURL.getFile()
+            resourceFile = new File(resourceURL.getFile())
         }
         if (resourceFile != null && (resourceFile.isFile() || resourceFile.isDirectory())) {
             return resourceFile
