@@ -1,3 +1,4 @@
+
 plugins {
     // required for jacoco test coverage checks
     id 'com.github.kt3k.coveralls' version '2.6.3'
@@ -32,9 +33,10 @@ apply plugin: 'pmd' // source code analyzer
 setVersion(project.ext.versionNumber)
 
 dependencies {
-    // We require groovy 2.5.x version for building this library instead of localGroovy (which is currently 2.4.x)
-    //compile localGroovy()
-    compile 'org.codehaus.groovy:groovy-all:2.5.+'
+    // localGroovy (which is currently 2.4.x) is used. Groovy 2.5.x supports JsonGenerator which could be used
+    // in SipJsonGenerator, but causes issues with downstream builds, so alternatives provided by Groovy 2.4.x are used.
+    compile localGroovy()
+    //compile 'org.codehaus.groovy:groovy-all:2.5.4'
 
     // Use the latest version
     compile "com.google.guava:guava:+"
