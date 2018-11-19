@@ -1,5 +1,6 @@
 package nz.govt.natlib.tools.sip
 
+import groovy.transform.AutoClone
 import groovy.transform.Canonical
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -9,8 +10,12 @@ import java.time.format.DateTimeFormatter
  * POJO representation of a SIP.
  */
 @Canonical
+@AutoClone
 class Sip {
+    static final String USAGE_TYPE_VIEW = "VIEW"
+    static final String OBJECT_IDENTIFIER_TYPE_ALMA_MMS = "ALMAMMS"
     static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
 
     // Title
     String title
@@ -33,6 +38,7 @@ class Sip {
     Integer revisionNumber
 
     @Canonical
+    @AutoClone
     static class FileWrapper {
         String mimeType
         File file
