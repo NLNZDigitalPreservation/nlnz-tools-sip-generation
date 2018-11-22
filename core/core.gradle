@@ -38,39 +38,40 @@ dependencies {
     compile localGroovy()
     //compile 'org.codehaus.groovy:groovy-all:2.5.4'
 
-    // Use the latest version
-    compile "com.google.guava:guava:+"
-    // Use the latest version
-    compile "org.apache.commons:commons-lang3:+"
-    compile "commons-io:commons-io:2.+"
-
-    compileOnly 'org.slf4j:slf4j-api:1.7.+'
-
+    // The latest version.
+    compile "com.google.guava:guava:23.0"
+    // The latest version.
+    compile "org.apache.commons:commons-lang3:3.8.1"
+    // The latest version.
+    compile "commons-io:commons-io:2.6"
+    // The latest version.
+    compileOnly 'org.slf4j:slf4j-api:1.7.25'
+    // Current version used in production by the National Library of New Zealand.
     compile 'com.exlibris.dps:dps-sdk-fat-all:5.5.0'
 
-    // For PDF processing
+    // For PDF processing.
     compile 'org.apache.pdfbox:pdfbox:2.0.12'
 
-    // latest version
+    // The latest version.
     testCompile 'junit:junit:4.12'
 
-    // latest version
+    // The latest version.
     testCompile 'org.mockito:mockito-core:1.10.19', {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
 
-    // latest version
+    // The latest version.
     testCompile 'org.powermock:powermock-module-junit4:1.7.4'
     testCompile 'org.powermock:powermock-api-mockito2:1.7.4'
 
-    // Use gson for comparing JSON strings
+    // Use gson for comparing JSON strings.
     testCompile 'com.google.code.gson:gson:2.8.5'
 
-    // Use xmlunit for comparing XML strings
+    // Use xmlunit for comparing XML strings.
     testCompile 'org.xmlunit:xmlunit-core:2.6.2'
 
-    // Use sl4j logging for tests
-    testCompile 'org.slf4j:slf4j-log4j12:1.7.+'
+    // Use sl4j logging for tests. The latest version.
+    testCompile 'org.slf4j:slf4j-log4j12:1.7.25'
 
 }
 
