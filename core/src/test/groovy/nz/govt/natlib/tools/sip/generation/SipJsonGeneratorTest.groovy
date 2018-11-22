@@ -37,7 +37,11 @@ class SipJsonGeneratorTest {
             if (fileObject != null && (fileObject in JsonPrimitive)) {
                 JsonPrimitive fileStringPrimitive = (JsonPrimitive) fileObject
                 // support testing in Windows. Replace the 'file' object with a path-adjusted file object.
-                fileWrapperObject.addProperty("file", fileStringPrimitive.getAsString().replace("\\", "/"))
+                String fileString =  fileStringPrimitive.getAsString().replace("\\", "/")
+                if (fileString.toLowerCase().startsWith("c:")) {
+                    fileString = fileString.substring(2)
+                }
+                fileWrapperObject.addProperty("file", fileString)
             }
         }
 
