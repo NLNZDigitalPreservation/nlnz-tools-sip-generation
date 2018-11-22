@@ -35,17 +35,17 @@ setVersion(project.ext.versionNumber)
 dependencies {
     // localGroovy (which is currently 2.4.x) is used. Groovy 2.5.x supports JsonGenerator which could be used
     // in SipJsonGenerator, but causes issues with downstream builds, so alternatives provided by Groovy 2.4.x are used.
-    compile localGroovy()
-    //compile 'org.codehaus.groovy:groovy-all:2.5.4'
+    //compile localGroovy()
+    compile 'org.codehaus.groovy:groovy-all:2.4.15'
 
     // The latest version.
-    compile "com.google.guava:guava:23.0"
+    compile 'com.google.guava:guava:23.0'
     // The latest version.
-    compile "org.apache.commons:commons-lang3:3.8.1"
+    compile 'org.apache.commons:commons-lang3:3.8.1'
     // The latest version.
-    compile "commons-io:commons-io:2.6"
+    compile 'commons-io:commons-io:2.6'
     // The latest version.
-    compileOnly 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.slf4j:slf4j-api:1.7.25'
     // Current version used in production by the National Library of New Zealand.
     compile 'com.exlibris.dps:dps-sdk-fat-all:5.5.0'
 
