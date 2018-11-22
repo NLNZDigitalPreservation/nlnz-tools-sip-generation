@@ -36,8 +36,11 @@ class SipFileWrapperFactoryTest {
         assertThat("testFileWrapper.mimeType=${testFileWrapper.mimeType}",
                 testFileWrapper.mimeType, is("application/pdf"))
         assertThat("testFileWrapper.file=${testFileWrapper.file}", testFileWrapper.file, is(testFile))
+
+        // Support Windows testing where the file path has backslashes.
+        String adjustedFileOriginalPath = testFileWrapper.fileOriginalPath.replace("\\", "/")
         assertTrue("testFileWrapper.fileOriginalPath=${testFileWrapper.fileOriginalPath}",
-                testFileWrapper.fileOriginalPath.endsWith("nz/govt/natlib/tools/sip"))
+                adjustedFileOriginalPath.endsWith("nz/govt/natlib/tools/sip"))
         assertThat("testFileWrapper.fileOriginalName=${testFileWrapper.fileOriginalName}",
                 testFileWrapper.fileOriginalName, is(SipTestHelper.TEST_PDF_FILE_1_FILENAME))
         assertNull("testFileWrapper.label=${testFileWrapper.label}", testFileWrapper.label)
@@ -88,8 +91,11 @@ class SipFileWrapperFactoryTest {
         assertThat("testFileWrapper.mimeType=${testFileWrapper.mimeType}",
                 testFileWrapper.mimeType, is("application/pdf"))
         assertThat("testFileWrapper.file=${testFileWrapper.file}", testFileWrapper.file, is(testFile))
+
+        // Support Windows testing where the file path has backslashes.
+        String adjustedFileOriginalPath = testFileWrapper.fileOriginalPath.replace("\\", "/")
         assertTrue("testFileWrapper.fileOriginalPath=${testFileWrapper.fileOriginalPath}",
-                testFileWrapper.fileOriginalPath.endsWith("nz/govt/natlib/tools/sip"))
+                adjustedFileOriginalPath.endsWith("nz/govt/natlib/tools/sip"))
         assertThat("testFileWrapper.fileOriginalName=${testFileWrapper.fileOriginalName}",
                 testFileWrapper.fileOriginalName, is(SipTestHelper.TEST_PDF_FILE_1_FILENAME))
         assertNull("testFileWrapper.label=${testFileWrapper.label}", testFileWrapper.label)

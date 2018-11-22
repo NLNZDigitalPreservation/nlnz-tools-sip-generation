@@ -1,5 +1,8 @@
 package nz.govt.natlib.tools.sip.generation
 
+import com.google.gson.JsonObject
+import com.google.gson.JsonPrimitive
+
 import static org.hamcrest.core.Is.is
 import static org.junit.Assert.assertThat
 
@@ -29,6 +32,14 @@ class SipJsonGeneratorTest {
         JsonParser jsonParser = new JsonParser()
         JsonElement expectedJson = jsonParser.parse(SipTestHelper.getTextFromResourceOrFile(SipTestHelper.TEST_SIP_JSON_1_FILENAME))
         JsonElement actualJson = jsonParser.parse(jsonString)
+        actualJson.getAsJsonObject().get("fileWrappers").each { JsonObject fileWrapperObject ->
+            JsonElement fileObject = fileWrapperObject.get("file")
+            if (fileObject != null && (fileObject in JsonPrimitive)) {
+                JsonPrimitive fileStringPrimitive = (JsonPrimitive) fileObject
+                // support testing in Windows. Replace the 'file' object with a path-adjusted file object.
+                fileWrapperObject.addProperty("file", fileStringPrimitive.getAsString().replace("\\", "/"))
+            }
+        }
 
         assertThat("Generated JSON matches expected JSON for file=${SipTestHelper.TEST_SIP_JSON_1_FILENAME}",
             expectedJson, is(actualJson))
