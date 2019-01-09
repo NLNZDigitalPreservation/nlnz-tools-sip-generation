@@ -35,43 +35,44 @@ setVersion(project.ext.versionNumber)
 dependencies {
     // localGroovy (which is currently 2.4.x) is used. Groovy 2.5.x supports JsonGenerator which could be used
     // in SipJsonGenerator, but causes issues with downstream builds, so alternatives provided by Groovy 2.4.x are used.
+    // We explicitly include the groovy-all version so the dependency shows up correctly.
     //compile localGroovy()
-    compile 'org.codehaus.groovy:groovy-all:2.4.15'
+    compile "org.codehaus.groovy:groovy-all:2.4.15"
 
     // The latest version.
-    compile 'com.google.guava:guava:23.0'
+    compile "com.google.guava:guava:27.0.1-jre"
     // The latest version.
-    compile 'org.apache.commons:commons-lang3:3.8.1'
+    compile "org.apache.commons:commons-lang3:3.8.1"
     // The latest version.
-    compile 'commons-io:commons-io:2.6'
-    // The latest version.
-    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile "commons-io:commons-io:2.6"
+    // The latest version. We expect that the container running this jar has a slf4j dependency in its path already.
+    compileOnly "org.slf4j:slf4j-api:1.7.25"
     // Current version used in production by the National Library of New Zealand.
-    compile 'com.exlibris.dps:dps-sdk-fat-all:5.5.0'
+    compile "com.exlibris.dps:dps-sdk-fat-all:5.5.0"
 
     // For PDF processing.
-    compile 'org.apache.pdfbox:pdfbox:2.0.12'
+    compile "org.apache.pdfbox:pdfbox:2.0.12"
 
     // The latest version.
-    testCompile 'junit:junit:4.12'
+    testCompile "junit:junit:4.12"
 
     // The latest version.
-    testCompile 'org.mockito:mockito-core:1.10.19', {
+    testCompile "org.mockito:mockito-core:1.10.19", {
         exclude group: 'org.hamcrest', module: 'hamcrest-core'
     }
 
     // The latest version.
-    testCompile 'org.powermock:powermock-module-junit4:1.7.4'
-    testCompile 'org.powermock:powermock-api-mockito2:1.7.4'
+    testCompile "org.powermock:powermock-module-junit4:1.7.4"
+    testCompile "org.powermock:powermock-api-mockito2:1.7.4"
 
     // Use gson for comparing JSON strings.
-    testCompile 'com.google.code.gson:gson:2.8.5'
+    testCompile "com.google.code.gson:gson:2.8.5"
 
     // Use xmlunit for comparing XML strings.
-    testCompile 'org.xmlunit:xmlunit-core:2.6.2'
+    testCompile "org.xmlunit:xmlunit-core:2.6.2"
 
     // Use sl4j logging for tests. The latest version.
-    testCompile 'org.slf4j:slf4j-log4j12:1.7.25'
+    testCompile "org.slf4j:slf4j-log4j12:1.7.25"
 
 }
 
