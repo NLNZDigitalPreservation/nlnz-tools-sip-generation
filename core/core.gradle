@@ -21,8 +21,21 @@ project.ext {
 }
 
 apply plugin: 'groovy'
+
 apply plugin: 'java'
+// this needs to be set after the 'java' plugin has been applied
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
+
 apply plugin: 'jacoco'
+jacoco {
+    // This version is necessary to run under JDK 1.11
+    toolVersion = "0.8.2"
+}
+
+// this needs to be set after the 'java' plugin has been applied
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 // run the findBugs checks with 'gradle check' or 'gradle findBugsMain' or 'gradle findBugsTest'
 //apply plugin: 'findbugs'
