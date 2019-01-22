@@ -6,11 +6,11 @@ import org.apache.commons.lang3.StringUtils
 class SipProcessingException extends Exception {
     List<SipProcessingExceptionReason> reasons = [ ]
 
-    static SipProcessingException createWithReason(SipProcessingExceptionReason sipProcessingFailureReason) {
-        SipProcessingException sipProcessingFailure = new SipProcessingException()
-        sipProcessingFailure.addReason(sipProcessingFailureReason)
+    static SipProcessingException createWithReason(SipProcessingExceptionReason sipProcessingExceptionReason) {
+        SipProcessingException sipProcessingException = new SipProcessingException()
+        sipProcessingException.addReason(sipProcessingExceptionReason)
 
-        return sipProcessingFailure
+        return sipProcessingException
     }
 
     SipProcessingException() {
@@ -33,15 +33,15 @@ class SipProcessingException extends Exception {
         super(message, cause, enableSuppression, writableStackTrace)
     }
 
-    void addReason(SipProcessingExceptionReasonType failureReasonType, Exception exception, String... detail) {
-        SipProcessingExceptionReason sipProcessingFailureReason =
-                new SipProcessingExceptionReason(failureReasonType, exception, detail)
+    void addReason(SipProcessingExceptionReasonType exceptionReasonType, Exception exception, String... detail) {
+        SipProcessingExceptionReason sipProcessingExceptionReason =
+                new SipProcessingExceptionReason(exceptionReasonType, exception, detail)
 
-        this.addReason(sipProcessingFailureReason)
+        this.addReason(sipProcessingExceptionReason)
     }
 
-    void addReason(SipProcessingExceptionReason failureReason) {
-        reasons.add(failureReason)
+    void addReason(SipProcessingExceptionReason exceptionReason) {
+        reasons.add(exceptionReason)
     }
 
     String toString() {
