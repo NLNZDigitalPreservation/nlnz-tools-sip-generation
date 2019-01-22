@@ -3,25 +3,31 @@ package nz.govt.natlib.tools.sip.state
 import groovy.text.SimpleTemplateEngine
 import groovy.text.Template
 
-enum SipProcessingFailureReasonType {
+enum SipProcessingExceptionReasonType {
     /**
      * The description field can have placeholders for the details, which are provided by the
-     * {@link SipProcessingFailureReason#details}. The values are then substituted into the description.
+     * {@link SipProcessingExceptionReason#details}. The values are then substituted into the description.
      * Note that the <em>LAST</em> placeholder will have the exception name substituted in if the
      * {@link #getDescription} method is called with an exception.
      */
-    FILE_OF_LENGTH_ZERO('The given file=${a} is of length zero.'),
-    ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED('All files cannot be properly evaluated.'),
-    GENERIC_THREE_PLACES('${a} ${b} ${c}')
+    FILE_OF_LENGTH_ZERO(false, 'The given file=${a} is of length zero.'),
+    ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED(true, 'All files cannot be properly evaluated.'),
+    GENERIC_THREE_PLACES(false, '${a} ${b} ${c}')
 
+    private final boolean fatal
     private final String description
 
-    SipProcessingFailureReasonType(String description) {
+    SipProcessingExceptionReasonType(boolean fatal, String description) {
+        this.fatal = fatal
         this.description = description
     }
 
     String getDescription() {
         return this.description
+    }
+
+    String isFatal() {
+        return this.fatal
     }
 
     /**

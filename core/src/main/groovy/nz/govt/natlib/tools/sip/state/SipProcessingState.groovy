@@ -7,18 +7,18 @@ import org.apache.commons.lang3.StringUtils
 class SipProcessingState {
 
     boolean complete = false
-    List<SipProcessingFailure> failures = [ ]
+    List<SipProcessingException> exceptions = [ ]
 
-    boolean hasFailures() {
-        return failures.size() > 0
+    boolean hasExceptions() {
+        return exceptions.size() > 0
     }
 
     boolean isSuccessful() {
-        return complete && failures.size() == 0
+        return complete && exceptions.size() == 0
     }
 
-    void addFailure(SipProcessingFailure sipProcessingFailure) {
-        this.failures.add(sipProcessingFailure)
+    void addException(SipProcessingException sipProcessingException) {
+        this.exceptions.add(sipProcessingException)
     }
 
     String toString() {
@@ -32,23 +32,23 @@ class SipProcessingState {
         stringBuilder.append(": ")
         stringBuilder.append(complete ? "Complete, " : "NOT Complete")
         stringBuilder.append(isSuccessful() ? ", Successful " : ", NOT Successful")
-        if (this.failures.size() > 1) {
+        if (this.exceptions.size() > 1) {
             stringBuilder.append(':')
-            this.failures.each { SipProcessingFailure failure ->
+            this.exceptions.each { SipProcessingException exception ->
                 stringBuilder.append(System.lineSeparator())
-                appendFailure(stringBuilder, offset + 4, failure)
+                appendException(stringBuilder, offset + 4, exception)
             }
-        } else if (this.failures.size() == 1) {
+        } else if (this.exceptions.size() == 1) {
             stringBuilder.append(': ')
-            appendFailure(stringBuilder, 0, this.failures.first())
+            appendException(stringBuilder, 0, this.exceptions.first())
         }
 
         return stringBuilder.toString()
     }
 
-    private void appendFailure(StringBuilder stringBuilder, int offset, SipProcessingFailure failure) {
+    private void appendException(StringBuilder stringBuilder, int offset, SipProcessingException exception) {
         String initialOffset = StringUtils.repeat(' ', offset)
         stringBuilder.append(initialOffset)
-        stringBuilder.append(failure.toString(offset))
+        stringBuilder.append(exception.toString(offset))
     }
 }

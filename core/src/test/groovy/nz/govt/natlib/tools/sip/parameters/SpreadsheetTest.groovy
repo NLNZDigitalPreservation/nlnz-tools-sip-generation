@@ -1,7 +1,7 @@
 package nz.govt.natlib.tools.sip.parameters
 
 import groovy.json.JsonOutput
-import nz.govt.natlib.tools.sip.SipProcessingException
+import nz.govt.natlib.tools.sip.state.SipProcessingException
 import nz.govt.natlib.tools.sip.generation.parameters.Spreadsheet
 
 import static org.hamcrest.core.Is.is

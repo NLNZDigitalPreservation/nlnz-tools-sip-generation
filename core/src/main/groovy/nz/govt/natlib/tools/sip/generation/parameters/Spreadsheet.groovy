@@ -5,7 +5,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Canonical
 import groovy.util.logging.Slf4j
-import nz.govt.natlib.tools.sip.SipProcessingException
+import nz.govt.natlib.tools.sip.state.SipProcessingException
 
 @Slf4j
 @Canonical

@@ -1,7 +1,7 @@
 package nz.govt.natlib.tools.sip.generation.parameters
 
 import groovy.util.logging.Slf4j
-import nz.govt.natlib.tools.sip.SipProcessingException
+import nz.govt.natlib.tools.sip.state.SipProcessingException
 
 import java.util.regex.Pattern
 
