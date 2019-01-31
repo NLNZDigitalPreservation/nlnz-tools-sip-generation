@@ -38,7 +38,8 @@ class FilesFinder {
     // TODO We may want to unit test this method, however it is composed mostly of java.nio.file methods.
     // If we do decide to write unit tests, use the following as a guide:
     // https://stackoverflow.com/questions/47101232/mocking-directorystreampath-without-mocking-iterator-possible
-    static List<File> getMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly, String... patterns) {
+    static List<File> getMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+                                       boolean sortFiles = true, String... patterns) {
         List<File> matchingFiles = [ ]
         DirectoryStream.Filter<Path> pathFilter = getPathFilter(isRegexNotGlob, matchFilenameOnly, patterns)
 
@@ -56,6 +57,10 @@ class FilesFinder {
         } finally {
             directoryStream.close()
         }
-        return matchingFiles
+        if (sortFiles) {
+            return matchingFiles.toSorted { File a, File b -> a.getCanonicalPath() <=> b.getCanonicalPath() }
+        } else {
+            return matchingFiles
+        }
     }
 }
