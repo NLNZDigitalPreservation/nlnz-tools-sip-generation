@@ -3,11 +3,14 @@ package nz.govt.natlib.tools.sip.state
 import groovy.transform.Canonical
 import org.apache.commons.lang3.StringUtils
 
+import java.nio.file.Path
+
 @Canonical
 class SipProcessingState {
 
     boolean complete = false
     List<SipProcessingException> exceptions = [ ]
+    Path processingOutputPath
 
     boolean hasExceptions() {
         return exceptions.size() > 0
@@ -19,6 +22,18 @@ class SipProcessingState {
 
     void addException(SipProcessingException sipProcessingException) {
         this.exceptions.add(sipProcessingException)
+    }
+
+    Path toTempFile(String filePrefix = "SipProcessingState-", String fileSuffix = ".txt",
+                    boolean deleteOnExit = false) {
+        File tempFile = File.createTempFile(filePrefix, fileSuffix)
+        Path tempPath = tempFile.toPath()
+        if (deleteOnExit) {
+            tempFile.deleteOnExit()
+        }
+        tempPath.write(toString())
+
+        return tempPath
     }
 
     String toString() {

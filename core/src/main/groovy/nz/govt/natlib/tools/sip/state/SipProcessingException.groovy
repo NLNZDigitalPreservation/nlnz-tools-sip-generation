@@ -65,7 +65,7 @@ class SipProcessingException extends Exception {
                 appendReason(stringBuilder, offset + 4, reason)
             }
         } else if (reasons.size() == 1) {
-            appendReason(stringBuilder, 0, reasons.first())
+            appendReason(stringBuilder, 1, reasons.first())
         } else {
             stringBuilder.append("NO REASONS GIVEN")
         }
