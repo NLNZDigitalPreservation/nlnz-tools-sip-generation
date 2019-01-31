@@ -12,6 +12,7 @@ enum SipProcessingExceptionReasonType {
      */
     FILE_OF_LENGTH_ZERO(false, 'The given file=${a} is of length zero.'),
     ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED(true, 'All files cannot be properly evaluated.'),
+    INVALID_PAGE_FILENAME(false, 'The given file=${a} has an invalid filename (the filename does not conform to expected naming convention)'),
     GENERIC_THREE_PLACES(false, '${a} ${b} ${c}')
 
     private final boolean fatal
