@@ -11,6 +11,7 @@ class SipProcessingState {
     boolean complete = false
     List<SipProcessingException> exceptions = [ ]
     Path processingOutputPath
+    int totalFilesProcessed
 
     boolean hasExceptions() {
         return exceptions.size() > 0
