@@ -13,6 +13,7 @@ enum SipProcessingExceptionReasonType {
     FILE_OF_LENGTH_ZERO(false, 'The given file=${a} is of length zero.'),
     ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED(true, 'All files cannot be properly evaluated.'),
     INVALID_PAGE_FILENAME(false, 'The given file=${a} has an invalid filename (the filename does not conform to expected naming convention)'),
+    INVALID_PDF(false, 'The given file=${a} is an invalid PDF. Validation failure(s)=${b}.'),
     GENERIC_THREE_PLACES(false, '${a} ${b} ${c}')
 
     private final boolean fatal
@@ -32,7 +33,7 @@ enum SipProcessingExceptionReasonType {
     }
 
     /**
-     * Substitute the list of details into the descrption. If the <code>exception</exception> is non-null, then
+     * Substitute the list of details into the description. If the <code>exception</exception> is non-null, then
      * the last value is replaced with the exception.
      *
      * @param details
