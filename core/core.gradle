@@ -63,9 +63,20 @@ dependencies {
     // Current version used in production by the National Library of New Zealand.
     compile "com.exlibris.dps:dps-sdk-fat-all:5.5.0"
 
-    // For PDF processing.
+    // For PDF processing/validation using PDFBox.
     compile "org.apache.pdfbox:pdfbox:2.0.13"
     compile "org.apache.pdfbox:preflight:2.0.13"
+
+    // For PDF processing/validation using Droid.
+    compile "uk.gov.nationalarchives:droid-core:6.4"
+    // We force the use of ant-compress 1.5 because 1.4 has an error in its pom:
+    // > Could not resolve org.apache.ant:ant-compress:1.4.
+    //    > inconsistent module metadata found. Descriptor: org.apache.ant:compress-antlib:1.4 Errors: bad module name: expected='ant-compress' found='compress-antlib'
+    compile "org.apache.ant:ant-compress:1.5"
+
+    // For PDF processing/validation using Jhove.
+    compile "org.openpreservation.jhove:jhove-core:1.20.1"
+    compile "org.openpreservation.jhove:jhove-modules:1.20.1"
 
     // No longer part of the JDK (i.e. not in OpenJDK 11)
     compile "com.sun.activation:javax.activation:1.2.0"
