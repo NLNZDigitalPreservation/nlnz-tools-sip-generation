@@ -46,11 +46,9 @@ apply plugin: 'pmd' // source code analyzer
 setVersion(project.ext.versionNumber)
 
 dependencies {
-    // localGroovy (which is currently 2.4.x) is used. Groovy 2.5.x supports JsonGenerator which could be used
-    // in SipJsonGenerator, but causes issues with downstream builds, so alternatives provided by Groovy 2.4.x are used.
-    // We explicitly include the groovy-all version so the dependency shows up correctly.
-    //compile localGroovy()
-    compile "org.codehaus.groovy:groovy-all:2.4.15"
+    // This project now requires Gradle 2.5.x (build failure under 2.4.x: java.lang.ExceptionInInitializerError).
+    // Note that Groovy 2.5.x supports JsonGenerator.
+    compile localGroovy()
 
     // The latest version.
     compile "com.google.guava:guava:27.0.1-jre"
