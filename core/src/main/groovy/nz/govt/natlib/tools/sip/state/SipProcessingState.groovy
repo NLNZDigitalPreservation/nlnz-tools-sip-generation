@@ -9,8 +9,12 @@ import java.nio.file.Path
 class SipProcessingState {
 
     boolean complete = false
+    String identifier
     List<SipProcessingException> exceptions = [ ]
     Path processingOutputPath
+    List<File> validFiles = [ ]
+    List<File> invalidFiles = [ ]
+    List<File> unrecognizedFiles = [ ]
     int totalFilesProcessed
 
     boolean hasExceptions() {
@@ -45,6 +49,7 @@ class SipProcessingState {
         String initialOffset = StringUtils.repeat(' ', offset)
         StringBuilder stringBuilder = new StringBuilder(initialOffset)
         stringBuilder.append(this.getClass().getName())
+        stringBuilder.append(" (identifier=${identifier})")
         stringBuilder.append(": ")
         stringBuilder.append(complete ? "Complete, " : "NOT Complete")
         stringBuilder.append(isSuccessful() ? ", Successful " : ", NOT Successful")
@@ -59,6 +64,19 @@ class SipProcessingState {
             appendException(stringBuilder, 0, this.exceptions.first())
         }
 
+        stringBuilder.append("${initialOffset}totalFilesProcessed=${totalFilesProcessed}")
+        stringBuilder.append("${initialOffset}validFiles=${validFiles.size()}:")
+        validFiles.each { File file ->
+            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+        }
+        stringBuilder.append("${initialOffset}invalidFiles=${invalidFiles.size()}:")
+        invalidFiles.each { File file ->
+            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+        }
+        stringBuilder.append("${initialOffset}unrecognizedFiles=${unrecognizedFiles.size()}")
+        unrecognizedFiles.each { File file ->
+            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+        }
         return stringBuilder.toString()
     }
 
