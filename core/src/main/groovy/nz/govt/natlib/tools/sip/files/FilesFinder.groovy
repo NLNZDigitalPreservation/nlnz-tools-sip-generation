@@ -14,7 +14,8 @@ import java.nio.file.PathMatcher
  */
 @Slf4j
 class FilesFinder {
-    static DirectoryStream.Filter<Path> getPathFilter(boolean isRegexNotGlob, boolean matchFilenameOnly, String... patterns) {
+    static DirectoryStream.Filter<Path> getPathFilter(boolean isRegexNotGlob, boolean matchFilenameOnly,
+                                                      boolean directoryOnly = false, String... patterns) {
         FileSystem fileSystem = FileSystems.getDefault()
         final List<PathMatcher> pathMatchers = [ ]
         String matcherType = isRegexNotGlob ? "regex:" : "glob:"
@@ -25,11 +26,15 @@ class FilesFinder {
             @Override
             boolean accept(Path entry) throws IOException {
                 return pathMatchers.any { PathMatcher pathMatcher ->
-                    if (matchFilenameOnly) {
-                        pathMatcher.matches(entry.getFileName())
-                    } else {
-                        pathMatcher.matches(entry.normalize())
+                    boolean matched = directoryOnly ? Files.isDirectory(entry) : true
+                    if (matched) {
+                        if (matchFilenameOnly) {
+                            matched = pathMatcher.matches(entry.getFileName())
+                        } else {
+                            matched = pathMatcher.matches(entry.normalize())
+                        }
                     }
+                    matched
                 }
             }
         }
@@ -40,8 +45,20 @@ class FilesFinder {
     // https://stackoverflow.com/questions/47101232/mocking-directorystreampath-without-mocking-iterator-possible
     static List<File> getMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
                                        boolean sortFiles = true, String... patterns) {
+        boolean includeSubdirectories = false
+        boolean directoryOnly = false
+        return getMatchingFilesFull(filesPath, isRegexNotGlob, matchFilenameOnly, sortFiles, includeSubdirectories,
+                directoryOnly, patterns)
+    }
+
+    // TODO We may want to unit test this method, however it is composed mostly of java.nio.file methods.
+    // If we do decide to write unit tests, use the following as a guide:
+    // https://stackoverflow.com/questions/47101232/mocking-directorystreampath-without-mocking-iterator-possible
+    static List<File> getMatchingFilesFull(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+                                           boolean sortFiles = true, boolean includeSubdirectories = false,
+                                           boolean directoryOnly = false, String... patterns) {
         List<File> matchingFiles = [ ]
-        DirectoryStream.Filter<Path> pathFilter = getPathFilter(isRegexNotGlob, matchFilenameOnly, patterns)
+        DirectoryStream.Filter<Path> pathFilter = getPathFilter(isRegexNotGlob, matchFilenameOnly, directoryOnly, patterns)
 
         // Note that the 'try with resources pattern does not work with this version of groovy (2.4.x). Will work in 2.5.x.
         // This means that we must have a finally block to close the resource
@@ -49,6 +66,11 @@ class FilesFinder {
         try /*(DirectoryStream directoryStream = Files.newDirectoryStream(filesPath, pattern))*/ {
             for (Path path : directoryStream) {
                 matchingFiles.add(path.toFile())
+                if (includeSubdirectories && Files.isDirectory(path)) {
+                    // Note that this is recursive -- danger of stack overflow
+                    matchingFiles.addAll(getMatchingFilesFull(path, isRegexNotGlob, matchFilenameOnly, sortFiles,
+                                                              includeSubdirectories, directoryOnly, patterns))
+                }
             }
         } catch (IOException e) {
             log.warn("Unexpected exception filtering '${filesPath}': ${e}")
