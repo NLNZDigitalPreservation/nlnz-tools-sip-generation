@@ -51,8 +51,9 @@ class SipProcessingState {
         stringBuilder.append(this.getClass().getName())
         stringBuilder.append(" (identifier=${identifier})")
         stringBuilder.append(": ")
-        stringBuilder.append(complete ? "Complete, " : "NOT Complete")
+        stringBuilder.append(complete ? "Complete" : "NOT Complete")
         stringBuilder.append(isSuccessful() ? ", Successful " : ", NOT Successful")
+        stringBuilder.append(System.lineSeparator())
         if (this.exceptions.size() > 1) {
             stringBuilder.append(':')
             this.exceptions.each { SipProcessingException exception ->
@@ -65,17 +66,33 @@ class SipProcessingState {
         }
 
         stringBuilder.append("${initialOffset}totalFilesProcessed=${totalFilesProcessed}")
-        stringBuilder.append("${initialOffset}validFiles=${validFiles.size()}:")
+        stringBuilder.append(System.lineSeparator())
+        stringBuilder.append("${initialOffset}validFiles=${validFiles.size()}")
+        if (validFiles.size() > 0) {
+            stringBuilder.append(":")
+        }
+        stringBuilder.append(System.lineSeparator())
         validFiles.each { File file ->
             stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append(System.lineSeparator())
         }
-        stringBuilder.append("${initialOffset}invalidFiles=${invalidFiles.size()}:")
+        stringBuilder.append("${initialOffset}invalidFiles=${invalidFiles.size()}")
+        if (invalidFiles.size() > 0) {
+            stringBuilder.append(":")
+        }
+        stringBuilder.append(System.lineSeparator())
         invalidFiles.each { File file ->
             stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append(System.lineSeparator())
         }
         stringBuilder.append("${initialOffset}unrecognizedFiles=${unrecognizedFiles.size()}")
+        if (unrecognizedFiles.size() > 0) {
+            stringBuilder.append(":")
+        }
+        stringBuilder.append(System.lineSeparator())
         unrecognizedFiles.each { File file ->
             stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append(System.lineSeparator())
         }
         return stringBuilder.toString()
     }
