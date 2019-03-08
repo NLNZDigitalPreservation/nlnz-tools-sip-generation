@@ -14,6 +14,7 @@ enum SipProcessingExceptionReasonType {
     ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED(true, 'All files cannot be properly evaluated.'),
     INVALID_PAGE_FILENAME(false, 'The given file=${a} has an invalid filename (the filename does not conform to expected naming convention)'),
     INVALID_PDF(false, 'The given file=${a} is an invalid PDF. Validation failure(s)=${b}.'),
+    DUPLICATE_FILE(false, 'Duplicate files file1=${a}, file2=${b}.'),
     GENERIC_THREE_PLACES(false, '${a} ${b} ${c}')
 
     private final boolean fatal
