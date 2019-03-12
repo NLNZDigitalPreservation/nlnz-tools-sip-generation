@@ -12,6 +12,7 @@ enum SipProcessingExceptionReasonType {
      */
     FILE_OF_LENGTH_ZERO(false, 'The given file=${a} is of length zero.'),
     ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED(true, 'All files cannot be properly evaluated.'),
+    NO_MATCHING_SIP_DEFINITION(true, 'Unable to match an appropriate SIP definition to the files. Detailed reason=${a}.'),
     INVALID_PAGE_FILENAME(false, 'The given file=${a} has an invalid filename (the filename does not conform to expected naming convention)'),
     INVALID_PDF(false, 'The given file=${a} is an invalid PDF. Validation failure(s)=${b}.'),
     DUPLICATE_FILE(false, 'Duplicate files file1=${a}, file2=${b}.'),
