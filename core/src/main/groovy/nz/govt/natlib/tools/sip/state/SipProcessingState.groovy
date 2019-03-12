@@ -16,6 +16,7 @@ class SipProcessingState {
     List<File> invalidFiles = [ ]
     List<File> unrecognizedFiles = [ ]
     int totalFilesProcessed
+    SipProcessingType processingType = SipProcessingType.UNKNOWN
 
     boolean hasExceptions() {
         return exceptions.size() > 0
