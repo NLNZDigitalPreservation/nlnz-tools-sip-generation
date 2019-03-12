@@ -43,6 +43,38 @@ class FilesFinder {
         }
     }
 
+    /**
+     * Returns a filter that matches all paths that <em>don't</em> match the given patterns.
+     */
+    static DirectoryStream.Filter<Path> getNonMatchPathFilter(boolean isRegexNotGlob, boolean matchFilenameOnly,
+                                                      boolean directoryOnly = false, String... patterns) {
+        FileSystem fileSystem = FileSystems.getDefault()
+        final List<PathMatcher> pathMatchers = [ ]
+        String matcherType = isRegexNotGlob ? "regex:" : "glob:"
+        patterns.each { String pattern ->
+            pathMatchers.add(fileSystem.getPathMatcher(matcherType + pattern))
+        }
+        return new DirectoryStream.Filter<Path>() {
+            @Override
+            boolean accept(Path entry) throws IOException {
+                return pathMatchers.any { PathMatcher pathMatcher ->
+                    boolean isDirectory = Files.isDirectory(entry)
+                    boolean matched = directoryOnly ? isDirectory : true
+                    if (matched) {
+                        if (matchFilenameOnly) {
+                            matched = !pathMatcher.matches(entry.getFileName())
+                        } else {
+                            matched = !pathMatcher.matches(entry.normalize())
+                        }
+                    }
+                    //log.info("getPathFilter matched=${matched}, path=${entry.toFile().getCanonicalPath()}")
+                    matched
+                }
+            }
+        }
+    }
+
+
     static List<File> getMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
                                        boolean sortFiles = true, String... patterns) {
         boolean includeSubdirectories = false
@@ -96,4 +128,39 @@ class FilesFinder {
 
         return matchingFiles
     }
+
+    static List<File> getNonMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+                                          boolean sortFiles = true, String... patterns) {
+        boolean includeSubdirectories = false
+        boolean directoryOnly = false
+        return getNonMatchingFilesFull(filesPath, isRegexNotGlob, matchFilenameOnly, sortFiles, includeSubdirectories,
+                directoryOnly, patterns)
+    }
+
+    // TODO We may want to unit test this method, however it is composed mostly of java.nio.file methods.
+    // If we do decide to write unit tests, use the following as a guide:
+    // https://stackoverflow.com/questions/47101232/mocking-directorystreampath-without-mocking-iterator-possible
+    static List<File> getNonMatchingFilesFull(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+                                           boolean sortFiles = true, boolean includeSubdirectories = false,
+                                           boolean directoryOnly = false, String... patterns) {
+        List<File> nonMatchingFiles = [ ]
+        DirectoryStream.Filter<Path> pathFilter = getNonMatchPathFilter(isRegexNotGlob, matchFilenameOnly,
+                directoryOnly, patterns)
+
+        nonMatchingFiles = getMatchingFilesWithFilter(filesPath, pathFilter)
+
+        if (includeSubdirectories) {
+            File parentFolder = filesPath.toFile()
+            parentFolder.eachFileRecurse(FileType.DIRECTORIES) { File subdirectory ->
+                nonMatchingFiles.addAll(getMatchingFilesWithFilter(subdirectory.toPath(), pathFilter))
+            }
+        }
+
+        if (sortFiles) {
+            return nonMatchingFiles.toSorted { File a, File b -> a.getCanonicalPath() <=> b.getCanonicalPath() }
+        } else {
+            return nonMatchingFiles
+        }
+    }
+
 }

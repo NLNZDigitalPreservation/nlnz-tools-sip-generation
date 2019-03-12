@@ -52,7 +52,7 @@ class SipProcessingState {
         stringBuilder.append(" (identifier=${identifier})")
         stringBuilder.append(": ")
         stringBuilder.append(complete ? "Complete" : "NOT Complete")
-        stringBuilder.append(isSuccessful() ? ", Successful " : ", NOT Successful")
+        stringBuilder.append(isSuccessful() ? ", Successful" : ", NOT Successful")
         stringBuilder.append(':')
         stringBuilder.append(System.lineSeparator())
         if (this.exceptions.size() > 1) {
@@ -65,10 +65,11 @@ class SipProcessingState {
                 }
                 appendException(stringBuilder, offset + 4, exception)
             }
+            stringBuilder.append(System.lineSeparator())
         } else if (this.exceptions.size() == 1) {
             appendException(stringBuilder, 0, this.exceptions.first())
+            stringBuilder.append(System.lineSeparator())
         }
-        stringBuilder.append(System.lineSeparator())
 
         stringBuilder.append("${initialOffset}totalFilesProcessed=${totalFilesProcessed}")
         stringBuilder.append(System.lineSeparator())
