@@ -2,6 +2,7 @@ package nz.govt.natlib.tools.sip.extraction
 
 import groovy.util.logging.Slf4j
 import groovy.util.slurpersupport.GPathResult
+import nz.govt.natlib.tools.sip.IEEntityType
 import nz.govt.natlib.tools.sip.Sip
 
 import java.time.LocalDateTime
@@ -26,47 +27,47 @@ class SipXmlExtractor {
 
     Sip asSip() {
         Sip sip = new Sip()
-        sip.title = getTitle()
+        sip.title = extractTitle()
 
-        sip.year = getYear()
-        sip.month = getMonth()
-        sip.dayOfMonth = getDayOfMonth()
+        sip.year = extractYear()
+        sip.month = extractMonth()
+        sip.dayOfMonth = extractDayOfMonth()
 
-        sip.ieEntityType = getIEEntityType()
-        sip.objectIdentifierType = getObjectIdentifierType()
-        sip.objectIdentifierValue = getObjectIdentifierValue()
-        sip.policyId = getPolicyId()
+        sip.ieEntityType = extractIEEntityType()
+        sip.objectIdentifierType = extractObjectIdentifierType()
+        sip.objectIdentifierValue = extractObjectIdentifierValue()
+        sip.policyId = extractPolicyId()
 
-        sip.preservationType = getPreservationType()
-        sip.usageType = getUsageType()
-        sip.digitalOriginal = getDigitalOriginal()
-        sip.revisionNumber = getRevisionNumber()
+        sip.preservationType = extractPreservationType()
+        sip.usageType = extractUsageType()
+        sip.digitalOriginal = extractDigitalOriginal()
+        sip.revisionNumber = extractRevisionNumber()
 
-        sip.fileWrappers = getFileWrappers()
+        sip.fileWrappers = extractFileWrappers()
 
         return sip
     }
 
-    List<Sip.FileWrapper> getFileWrappers() {
+    List<Sip.FileWrapper> extractFileWrappers() {
         List<Sip.FileWrapper> fileWrappers = [ ]
         boolean moreRecords = true
         int fileIdIndex = 0
         while (moreRecords) {
             fileIdIndex += 1
-            GPathResult fileIdRecord = getFileIdRecord(fileIdIndex)
+            GPathResult fileIdRecord = extractFileIdRecord(fileIdIndex)
             if (fileIdRecord == null || (fileIdRecord.children().size() == 0)) {
                 moreRecords = false
             } else {
                 Sip.FileWrapper sipFileWrapper = new Sip.FileWrapper()
-                sipFileWrapper.creationDate = getFileCreationDate(fileIdRecord)
-                sipFileWrapper.fileOriginalName = getFileOriginalName(fileIdRecord)
-                sipFileWrapper.fileOriginalPath = getFileOriginalPath(fileIdRecord)
-                sipFileWrapper.fileSizeBytes = getFileSizeBytes(fileIdRecord)
-                sipFileWrapper.fixityType = getFileFixityType(fileIdRecord)
-                sipFileWrapper.fixityValue = getFileFixityValue(fileIdRecord)
-                sipFileWrapper.label = getFileLabel(fileIdRecord)
-                sipFileWrapper.mimeType = getFileMimeType(fileIdRecord)
-                sipFileWrapper.modificationDate = getFileModificationDate(fileIdRecord)
+                sipFileWrapper.creationDate = extractFileCreationDate(fileIdRecord)
+                sipFileWrapper.fileOriginalName = extractFileOriginalName(fileIdRecord)
+                sipFileWrapper.fileOriginalPath = extractFileOriginalPath(fileIdRecord)
+                sipFileWrapper.fileSizeBytes = extractFileSizeBytes(fileIdRecord)
+                sipFileWrapper.fixityType = extractFileFixityType(fileIdRecord)
+                sipFileWrapper.fixityValue = extractFileFixityValue(fileIdRecord)
+                sipFileWrapper.label = extractFileLabel(fileIdRecord)
+                sipFileWrapper.mimeType = extractFileMimeType(fileIdRecord)
+                sipFileWrapper.modificationDate = extractFileModificationDate(fileIdRecord)
 
                 fileWrappers.add(sipFileWrapper)
             }
@@ -75,8 +76,8 @@ class SipXmlExtractor {
         return fileWrappers
     }
 
-    GPathResult getIeDmdRecord() {
-        GPathResult gPath = getGPathResult()
+    GPathResult extractIeDmdRecord() {
+        GPathResult gPath = extractGPathResult()
         GPathResult ieDmd = (GPathResult) gPath.'mets:dmdSec'.find { GPathResult childPath ->
             childPath.@ID == "ie-dmd"
         }
@@ -84,65 +85,67 @@ class SipXmlExtractor {
         return ieDmdRecord
     }
 
-    String getTitle() {
-        return getIeDmdRecord().'dc:title' as String
+    String extractTitle() {
+        return extractIeDmdRecord().'dc:title' as String
     }
 
-    Integer getYear() {
-        String yearString = getIeDmdRecord().'dc:date' as String
+    Integer extractYear() {
+        String yearString = extractIeDmdRecord().'dc:date' as String
         return Integer.parseInt(yearString)
     }
 
-    Integer getMonth() {
-        String monthString = getIeDmdRecord().'dcterms:available' as String
+    Integer extractMonth() {
+        String monthString = extractIeDmdRecord().'dcterms:available' as String
         return Integer.parseInt(monthString)
     }
 
-    Integer getDayOfMonth() {
-        String dayOfMonthString = getIeDmdRecord().'dc:coverage' as String
+    Integer extractDayOfMonth() {
+        String dayOfMonthString = extractIeDmdRecord().'dc:coverage' as String
         return Integer.parseInt(dayOfMonthString)
     }
 
-    GPathResult getIeAmdRecord() {
-        GPathResult gPath = getGPathResult()
+    GPathResult extractIeAmdRecord() {
+        GPathResult gPath = extractGPathResult()
         GPathResult ieAmdRecord = (GPathResult) gPath.'mets:amdSec'.find { GPathResult childPath ->
             childPath.@ID == "ie-amd"
         }
         return ieAmdRecord
     }
 
-    GPathResult getIeAmdTechRecord() {
-        GPathResult ieAmdRecord = getIeAmdRecord()
+    GPathResult extractIeAmdTechRecord() {
+        GPathResult ieAmdRecord = extractIeAmdRecord()
         GPathResult ieAmdTech = (GPathResult) ieAmdRecord.'mets:techMD'.find { GPathResult childPath ->
             childPath.@ID == "ie-amd-tech"
         }
         return ieAmdTech
     }
 
-    String getIEEntityType() {
-        return findFirstNodeWithAttribute(getIeAmdTechRecord(), "id", "IEEntityType") as String
+    IEEntityType extractIEEntityType() {
+        String ieEntityTypeString = extractFirstNodeWithAttribute(extractIeAmdTechRecord(), "id", "IEEntityType") as String
+
+        return IEEntityType.matching(ieEntityTypeString)
     }
 
-    GPathResult getObjectIdentifier() {
-        return findFirstNodeWithAttribute(getIeAmdTechRecord(), "id", "objectIdentifier")
+    GPathResult extractObjectIdentifier() {
+        return extractFirstNodeWithAttribute(extractIeAmdTechRecord(), "id", "objectIdentifier")
     }
 
-    String getObjectIdentifierType() {
-        return findFirstNodeWithAttribute(getObjectIdentifier(), "id", "objectIdentifierType") as String
+    String extractObjectIdentifierType() {
+        return extractFirstNodeWithAttribute(extractObjectIdentifier(), "id", "objectIdentifierType") as String
     }
 
-    String getObjectIdentifierValue() {
-        return findFirstNodeWithAttribute(getObjectIdentifier(), "id", "objectIdentifierValue") as String
+    String extractObjectIdentifierValue() {
+        return extractFirstNodeWithAttribute(extractObjectIdentifier(), "id", "objectIdentifierValue") as String
     }
 
-    String getPolicyId() {
-        GPathResult ieAmdRights = findFirstNodeWithAttribute(getIeAmdRecord(), "ID", "ie-amd-rights")
-        GPathResult accessRightsPolicy = findFirstNodeWithAttribute(ieAmdRights, "id", "accessRightsPolicy")
-        return findFirstNodeWithAttribute(accessRightsPolicy, "id", "policyId") as String
+    String extractPolicyId() {
+        GPathResult ieAmdRights = extractFirstNodeWithAttribute(extractIeAmdRecord(), "ID", "ie-amd-rights")
+        GPathResult accessRightsPolicy = extractFirstNodeWithAttribute(ieAmdRights, "id", "accessRightsPolicy")
+        return extractFirstNodeWithAttribute(accessRightsPolicy, "id", "policyId") as String
     }
 
-    GPathResult getGeneralRepCharacteristicsRecord() {
-        GPathResult gPath = getGPathResult()
+    GPathResult extractGeneralRepCharacteristicsRecord() {
+        GPathResult gPath = extractGPathResult()
         GPathResult rep1Amd = (GPathResult) gPath.'mets:amdSec'.find { GPathResult childPath ->
             childPath.@ID == "rep1-amd"
         }
@@ -160,94 +163,94 @@ class SipXmlExtractor {
         return generalRepCharacteristicsRecord
     }
 
-    String getPreservationTypeViaRecord() {
-        GPathResult generalRepCharacteristicsRecord = getGeneralRepCharacteristicsRecord()
+    String extractPreservationTypeViaRecord() {
+        GPathResult generalRepCharacteristicsRecord = extractGeneralRepCharacteristicsRecord()
         return generalRepCharacteristicsRecord.key.find { GPathResult childPath ->
             childPath.@id == "preservationType"
         }
     }
 
-    String getPreservationType() {
-        return findFirstNodeWithAttribute("id", "preservationType") as String
+    String extractPreservationType() {
+        return extractFirstNodeWithAttribute("id", "preservationType") as String
      }
 
-    String getUsageType() {
-        return findFirstNodeWithAttribute("id", "usageType") as String
+    String extractUsageType() {
+        return extractFirstNodeWithAttribute("id", "usageType") as String
     }
 
-    Integer getRevisionNumber() {
-        String revisionString = findFirstNodeWithAttribute("id", "RevisionNumber") as String
+    Integer extractRevisionNumber() {
+        String revisionString = extractFirstNodeWithAttribute("id", "RevisionNumber") as String
         return Integer.parseInt(revisionString)
     }
 
-    Boolean getDigitalOriginal() {
-        String booleanString = findFirstNodeWithAttribute("id", "DigitalOriginal") as String
+    Boolean extractDigitalOriginal() {
+        String booleanString = extractFirstNodeWithAttribute("id", "DigitalOriginal") as String
         return Boolean.parseBoolean(booleanString)
     }
 
-    GPathResult getFileIdRecord(int fileIdIndex) {
-        GPathResult gPath = getGPathResult()
+    GPathResult extractFileIdRecord(int fileIdIndex) {
+        GPathResult gPath = extractGPathResult()
         return gPath."mets:amdSec".find { GPathResult childPath ->
             childPath.@ID == "fid${fileIdIndex}-1-amd"
         }
     }
 
-    LocalDateTime getFileCreationDate(GPathResult fileRecord) {
-        String dateString = findFirstNodeWithAttribute(fileRecord, "id", "fileCreationDate") as String
+    LocalDateTime extractFileCreationDate(GPathResult fileRecord) {
+        String dateString = extractFirstNodeWithAttribute(fileRecord, "id", "fileCreationDate") as String
         return LocalDateTime.parse(dateString, Sip.LOCAL_DATE_TIME_FORMATTER)
     }
 
-    LocalDateTime getFileModificationDate(GPathResult fileRecord) {
-        String dateString = findFirstNodeWithAttribute(fileRecord, "id", "fileModificationDate") as String
+    LocalDateTime extractFileModificationDate(GPathResult fileRecord) {
+        String dateString = extractFirstNodeWithAttribute(fileRecord, "id", "fileModificationDate") as String
         return LocalDateTime.parse(dateString, Sip.LOCAL_DATE_TIME_FORMATTER)
     }
 
-    String getFileOriginalPath(GPathResult fileRecord) {
-        return findFirstNodeWithAttribute(fileRecord, "id", "fileOriginalPath") as String
+    String extractFileOriginalPath(GPathResult fileRecord) {
+        return extractFirstNodeWithAttribute(fileRecord, "id", "fileOriginalPath") as String
     }
 
-    String getFileLabel(GPathResult fileRecord) {
-        return findFirstNodeWithAttribute(fileRecord, "id", "label") as String
+    String extractFileLabel(GPathResult fileRecord) {
+        return extractFirstNodeWithAttribute(fileRecord, "id", "label") as String
     }
 
-    String getFileOriginalName(GPathResult fileRecord) {
-        return findFirstNodeWithAttribute(fileRecord, "id", "fileOriginalName") as String
+    String extractFileOriginalName(GPathResult fileRecord) {
+        return extractFirstNodeWithAttribute(fileRecord, "id", "fileOriginalName") as String
     }
 
-    Long getFileSizeBytes(GPathResult fileRecord) {
-        String sizeString = findFirstNodeWithAttribute(fileRecord, "id", "fileSizeBytes") as String
+    Long extractFileSizeBytes(GPathResult fileRecord) {
+        String sizeString = extractFirstNodeWithAttribute(fileRecord, "id", "fileSizeBytes") as String
         return Long.parseLong(sizeString)
     }
 
-    String getFileMimeType(GPathResult fileRecord) {
-        return findFirstNodeWithAttribute(fileRecord, "id", "fileMIMEType") as String
+    String extractFileMimeType(GPathResult fileRecord) {
+        return extractFirstNodeWithAttribute(fileRecord, "id", "fileMIMEType") as String
     }
 
-    GPathResult getFileFixityRecord(GPathResult fileRecord) {
-        return findFirstNodeWithAttribute(fileRecord, "id", "fileFixity")
+    GPathResult extractFileFixityRecord(GPathResult fileRecord) {
+        return extractFirstNodeWithAttribute(fileRecord, "id", "fileFixity")
     }
 
-    String getFileFixityType(GPathResult fileRecord) {
-        return findFirstNodeWithAttribute(getFileFixityRecord(fileRecord), "id", "fixityType") as String
+    String extractFileFixityType(GPathResult fileRecord) {
+        return extractFirstNodeWithAttribute(extractFileFixityRecord(fileRecord), "id", "fixityType") as String
     }
 
-    String getFileFixityValue(GPathResult fileRecord) {
-        return findFirstNodeWithAttribute(getFileFixityRecord(fileRecord), "id", "fixityValue") as String
+    String extractFileFixityValue(GPathResult fileRecord) {
+        return extractFirstNodeWithAttribute(extractFileFixityRecord(fileRecord), "id", "fixityValue") as String
     }
 
-    GPathResult findFirstNodeWithAttribute(String attributeName, String attributeValue) {
-        return findFirstNodeWithAttribute(getGPathResult(), attributeName, attributeValue)
+    GPathResult extractFirstNodeWithAttribute(String attributeName, String attributeValue) {
+        return extractFirstNodeWithAttribute(extractGPathResult(), attributeName, attributeValue)
     }
 
-    GPathResult findFirstNodeWithAttribute(GPathResult startingPoint, String attributeName, String attributeValue) {
+    GPathResult extractFirstNodeWithAttribute(GPathResult startingPoint, String attributeName, String attributeValue) {
          GPathResult matchingNode = (GPathResult) startingPoint.depthFirst().find { GPathResult child ->
             child.@"${attributeName}" == attributeValue
         }
         return matchingNode
     }
 
-    List<GPathResult> findNodesWithAttribute(String attributeName, String attributeValue) {
-        GPathResult gPath = getGPathResult()
+    List<GPathResult> extractNodesWithAttribute(String attributeName, String attributeValue) {
+        GPathResult gPath = extractGPathResult()
         List<GPathResult> matchingNodes = gPath.depthFirst().findAll { GPathResult child ->
             child.@"${attributeName}" == attributeValue
         }
@@ -257,7 +260,7 @@ class SipXmlExtractor {
         return matchingNodes
     }
 
-    private GPathResult getGPathResult() {
+    private GPathResult extractGPathResult() {
         synchronized (this) {
             if (this.gPathResult == null) {
                 XmlSlurper xmlSlurper = new XmlSlurper(false, true)

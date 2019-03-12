@@ -15,7 +15,7 @@ class SipTestHelper {
     static final Integer SIP_MONTH = 11
     static final Integer SIP_DAY_OF_MONTH = 23
 
-    static final String SIP_IE_ENTITY_TYPE = "test-ie-entity-type"
+    static final IEEntityType SIP_IE_ENTITY_TYPE = IEEntityType.MagazineIE
     static final String SIP_OBJECT_IDENTIFIER_TYPE = "test-object-identifier-type"
     static final String SIP_OBJECT_IDENTIFIER_VALUE = "test-object-identifier-value"
 
@@ -209,7 +209,7 @@ class SipTestHelper {
         assertThat("year", sip.year, is(2015))
         assertThat("month", sip.month, is(7))
         assertThat("dayOfMonth", sip.dayOfMonth, is(29))
-        assertThat("ieEntityType", sip.ieEntityType, is("NewspaperIE"))
+        assertThat("ieEntityType", sip.ieEntityType, is(IEEntityType.NewspaperIE))
         assertThat("objectIdentifierType", sip.objectIdentifierType, is("ALMAMMS"))
         assertThat("objectIdentifierValue", sip.objectIdentifierValue, is("9917982663502836"))
         assertThat("policyId", sip.policyId, is("200"))

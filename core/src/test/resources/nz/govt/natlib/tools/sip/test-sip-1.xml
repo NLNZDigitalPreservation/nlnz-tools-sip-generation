@@ -18,7 +18,7 @@
                     <dnx xmlns="http://www.exlibrisgroup.com/dps/dnx">
                         <section id="generalIECharacteristics">
                             <record>
-                                <key id="IEEntityType">test-ie-entity-type</key>
+                                <key id="IEEntityType">MagazineIE</key>
                             </record>
                         </section>
                         <section id="objectIdentifier">

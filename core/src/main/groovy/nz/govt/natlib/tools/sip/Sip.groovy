@@ -26,7 +26,7 @@ class Sip {
     Integer dayOfMonth
 
     // Type and policy
-    String ieEntityType
+    IEEntityType ieEntityType
     String objectIdentifierType
     String objectIdentifierValue
     String policyId

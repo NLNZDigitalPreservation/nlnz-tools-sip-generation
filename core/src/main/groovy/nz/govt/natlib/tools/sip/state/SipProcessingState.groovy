@@ -1,6 +1,7 @@
 package nz.govt.natlib.tools.sip.state
 
 import groovy.transform.Canonical
+import nz.govt.natlib.tools.sip.IEEntityType
 import org.apache.commons.lang3.StringUtils
 
 import java.nio.file.Path
@@ -16,7 +17,7 @@ class SipProcessingState {
     List<File> invalidFiles = [ ]
     List<File> unrecognizedFiles = [ ]
     int totalFilesProcessed
-    SipProcessingType processingType = SipProcessingType.UNKNOWN
+    IEEntityType ieEntityType = IEEntityType.UNKNOWN
 
     boolean hasExceptions() {
         return exceptions.size() > 0
