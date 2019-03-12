@@ -40,7 +40,7 @@ class SipXmlGenerator {
             DnxDocumentHelper documentHelper = new DnxDocumentHelper(dnxDocument)
 
             DnxDocumentHelper.GeneralIECharacteristics generalIECharacteristics = new DnxDocumentHelper.GeneralIECharacteristics(documentHelper)
-            generalIECharacteristics.setIEEntityType(sip.ieEntityType)
+            generalIECharacteristics.setIEEntityType(sip.ieEntityType.getFieldValue())
             documentHelper.setGeneralIECharacteristics(generalIECharacteristics)
 
             DnxDocumentHelper.ObjectIdentifier objectIdentifier = new DnxDocumentHelper.ObjectIdentifier(documentHelper)

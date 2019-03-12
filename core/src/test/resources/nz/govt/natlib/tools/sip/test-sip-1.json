@@ -3,7 +3,7 @@
   "year": 2018,
   "month": 11,
   "dayOfMonth": 23,
-  "ieEntityType": "test-ie-entity-type",
+  "ieEntityType": "MagazineIE",
   "objectIdentifierType": "test-object-identifier-type",
   "objectIdentifierValue": "test-object-identifier-value",
   "policyId": "test-policy-id",

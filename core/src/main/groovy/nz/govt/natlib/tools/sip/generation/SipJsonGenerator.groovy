@@ -22,7 +22,7 @@ class SipJsonGenerator {
             month sip.month
             dayOfMonth sip.dayOfMonth
 
-            ieEntityType sip.ieEntityType
+            ieEntityType sip.ieEntityType.getFieldValue()
             objectIdentifierType sip.objectIdentifierType
             objectIdentifierValue sip.objectIdentifierValue
             policyId sip.policyId
