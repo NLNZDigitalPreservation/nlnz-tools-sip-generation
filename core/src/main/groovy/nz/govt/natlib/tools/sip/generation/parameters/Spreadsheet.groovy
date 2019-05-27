@@ -10,12 +10,18 @@ import nz.govt.natlib.tools.sip.state.SipProcessingException
 @Slf4j
 @Canonical
 class Spreadsheet {
-    static String NO_ID_KEY = "NO_GIVEN_ID"
+    static final String NO_ID_KEY = "NO_GIVEN_ID"
+    static final String COLUMN_HEADERS_KEY = "COLUMN_NAMES"
+    static final String COMMENTS_KEY = "COMMENTS"
+    static final String EMPTY_VALUE = ""
 
     /** The column to use for ids */
     String idColumnName
     boolean allowDuplicateIds
     boolean allowRowsWithoutIds
+    // Comments start with a '#'
+    List<String> comments = [ ]
+    List<String> columnHeaders = [ ]
     List<Map<String, String>> rows = [ ]
 
     static Spreadsheet fromJson(String idColumnName, File jsonFile, boolean allowDuplicateIds = false,
@@ -33,7 +39,20 @@ class Spreadsheet {
             throw new SipProcessingException("Unable to parse JSON-text='${jsonString}'")
         }
         // We assume the JSON is the same structure as produced by {@link #asJsonString}.
-        List<Map<String, Map<String, String>>> jsonList = (List<Map<String, Map<String, String>>>) parsedJson
+        List<Object> simpleJsonList = (List<Object>) parsedJson
+        List<String> theComments = [ ]
+        List<String> theColumnHeaders = [ ]
+        List<Map<String, Map<String, String>>> jsonList = [ ]
+        simpleJsonList.each { Object jsonRow ->
+            Map<String, Object> jsonRowMap = (Map<String, Object>) jsonRow
+            if (jsonRowMap.containsKey(COMMENTS_KEY)) {
+                theComments = (List<String>) jsonRowMap.get(COMMENTS_KEY)
+            } else if (jsonRowMap.containsKey(COLUMN_HEADERS_KEY)) {
+                theColumnHeaders = (List<String>) jsonRowMap.get(COLUMN_HEADERS_KEY)
+            } else {
+                jsonList.add((Map<String, Map<String, String>>) jsonRow)
+            }
+        }
 
         List<Map<String, String>> rowsForCreation = [ ]
         try {
@@ -47,11 +66,13 @@ class Spreadsheet {
             throw new SipProcessingException("Unable to convert to proper input format: JSON-text='${jsonString}'")
         }
 
-        return new Spreadsheet(idColumnName, rowsForCreation, allowDuplicateIds, allowRowsWithoutIds)
+        return new Spreadsheet(idColumnName, theColumnHeaders, rowsForCreation, theComments,
+                allowDuplicateIds, allowRowsWithoutIds)
     }
 
-    Spreadsheet(String idColumnName, List<Map<String, String>> rows, boolean allowDuplicateIds = false,
-                boolean allowRowsWithoutIds = false) throws SipProcessingException {
+    Spreadsheet(String idColumnName, List<String> columnHeaders, List<Map<String, String>> rows,
+                List<String> comments = [ ], boolean allowDuplicateIds = false, boolean allowRowsWithoutIds = false)
+            throws SipProcessingException {
         if (idColumnName == null || idColumnName.isEmpty()) {
             throw new IllegalArgumentException("idColumnName='${idColumnName}' cannot be null or empty.")
         }
@@ -61,6 +82,8 @@ class Spreadsheet {
         this.idColumnName = idColumnName
         this.allowDuplicateIds = allowDuplicateIds
         this.allowRowsWithoutIds = allowRowsWithoutIds
+        this.columnHeaders = columnHeaders
+        this.comments = comments
         this.rows = rows
         if (!isValid(true, true)) {
             throw new SipProcessingException("Spreadsheet is invalid. See warnings in log.")
@@ -171,26 +194,101 @@ class Spreadsheet {
         StringBuilder stringBuilder = new StringBuilder()
         rows.each { Map<String, String> row ->
             String columnId = row.get(this.idColumnName)
-            stringBuilder.append(rowString(columnId, row), withColumnId)
+            stringBuilder.append(rowString(columnId, row, withColumnId))
         }
         return stringBuilder
     }
 
-    List<Map<String, Map<String, String>>> keyOrNoIdMap() {
+    List<Map<String, Map<String, String>>> keyOrNoIdMap(boolean orderByColumnHeaders = true) {
         List<Map<String, Map<String, String>>> keyOrNoIdMap = [ ]
         rows.each { Map<String, String> rowMap ->
+            Map<String, String> adjustedRowMap = rowMap
             String idKey = rowMap.get(idColumnName)
+            if (orderByColumnHeaders) {
+                adjustedRowMap = new LinkedHashMap<String, String>()
+                this.columnHeaders.each { String columnHeader ->
+                    String columnValue = rowMap.get(columnHeader)
+                    if (columnValue == null) {
+                        columnValue = EMPTY_VALUE
+                    }
+                    adjustedRowMap.put(columnHeader, columnValue)
+                }
+                unmappedColumns(rowMap).each { String unmappedKey ->
+                    adjustedRowMap.put(unmappedKey, rowMap.get(unmappedKey))
+                }
+            }
             if (idKey == null) {
-                keyOrNoIdMap.add([ "${NO_ID_KEY}": rowMap ])
+                keyOrNoIdMap.add([ ("${NO_ID_KEY}".toString()): adjustedRowMap ])
             } else {
-                keyOrNoIdMap.add([ "${idKey}": rowMap ])
+                keyOrNoIdMap.add([ ("${idKey}".toString()): adjustedRowMap ])
             }
         }
         return keyOrNoIdMap
     }
 
+    List<String> unmappedColumns(Map<String, String> rowMap) {
+        List<String> unmapped = [ ]
+        Set<String> columnHeadersSet = [ ]
+        columnHeadersSet.addAll(this.columnHeaders)
+        rowMap.keySet().each { String key ->
+            if (!columnHeadersSet.contains(key)) {
+                unmapped.add(key)
+            }
+        }
+        return unmapped
+    }
+
     String asJsonString() {
-        String jsonOutput = JsonOutput.toJson(keyOrNoIdMap())
+        List<Object> jsonList = [ ]
+        jsonList.add(("${COMMENTS_KEY}".toString()): comments)
+        jsonList.add(("${COLUMN_HEADERS_KEY}".toString()): columnHeaders)
+        jsonList.addAll(keyOrNoIdMap())
+        String jsonOutput = JsonOutput.toJson(jsonList)
         return jsonOutput
     }
+
+    String asCsvString(String separator = ",") {
+        StringBuilder stringBuilder = new StringBuilder()
+        this.comments.each { String comment ->
+            stringBuilder.append(comment)
+            stringBuilder.append(System.lineSeparator())
+        }
+        boolean prependSeparator = false
+        this.columnHeaders.each { String columnHeader ->
+            if (prependSeparator) {
+                stringBuilder.append(separator)
+            } else {
+                prependSeparator = true
+            }
+            stringBuilder.append(columnHeader)
+        }
+        stringBuilder.append(System.lineSeparator())
+
+        this.rows.each { Map<String, String> row ->
+            prependSeparator = false
+            this.columnHeaders.each { String columnHeader ->
+                String columnValue = row.get(columnHeader)
+                if (columnValue == null) {
+                    columnValue = EMPTY_VALUE
+                }
+                if (prependSeparator) {
+                    stringBuilder.append(separator)
+                } else {
+                    prependSeparator = true
+                }
+                stringBuilder.append(columnValue)
+            }
+            unmappedColumns(row).each { String unmappedColumn ->
+                if (prependSeparator) {
+                    stringBuilder.append(separator)
+                } else {
+                    prependSeparator = true
+                }
+                stringBuilder.append(unmappedColumn)
+            }
+            stringBuilder.append(System.lineSeparator())
+        }
+        return stringBuilder.toString()
+    }
+
 }
