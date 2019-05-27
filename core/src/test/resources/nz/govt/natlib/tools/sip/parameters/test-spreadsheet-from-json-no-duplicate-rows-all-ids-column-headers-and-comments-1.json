@@ -3,6 +3,9 @@
     "COLUMN_NAMES": [ "column-1", "column 2", "column,3", "a column 4" ]
   },
   {
+    "COMMENTS": [ "# Comment 1", "  # Comment 2", "#", "# Comment 4" ]
+  },
+  {
     "row1": {
       "column-1": "row1",
       "column 2": "second",
@@ -21,14 +24,19 @@
       "column-1": "row3",
       "column 2": "c2",
       "column,3": "c3",
-      "a column 4": "c4"
+      "a column 4": "",
+      "": "",
+      "": "column-6"
     }
   },
   {
-    "NO_GIVEN_ID": {
-      "column 2": "second",
-      "column,3": "third",
-      "a column 4": "fourth"
+    "row4": {
+      "column-1": "row4",
+      "column 2": "c2",
+      "column,3": "c3",
+      "a column 4": "c4",
+      "": "extra-column-1",
+      "": "extra column 2"
     }
   }
 ]

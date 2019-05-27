@@ -1,6 +1,7 @@
 package nz.govt.natlib.tools.sip.parameters
 
 import groovy.json.JsonOutput
+import nz.govt.natlib.tools.sip.generation.parameters.SpreadsheetImporter
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 import nz.govt.natlib.tools.sip.generation.parameters.Spreadsheet
 
@@ -15,20 +16,30 @@ import org.junit.Test
  * Tests {@link nz.govt.natlib.tools.sip.generation.parameters.Spreadsheet}.
  */
 class SpreadsheetTest {
-    static Map<String, String> ROW_SAMPLE_ONE = [ 'column-1': 'row1', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
-    static Map<String, String> ROW_SAMPLE_TWO = [ 'column-1': 'row2', 'column 2': 'another' ]
-    static Map<String, String> ROW_SAMPLE_THREE = [ 'column-1': 'row3', 'column 2': 'c2', 'column,3': 'c3', 'a column 4': 'c4' ]
-    static Map<String, String> ROW_SAMPLE_DUPLICATE_ONE = [ 'column-1': 'row1', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
-    static Map<String, String> ROW_SAMPLE_NO_COLUMN_1 = [ 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
+    static final List<String> COMMENTS = [ '# Comment 1', '  # Comment 2', '#', '# Comment 4' ]
+    static final List<String> NO_COMMENTS = [ ]
+    static final List<String> COLUMN_HEADERS = [ 'column-1', 'column 2', 'column,3', 'a column 4']
+    static final Map<String, String> ROW_SAMPLE_ONE = [ 'column-1': 'row1', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
+    static final Map<String, String> ROW_SAMPLE_TWO = [ 'column-1': 'row2', 'column 2': 'another' ]
+    static final Map<String, String> ROW_SAMPLE_TWO_ALL_COLUMNS = [ 'column-1': 'row2', 'column 2': 'another', 'column,3': '', 'a column 4': '' ]
+    static final Map<String, String> ROW_SAMPLE_TWO_EMPTY_3 = [ 'column-1': 'row2', 'column 2': 'another', 'column,3': '', 'a column 4': 'four had an empty before' ]
+    static final Map<String, String> ROW_SAMPLE_THREE = [ 'column-1': 'row3', 'column 2': 'c2', 'column,3': 'c3', 'a column 4': 'c4' ]
+    static final Map<String, String> ROW_SAMPLE_THREE_TO_COLUMN_6 = [ 'column-1': 'row3', 'column 2': 'c2', 'column,3': 'c3', 'a column 4': '', '': 'column-6' ]
+    static final Map<String, String> ROW_SAMPLE_DUPLICATE_ONE = [ 'column-1': 'row1', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
+    static final Map<String, String> ROW_SAMPLE_NO_COLUMN_1 = [ 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
+    static final Map<String, String> ROW_SAMPLE_FOUR_TO_COLUMN_6 = [ 'column-1': 'row4', 'column 2': 'c2', 'column,3': 'c3', 'a column 4': 'c4', '': 'extra column 2' ]
 
-    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_1 = [ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE ]
-    static List<Map<String, String>> ROWS_DUPLICATE_ROWS_ALL_IDS_1 = [ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE, ROW_SAMPLE_DUPLICATE_ONE ]
-    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1 = [ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE, ROW_SAMPLE_NO_COLUMN_1 ]
+    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE ]
+    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_ALL_COLUMNS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO_ALL_COLUMNS, ROW_SAMPLE_THREE ]
+    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_ALL_COLUMNS_TWO_EMPTY_3_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO_EMPTY_3, ROW_SAMPLE_THREE ]
+    static List<Map<String, String>> ROWS_DUPLICATE_ROWS_ALL_IDS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE, ROW_SAMPLE_DUPLICATE_ONE ]
+    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE, ROW_SAMPLE_NO_COLUMN_1 ]
+    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_WITH_EXTRAS = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE_TO_COLUMN_6, ROW_SAMPLE_FOUR_TO_COLUMN_6 ]
 
     @Test
     void rowsWithIdsAreValidSpreadsheet() {
         List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_ALL_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, false, false)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, COMMENTS, false, false)
 
         assertTrue("Spreadsheet is valid", spreadsheet.isValid())
         assertTrue("Spreadsheet has no rows with duplicate ids", spreadsheet.duplicateKeysWithRows().size() == 0)
@@ -38,7 +49,7 @@ class SpreadsheetTest {
     @Test(expected = SipProcessingException.class)
     void rowsWithDuplicateIdsAreInvalidIfNotAllowed() {
         List<Map<String, String>> rows = ROWS_DUPLICATE_ROWS_ALL_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, false, false)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, false, false)
 
         assertTrue("Spreadsheet is invalid", !spreadsheet.isValid())
         assertTrue("Spreadsheet has rows with duplicate ids", spreadsheet.duplicateKeysWithRows().size() > 0)
@@ -47,7 +58,7 @@ class SpreadsheetTest {
     @Test
     void rowsWithDuplicateIdsAreValidIfAllowed() {
         List<Map<String, String>> rows = ROWS_DUPLICATE_ROWS_ALL_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, true, false)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, true, false)
 
         assertTrue("Spreadsheet is valid", spreadsheet.isValid())
         assertTrue("Spreadsheet has rows with duplicate ids", spreadsheet.duplicateKeysWithRows().size() > 0)
@@ -56,7 +67,7 @@ class SpreadsheetTest {
     @Test(expected = SipProcessingException.class)
     void rowsWithoutIdsAreInvalidIfNotAllowed() {
         List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, false, false)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, false, false)
 
         assertTrue("Spreadsheet is invalid", !spreadsheet.isValid())
         assertTrue("Spreadsheet has rows without ids", spreadsheet.rowsWithoutIds().size() > 0)
@@ -65,7 +76,7 @@ class SpreadsheetTest {
     @Test
     void rowsWithoutIdsAreValidIfAllowed() {
         List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, false, true)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, false, true)
 
         assertTrue("Spreadsheet is valid", spreadsheet.isValid())
         assertTrue("Spreadsheet has rows without ids", spreadsheet.rowsWithoutIds().size() > 0)
@@ -81,6 +92,19 @@ class SpreadsheetTest {
 
         Spreadsheet testSpreadsheetFromJsonAllIdsNoDuplicateRows1 = testSpreadsheetFromJsonNoDuplicateRowsAllIds1()
         compareSpreadsheets(testSpreadsheetFromJsonAllIdsNoDuplicateRows1, spreadsheet)
+    }
+
+    @Test
+    void importRowsNoDuplicatesAllWithIdsColumnHeadersAndCommentsAndExtraColumnsIsValidSpreadsheet() {
+        InputStream jsonFileInputStream = SpreadsheetImporterTest.getResourceAsStream("test-spreadsheet-from-json-no-duplicate-rows-all-ids-column-headers-and-comments-1.json")
+        String jsonString = jsonFileInputStream.getText()
+
+        // Note that columns without a header will have the same id (an empty string) so duplicate ids must be allowed
+        Spreadsheet spreadsheet = Spreadsheet.fromJson("column-1", jsonString, true, true)
+        assertTrue("Spreadsheet is valid", spreadsheet.isValid(false, false))
+
+        Spreadsheet testSpreadsheetFromJsonNoDuplicateRowsAllIdsColumnHeadersAndComments1 = testSpreadsheetFromJsonNoDuplicateRowsAllIdsColumnHeadersAndComments1()
+        compareSpreadsheets(testSpreadsheetFromJsonNoDuplicateRowsAllIdsColumnHeadersAndComments1, spreadsheet)
     }
 
     @Test
@@ -112,7 +136,7 @@ class SpreadsheetTest {
         InputStream jsonFileInputStream = SpreadsheetImporterTest.getResourceAsStream("test-spreadsheet-from-json-no-duplicate-rows-missing-ids-1.json")
         String jsonString = jsonFileInputStream.getText()
 
-        Spreadsheet spreadsheet = Spreadsheet.fromJson("column-1", jsonString, false, true)
+        Spreadsheet spreadsheet = Spreadsheet.fromJson("column-1", jsonString, true, true)
         assertTrue("Spreadsheet is valid", spreadsheet.isValid(false, false))
 
         Spreadsheet testSpreadsheetFromJsonNoDuplicateRowsMissingIds1 = testSpreadsheetFromJsonNoDuplicateRowsMissingIds1()
@@ -150,28 +174,63 @@ class SpreadsheetTest {
         assertTrue("Spreadsheet is valid", spreadsheet.isValid(false, false))
     }
 
+    @Test
+    void spreadsheetCanBeImportedAndExportedToJsonAndRemainTheSame() {
+        Spreadsheet sourceSpreadsheet = testSpreadsheetFullCycle()
+        String testSpreadsheetJsonString = sourceSpreadsheet.asJsonString()
+        Spreadsheet recreatedSpreadsheet = Spreadsheet.fromJson("column-1", testSpreadsheetJsonString, false, false)
+        compareSpreadsheets(sourceSpreadsheet, recreatedSpreadsheet)
+    }
+
+    @Test
+    void spreadsheetCanBeImportedAndExportedToCsvAndRemainTheSame() {
+        Spreadsheet sourceSpreadsheet = testSpreadsheetFullCycle()
+        String separator = "|"
+        String testSpreadsheetCsvString = sourceSpreadsheet.asCsvString(separator)
+        Spreadsheet recreatedSpreadsheet = SpreadsheetImporter.extractSpreadsheet(testSpreadsheetCsvString, "column-1",
+                separator, false, false)
+        compareSpreadsheets(sourceSpreadsheet, recreatedSpreadsheet)
+    }
+
     Spreadsheet testSpreadsheetFromJsonNoDuplicateRowsAllIds1() {
         List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_ALL_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, false, false)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, false, false)
+
+        return spreadsheet
+    }
+
+    Spreadsheet testSpreadsheetFromJsonNoDuplicateRowsAllIdsColumnHeadersAndComments1() {
+        List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_ALL_IDS_WITH_EXTRAS
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, COMMENTS, true, true)
+
+        return spreadsheet
+    }
+
+    Spreadsheet testSpreadsheetFullCycle() {
+        List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_ALL_IDS_ALL_COLUMNS_TWO_EMPTY_3_1
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, COMMENTS, false, false)
 
         return spreadsheet
     }
 
     Spreadsheet testSpreadsheetFromJsonDuplicateRowsAllIds1() {
         List<Map<String, String>> rows = ROWS_DUPLICATE_ROWS_ALL_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, true, true)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, true, true)
 
         return spreadsheet
     }
 
     Spreadsheet testSpreadsheetFromJsonNoDuplicateRowsMissingIds1() {
         List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1
-        Spreadsheet spreadsheet = new Spreadsheet('column-1', rows, false, true)
+        Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, false, true)
 
         return spreadsheet
     }
 
     void compareSpreadsheets(Spreadsheet expectedSpreadsheet, Spreadsheet actualSpreadsheet) {
+        assertThat("Column headers match", expectedSpreadsheet.columnHeaders, is(actualSpreadsheet.columnHeaders))
+        assertThat("Comments match", expectedSpreadsheet.comments, is(actualSpreadsheet.comments))
+
         expectedSpreadsheet.rows.eachWithIndex { Map<String, String> lineMap, int index ->
             compareMaps(lineMap, actualSpreadsheet.rows.get(index))
         }
