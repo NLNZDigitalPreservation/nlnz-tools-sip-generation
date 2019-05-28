@@ -27,6 +27,7 @@ class SpreadsheetTest {
     static final Map<String, String> ROW_SAMPLE_THREE_TO_COLUMN_6 = [ 'column-1': 'row3', 'column 2': 'c2', 'column,3': 'c3', 'a column 4': '', '': 'column-6' ]
     static final Map<String, String> ROW_SAMPLE_DUPLICATE_ONE = [ 'column-1': 'row1', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
     static final Map<String, String> ROW_SAMPLE_NO_COLUMN_1 = [ 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
+    static final Map<String, String> ROW_SAMPLE_EMPTY_COLUMN_1 = [ 'column-1': '', 'column 2': 'second', 'column,3': 'third', 'a column 4': 'fourth' ]
     static final Map<String, String> ROW_SAMPLE_FOUR_TO_COLUMN_6 = [ 'column-1': 'row4', 'column 2': 'c2', 'column,3': 'c3', 'a column 4': 'c4', '': 'extra column 2' ]
 
     static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE ]
@@ -34,6 +35,7 @@ class SpreadsheetTest {
     static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_ALL_COLUMNS_TWO_EMPTY_3_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO_EMPTY_3, ROW_SAMPLE_THREE ]
     static List<Map<String, String>> ROWS_DUPLICATE_ROWS_ALL_IDS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE, ROW_SAMPLE_DUPLICATE_ONE ]
     static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE, ROW_SAMPLE_NO_COLUMN_1 ]
+    static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_ALL_COLUMNS_1 = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO_ALL_COLUMNS, ROW_SAMPLE_THREE, ROW_SAMPLE_EMPTY_COLUMN_1 ]
     static List<Map<String, String>> ROWS_NO_DUPLICATE_ROWS_ALL_IDS_WITH_EXTRAS = [ ROW_SAMPLE_ONE, ROW_SAMPLE_TWO, ROW_SAMPLE_THREE_TO_COLUMN_6, ROW_SAMPLE_FOUR_TO_COLUMN_6 ]
 
     @Test
@@ -155,6 +157,36 @@ class SpreadsheetTest {
         compareSpreadsheets(testSpreadsheetFromJsonNoDuplicateRowsMissingIds1, spreadsheet)
     }
 
+    @Test
+    void importWithGeneratedRowIdsIsValidSpreadsheet() {
+        InputStream jsonFileInputStream = SpreadsheetImporterTest.getResourceAsStream("test-spreadsheet-from-json-generated-row-ids-1.json")
+        String jsonString = jsonFileInputStream.getText()
+
+        Spreadsheet spreadsheet = Spreadsheet.fromJson("GENERATE_ID_VALUE", jsonString, true, true)
+        assertTrue("Spreadsheet is valid", spreadsheet.isValid(false, false))
+
+        Spreadsheet testSpreadsheetFromJsonGeneratedRowIds1 = testSpreadsheetFromJsonGeneratedRowIds1()
+        compareSpreadsheets(testSpreadsheetFromJsonGeneratedRowIds1, spreadsheet)
+    }
+
+    @Test
+    void fullCycleWithGeneratedRowIdsWorks() {
+        Spreadsheet sourceSpreadsheet = testSpreadsheetFromJsonGeneratedRowIdsAllColumns1()
+        String testSpreadsheetJsonString = sourceSpreadsheet.asJsonString()
+        Spreadsheet recreatedSpreadsheet = Spreadsheet.fromJson("GENERATE_ID_VALUE", testSpreadsheetJsonString, false, false)
+        compareSpreadsheets(sourceSpreadsheet, recreatedSpreadsheet)
+    }
+
+    @Test
+    void spreadsheetWithGeneratedRowIdsCanBeImportedAndExportedToCsvAndRemainTheSame() {
+        Spreadsheet sourceSpreadsheet = testSpreadsheetFromJsonGeneratedRowIdsAllColumns1()
+        String separator = "|"
+        String testSpreadsheetCsvString = sourceSpreadsheet.asCsvString(separator)
+        Spreadsheet recreatedSpreadsheet = SpreadsheetImporter.extractSpreadsheet(testSpreadsheetCsvString, "GENERATE_ID_VALUE",
+                separator, false, false)
+        compareSpreadsheets(sourceSpreadsheet, recreatedSpreadsheet)
+    }
+
     @Test(expected = SipProcessingException.class)
     void importJsonFileThatIsWrongJsonStructureIsInvalidSpreadsheet() {
         InputStream jsonFileInputStream = SpreadsheetImporterTest.getResourceAsStream("test-spreadsheet-wrong-structure-json.json")
@@ -223,6 +255,20 @@ class SpreadsheetTest {
     Spreadsheet testSpreadsheetFromJsonNoDuplicateRowsMissingIds1() {
         List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1
         Spreadsheet spreadsheet = new Spreadsheet('column-1', COLUMN_HEADERS, rows, NO_COMMENTS, false, true)
+
+        return spreadsheet
+    }
+
+    Spreadsheet testSpreadsheetFromJsonGeneratedRowIds1() {
+        List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_1
+        Spreadsheet spreadsheet = new Spreadsheet('GENERATE_ID_VALUE', COLUMN_HEADERS, rows, NO_COMMENTS, false, true)
+
+        return spreadsheet
+    }
+
+    Spreadsheet testSpreadsheetFromJsonGeneratedRowIdsAllColumns1() {
+        List<Map<String, String>> rows = ROWS_NO_DUPLICATE_ROWS_MISSING_IDS_ALL_COLUMNS_1
+        Spreadsheet spreadsheet = new Spreadsheet('GENERATE_ID_VALUE', COLUMN_HEADERS, rows, NO_COMMENTS, false, true)
 
         return spreadsheet
     }

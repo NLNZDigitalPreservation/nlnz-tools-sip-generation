@@ -14,6 +14,7 @@ class Spreadsheet {
     static final String COLUMN_HEADERS_KEY = "COLUMN_NAMES"
     static final String COMMENTS_KEY = "COMMENTS"
     static final String EMPTY_VALUE = ""
+    static final String GENERATE_ID_VALUE = "GENERATE_ID_VALUE"
 
     /** The column to use for ids */
     String idColumnName
@@ -154,8 +155,8 @@ class Spreadsheet {
 
    List<Map<String, String>> rowsWithoutIds() {
         List<Map<String, String>> rowsWithoutIdsList = [ ]
-        rows.each { Map<String, String> row ->
-            String rowId = row.get(idColumnName)
+        rows.eachWithIndex { Map<String, String> row, int index ->
+            String rowId = getIdKey(index, row)
             if (rowId == null) {
                 rowsWithoutIdsList.add(row)
             }
@@ -201,9 +202,9 @@ class Spreadsheet {
 
     List<Map<String, Map<String, String>>> keyOrNoIdMap(boolean orderByColumnHeaders = true) {
         List<Map<String, Map<String, String>>> keyOrNoIdMap = [ ]
-        rows.each { Map<String, String> rowMap ->
+        rows.eachWithIndex { Map<String, String> rowMap, int index ->
             Map<String, String> adjustedRowMap = rowMap
-            String idKey = rowMap.get(idColumnName)
+            String idKey = getIdKey(index, rowMap)
             if (orderByColumnHeaders) {
                 adjustedRowMap = new LinkedHashMap<String, String>()
                 this.columnHeaders.each { String columnHeader ->
@@ -224,6 +225,16 @@ class Spreadsheet {
             }
         }
         return keyOrNoIdMap
+    }
+
+    String getIdKey(int index, Map<String, String> rowMap) {
+        String idKey
+        if (idColumnName == GENERATE_ID_VALUE) {
+            idKey = String.format("row-%04d", index + 1)
+        } else {
+            idKey = rowMap.get(idColumnName)
+        }
+        return  idKey
     }
 
     List<String> unmappedColumns(Map<String, String> rowMap) {
