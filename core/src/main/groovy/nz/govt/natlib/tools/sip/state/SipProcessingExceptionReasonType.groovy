@@ -16,7 +16,8 @@ enum SipProcessingExceptionReasonType {
     INVALID_PAGE_FILENAME(false, 'The given file=${a} has an invalid filename (the filename does not conform to expected naming convention)'),
     INVALID_PDF(false, 'The given file=${a} is an invalid PDF. Validation failure(s)=${b}.'),
     DUPLICATE_FILE(false, 'Duplicate files file1=${a}, file2=${b}.'),
-    GENERIC_THREE_PLACES(false, '${a} ${b} ${c}')
+    GENERIC_THREE_PLACES(false, '${a} ${b} ${c}'),
+    INVALID_PARAMETERS(true, 'Invalid parameters=${a}')
 
     private final boolean fatal
     private final String description

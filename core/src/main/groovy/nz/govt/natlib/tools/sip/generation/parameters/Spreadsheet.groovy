@@ -175,6 +175,17 @@ class Spreadsheet {
         return mapsForId
     }
 
+    List<Map<String, String>> mapsForColumn(String columnId, String columnValue) {
+        List<Map<String, String>> mapsForColumn = []
+        rows.each { Map<String, String> row ->
+            String theColumnValue = row.get(columnId)
+            if (columnValue == theColumnValue) {
+                mapsForColumn.add(row)
+            }
+        }
+        return mapsForColumn
+    }
+
     String rowString(String columnId, Map<String, String> row, boolean withColumnId) {
         StringBuilder stringBuilder = new StringBuilder()
         if (withColumnId) {

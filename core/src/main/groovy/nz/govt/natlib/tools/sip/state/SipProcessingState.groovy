@@ -1,5 +1,6 @@
 package nz.govt.natlib.tools.sip.state
 
+import groovy.transform.AutoClone
 import groovy.transform.Canonical
 import nz.govt.natlib.tools.sip.IEEntityType
 import org.apache.commons.lang3.StringUtils
@@ -7,6 +8,7 @@ import org.apache.commons.lang3.StringUtils
 import java.nio.file.Path
 
 @Canonical
+@AutoClone
 class SipProcessingState {
 
     boolean complete = false
@@ -15,6 +17,7 @@ class SipProcessingState {
     Path processingOutputPath
     List<File> validFiles = [ ]
     List<File> invalidFiles = [ ]
+    List<File> ignoredFiles = [ ]
     List<File> unrecognizedFiles = [ ]
     int totalFilesProcessed
     IEEntityType ieEntityType = IEEntityType.UNKNOWN
@@ -90,6 +93,15 @@ class SipProcessingState {
         }
         stringBuilder.append(System.lineSeparator())
         invalidFiles.each { File file ->
+            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append(System.lineSeparator())
+        }
+        stringBuilder.append("${initialOffset}ignoredFiles=${ignoredFiles.size()}")
+        if (ignoredFiles.size() > 0) {
+            stringBuilder.append(":")
+        }
+        stringBuilder.append(System.lineSeparator())
+        ignoredFiles.each { File file ->
             stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
             stringBuilder.append(System.lineSeparator())
         }
