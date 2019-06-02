@@ -61,6 +61,7 @@ class SipProcessingState {
         stringBuilder.append(':')
         stringBuilder.append(System.lineSeparator())
         if (this.exceptions.size() > 1) {
+            stringBuilder.append("${initialOffset}    Exceptions:")
             boolean first = true
             this.exceptions.each { SipProcessingException exception ->
                 if (first) {
@@ -68,58 +69,56 @@ class SipProcessingState {
                 } else {
                     stringBuilder.append(System.lineSeparator())
                 }
-                appendException(stringBuilder, offset + 4, exception)
+                appendException(stringBuilder, offset + 8, exception)
             }
             stringBuilder.append(System.lineSeparator())
         } else if (this.exceptions.size() == 1) {
-            appendException(stringBuilder, 0, this.exceptions.first())
+            appendException(stringBuilder, offset + 4, this.exceptions.first())
             stringBuilder.append(System.lineSeparator())
         }
 
-        stringBuilder.append("${initialOffset}totalFilesProcessed=${totalFilesProcessed}")
+        stringBuilder.append("${initialOffset}    totalFilesProcessed=${totalFilesProcessed}")
         stringBuilder.append(System.lineSeparator())
-        stringBuilder.append("${initialOffset}validFiles=${validFiles.size()}")
+        stringBuilder.append("${initialOffset}    validFiles=${validFiles.size()}")
         if (validFiles.size() > 0) {
             stringBuilder.append(":")
         }
         stringBuilder.append(System.lineSeparator())
         validFiles.each { File file ->
-            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
             stringBuilder.append(System.lineSeparator())
         }
-        stringBuilder.append("${initialOffset}invalidFiles=${invalidFiles.size()}")
+        stringBuilder.append("${initialOffset}    invalidFiles=${invalidFiles.size()}")
         if (invalidFiles.size() > 0) {
             stringBuilder.append(":")
         }
         stringBuilder.append(System.lineSeparator())
         invalidFiles.each { File file ->
-            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
             stringBuilder.append(System.lineSeparator())
         }
-        stringBuilder.append("${initialOffset}ignoredFiles=${ignoredFiles.size()}")
+        stringBuilder.append("${initialOffset}    ignoredFiles=${ignoredFiles.size()}")
         if (ignoredFiles.size() > 0) {
             stringBuilder.append(":")
         }
         stringBuilder.append(System.lineSeparator())
         ignoredFiles.each { File file ->
-            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
             stringBuilder.append(System.lineSeparator())
         }
-        stringBuilder.append("${initialOffset}unrecognizedFiles=${unrecognizedFiles.size()}")
+        stringBuilder.append("${initialOffset}    unrecognizedFiles=${unrecognizedFiles.size()}")
         if (unrecognizedFiles.size() > 0) {
             stringBuilder.append(":")
         }
         stringBuilder.append(System.lineSeparator())
         unrecognizedFiles.each { File file ->
-            stringBuilder.append("${initialOffset}    ${file.getCanonicalPath()}")
+            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
             stringBuilder.append(System.lineSeparator())
         }
         return stringBuilder.toString()
     }
 
     private void appendException(StringBuilder stringBuilder, int offset, SipProcessingException exception) {
-        String initialOffset = StringUtils.repeat(' ', offset)
-        stringBuilder.append(initialOffset)
         stringBuilder.append(exception.toString(offset))
     }
 }
