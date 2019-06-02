@@ -56,8 +56,14 @@ dependencies {
     compile "org.apache.commons:commons-lang3:3.8.1"
     // The latest version.
     compile "commons-io:commons-io:2.6"
-    // The latest version. We expect that the container running this jar has a slf4j dependency in its path already.
-    compileOnly "org.slf4j:slf4j-api:1.7.25"
+
+    // The latest version.
+    compile 'org.apache.logging.log4j:log4j-api:2.11.2'
+    compile 'org.apache.logging.log4j:log4j-core:2.11.2'
+    // Ensure that other logging APIs use log4j2
+    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.2'
+    compile 'org.apache.logging.log4j:log4j-jcl:2.11.2'
+
     // Current version used in production by the National Library of New Zealand.
     compile "com.exlibris.dps:dps-sdk-fat-all:5.5.0"
 
@@ -101,10 +107,6 @@ dependencies {
 
     // Use xmlunit for comparing XML strings.
     testCompile "org.xmlunit:xmlunit-core:2.6.2"
-
-    // Use sl4j logging for tests. The latest version.
-    testCompile "org.slf4j:slf4j-log4j12:1.7.25"
-
 }
 
 jar {

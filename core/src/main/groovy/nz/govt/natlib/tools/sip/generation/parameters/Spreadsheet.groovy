@@ -4,10 +4,10 @@ import groovy.json.JsonException
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Canonical
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 
-@Slf4j
+@Log4j2
 @Canonical
 class Spreadsheet {
     static final String NO_ID_KEY = "NO_GIVEN_ID"

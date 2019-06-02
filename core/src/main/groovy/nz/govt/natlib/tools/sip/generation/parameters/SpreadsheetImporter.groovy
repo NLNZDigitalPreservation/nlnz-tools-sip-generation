@@ -1,11 +1,11 @@
 package nz.govt.natlib.tools.sip.generation.parameters
 
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 
 import java.util.regex.Pattern
 
-@Slf4j
+@Log4j2
 class SpreadsheetImporter {
 
     static Spreadsheet extractSpreadsheet(File spreadsheetSourceFile, String idColumnName, String separator = ",",

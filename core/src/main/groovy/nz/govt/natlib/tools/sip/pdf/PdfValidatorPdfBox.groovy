@@ -1,6 +1,6 @@
 package nz.govt.natlib.tools.sip.pdf
 
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 import nz.govt.natlib.tools.sip.state.SipProcessingExceptionReason
 import nz.govt.natlib.tools.sip.state.SipProcessingExceptionReasonType
@@ -16,7 +16,7 @@ import java.nio.file.Path
  * validation. Note that the validation itself returns a SipProcessingException if the PDF is invalid and
  * <code>null</code> otherwise.
  */
-@Slf4j
+@Log4j2
 class PdfValidatorPdfBox implements PdfValidator {
     SipProcessingException validatePdf(Path path) {
         SipProcessingException sipProcessingException = null
