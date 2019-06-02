@@ -1,12 +1,12 @@
 package nz.govt.natlib.tools.sip.generation
 
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 import org.apache.commons.io.FilenameUtils
 
 import java.security.MessageDigest
 
-@Slf4j
+@Log4j2
 class MD5Generator {
     static int DEFAULT_MD5_DIGEST_BUFFER_LENGTH = 4096
     static String MD5_ALGORITHM = "MD5"

@@ -1,7 +1,7 @@
 package nz.govt.natlib.tools.sip.files
 
 import groovy.io.FileType
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 
 import java.nio.file.DirectoryStream
 import java.nio.file.FileSystem
@@ -13,7 +13,7 @@ import java.nio.file.PathMatcher
 /**
  * Finds files using various criteria.
  */
-@Slf4j
+@Log4j2
 class FilesFinder {
     static DirectoryStream.Filter<Path> getPathFilter(boolean isRegexNotGlob, boolean matchFilenameOnly,
                                                       boolean directoryOnly = false, String... patterns) {

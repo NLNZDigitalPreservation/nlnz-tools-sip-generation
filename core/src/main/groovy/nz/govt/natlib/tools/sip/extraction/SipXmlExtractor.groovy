@@ -1,13 +1,13 @@
 package nz.govt.natlib.tools.sip.extraction
 
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import groovy.util.slurpersupport.GPathResult
 import nz.govt.natlib.tools.sip.IEEntityType
 import nz.govt.natlib.tools.sip.Sip
 
 import java.time.LocalDateTime
 
-@Slf4j
+@Log4j2
 class SipXmlExtractor {
     static final Map<String, String> SIP_NAMESPACES = [
             mets: 'http://www.loc.gov/METS/',

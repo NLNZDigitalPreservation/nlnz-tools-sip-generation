@@ -49,7 +49,6 @@ class SipXmlExtractorTest {
 
     @Test
     void rawMethodsExtractsAucklandCityHarbourNewsCorrectly() {
-        println("First test")
         testSip = new SipXmlExtractor(SipTestHelper.getTextFromResourceOrFile(SipTestHelper.TEST_SIP_XML_ACHN_ACTUAL_FILENAME))
 
         assertTrue("SipXmlExtractor has content", testSip.xml.length() > 0)

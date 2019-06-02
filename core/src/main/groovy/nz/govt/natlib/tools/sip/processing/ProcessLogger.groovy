@@ -1,6 +1,6 @@
 package nz.govt.natlib.tools.sip.processing
 
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import org.apache.commons.io.output.TeeOutputStream
 
 import java.nio.file.Files
@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 /**
  * Provides directed logging of console output.
  */
-@Slf4j
+@Log4j2
 class ProcessLogger {
     static final String TEMP_FILE_PREFIX = "ProcessLogger"
     static final String TEMP_FILE_SUFFIX = ".log"

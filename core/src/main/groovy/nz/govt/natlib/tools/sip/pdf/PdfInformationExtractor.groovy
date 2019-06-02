@@ -1,6 +1,6 @@
 package nz.govt.natlib.tools.sip.pdf
 
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDDocumentInformation
 import org.apache.pdfbox.text.PDFTextStripper
@@ -8,7 +8,7 @@ import org.apache.pdfbox.text.PDFTextStripper
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-@Slf4j
+@Log4j2
 class PdfInformationExtractor {
 
     static Map<String, String> extractMetadata(File pdfFile) {

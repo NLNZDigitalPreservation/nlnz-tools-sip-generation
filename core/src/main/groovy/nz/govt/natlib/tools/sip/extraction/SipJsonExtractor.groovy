@@ -1,12 +1,12 @@
 package nz.govt.natlib.tools.sip.extraction
 
 import groovy.json.JsonSlurper
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.Sip
 
 import java.time.LocalDateTime
 
-@Slf4j
+@Log4j2
 class SipJsonExtractor {
     final String json
 

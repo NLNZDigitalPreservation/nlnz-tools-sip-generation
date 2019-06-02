@@ -5,12 +5,12 @@ import groovy.json.JsonBuilder
 //import groovy.json.JsonGenerator
 //import groovy.json.JsonGenerator.Converter
 import groovy.json.JsonOutput
-import groovy.util.logging.Slf4j
+import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.Sip
 
 //import java.time.LocalDateTime
 
-@Slf4j
+@Log4j2
 class SipJsonGenerator {
 
     static String toJson(Sip sip, boolean prettyPrint = false) {
