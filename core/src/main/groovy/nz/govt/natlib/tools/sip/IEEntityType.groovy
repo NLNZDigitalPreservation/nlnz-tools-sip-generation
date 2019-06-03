@@ -1,7 +1,7 @@
 package nz.govt.natlib.tools.sip
 
 enum IEEntityType {
-    UNKNOWN('UNKNOWN_IE', 'unknown'),
+    UNKNOWN('UNKNOWN_IE', 'unknown_ie'),
     NewspaperIE('NewspaperIE', 'newspaper'),
     MagazineIE('MagazineIE', 'magazine')
 
