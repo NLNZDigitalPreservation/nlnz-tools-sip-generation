@@ -68,8 +68,9 @@ dependencies {
     compile "com.exlibris.dps:dps-sdk-fat-all:5.5.0"
 
     // For PDF processing/validation using PDFBox.
-    compile "org.apache.pdfbox:pdfbox:2.0.13"
-    compile "org.apache.pdfbox:preflight:2.0.13"
+    compile "org.apache.pdfbox:pdfbox:2.0.15"
+    compile "org.apache.pdfbox:preflight:2.0.15"
+    compile "org.apache.pdfbox:pdfbox-tools:2.0.15"
 
     // For PDF processing using Droid.
     // Note that Droid uses signature files to identify different types of files. It does not validate the integrity of
