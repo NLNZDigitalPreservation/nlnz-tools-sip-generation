@@ -138,17 +138,22 @@ class ThumbnailGenerator {
         List<BufferedImage> images = [ ]
         if (sipProcessingException == null) {
             final PDDocument document = PDDocument.load(pdfFile)
-            PDFRenderer pdfRenderer = new PDFRenderer(document)
-            int numberOfPages = document.getNumberOfPages()
-            for (int page = 0; page < numberOfPages; ++page) {
-                BufferedImage pdfImage = pdfRenderer.renderImageWithDPI(page, parameters.dpi, ImageType.RGB)
-                log.debug("BufferedImage for pdf=${pdfFile.getCanonicalPath()}, page=${page}, width=${pdfImage.width}, height=${pdfImage.height}")
-                String pageNumber = numberOfPages > 1 ? " - ${page}" : ""
-                String caption = "${pdfFile.getName()}${pageNumber}"
-                BufferedImage scaledWithTextImage = scaleAndWriteCaption(pdfImage, parameters, caption)
-                images.add(scaledWithTextImage)
+            try {
+                PDFRenderer pdfRenderer = new PDFRenderer(document)
+                int numberOfPages = document.getNumberOfPages()
+                for (int page = 0; page < numberOfPages; ++page) {
+                    BufferedImage pdfImage = pdfRenderer.renderImageWithDPI(page, parameters.dpi, ImageType.RGB)
+                    log.debug("BufferedImage for pdf=${pdfFile.getCanonicalPath()}, page=${page}, width=${pdfImage.width}, height=${pdfImage.height}")
+                    String pageNumber = numberOfPages > 1 ? " - ${page}" : ""
+                    String caption = "${pdfFile.getName()}${pageNumber}"
+                    BufferedImage scaledWithTextImage = scaleAndWriteCaption(pdfImage, parameters, caption)
+                    images.add(scaledWithTextImage)
+                }
+            } finally {
+                if (document != null) {
+                    document.close()
+                }
             }
-            document.close()
         } else {
             SipProcessingExceptionReason reason = sipProcessingException.reasons.isEmpty() ? null :
                     sipProcessingException.reasons.first()
