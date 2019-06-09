@@ -32,7 +32,7 @@ class ThumbnailGeneratorTest {
     static final String EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_NAME = "sample-multi-page-a4-pdf-with-images_1.jpeg"
     static final String EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME = "sample-multi-page-a4-pdf-with-images_2.jpeg"
     static final String EXPECTED_FILE_THUMBNAIL_INVALID_PDF_NAME = "sample-invalid-pdf_thumbnail.jpeg"
-    static final String EXPECTED_FILE_THUMBNAIL_PAGE_NAME = "page-of-thumbnails-from-11-pdf-files-01.jpeg"
+    static final String EXPECTED_FILE_THUMBNAIL_PAGE_NAME = "page-of-thumbnails-from-12-pdf-files-01.jpeg"
 
     static File WORKING_DIRECTORY
     static File RESOURCES_DIRECTORY
@@ -151,9 +151,10 @@ class ThumbnailGeneratorTest {
         PDF_FILE_MULTIPLE_A4 = new File(RESOURCES_DIRECTORY, MULTIPLE_A4_PAGE_PDF_NAME)
         PDF_FILE_INVALID_PDF = new File(RESOURCES_DIRECTORY, SAMPLE_INVALID_PDF_NAME)
 
-        PDF_FILES_LIST_1 = [ PDF_FILE_SINGLE_A4, PDF_FILE_WIDE_A3, PDF_FILE_MULTIPLE_A4, PDF_FILE_INVALID_PDF,
-                             PDF_FILE_SINGLE_A4, PDF_FILE_SINGLE_A4, PDF_FILE_MULTIPLE_A4, PDF_FILE_SINGLE_A4,
-                             PDF_FILE_MULTIPLE_A4, PDF_FILE_SINGLE_A4, PDF_FILE_WIDE_A3 ]
+        PDF_FILES_LIST_1 = [ PDF_FILE_WIDE_A3, PDF_FILE_MULTIPLE_A4, PDF_FILE_INVALID_PDF,
+                             PDF_FILE_SINGLE_A4, PDF_FILE_MULTIPLE_A4, PDF_FILE_SINGLE_A4, PDF_FILE_MULTIPLE_A4,
+                             PDF_FILE_WIDE_A3, PDF_FILE_MULTIPLE_A4, PDF_FILE_SINGLE_A4, PDF_FILE_WIDE_A3,
+                             PDF_FILE_MULTIPLE_A4 ]
 
         EXPECTED_FILE_THUMBNAIL_SINGLE_A4 = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_SINGLE_A4_NAME)
         EXPECTED_FILE_THUMBNAIL_WIDE_A3 = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_WIDE_A3_NAME)
@@ -163,7 +164,7 @@ class ThumbnailGeneratorTest {
         EXPECTED_FILE_INVALID_PDF_THUMBNAIL = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_INVALID_PDF_NAME)
         EXPECTED_FILE_THUMBNAIL_PAGE = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_PAGE_NAME)
 
-        DEFAULT_PARAMETERS = new ThumbnailParameters(thumbnailHeight: 180, useAffineTransformation: false,
+        DEFAULT_PARAMETERS = new ThumbnailParameters(thumbnailHeight: 250, useAffineTransformation: false,
                 textJustification: ThumbnailParameters.TextJustification.RIGHT)
     }
 
@@ -217,6 +218,7 @@ class ThumbnailGeneratorTest {
 
         ThumbnailParameters parameters = DEFAULT_PARAMETERS.clone()
         parameters.maximumPageWidth = 1200
+        parameters.pageTitleFontJustification = ThumbnailParameters.TextJustification.RIGHT
         parameters.pageTitleText = "ThumbnailGeneratorTest with ${PDF_FILES_LIST_1.size()} pdf files"
 
         ThumbnailGenerator.writeThumbnailPage(PDF_FILES_LIST_1, parameters, pdfPageFile)
