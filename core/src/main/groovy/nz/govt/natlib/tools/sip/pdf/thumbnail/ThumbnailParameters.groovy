@@ -15,11 +15,12 @@ class ThumbnailParameters {
     // General
     int dpi = 300
     Color backgroundColor = Color.LIGHT_GRAY
+    Color captionBackgroundColor = Color.WHITE
     Color fontColor = Color.BLACK
     Color errorColor = Color.YELLOW
     int distanceBetweenFontLines = 3
 
-    int thumbnailHeight = 120
+    int thumbnailHeight = 250
     // Note that 10 point font is 13 pixels, so 2 pixel space
     int textHeight = 15
     int fontSize = 10
@@ -31,9 +32,9 @@ class ThumbnailParameters {
     int maximumPageWidth
     String pageTitleText = ""
     String pageTitleFontName = "Ariel" // "Times" // "Courier"
-    TextJustification pageTitleFontJustification = TextJustification.CENTER
-    int pageTitleTextHeight = 24
-    int pageTitleFontSize = 22
+    TextJustification pageTitleFontJustification = TextJustification.RIGHT
+    int pageTitleTextHeight = 20
+    int pageTitleFontSize = 18
     int widthBetweenThumbnails = 5
     int heightBetweenThumbnails = 5
 

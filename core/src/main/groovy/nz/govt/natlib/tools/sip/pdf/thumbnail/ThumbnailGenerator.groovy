@@ -198,7 +198,7 @@ class ThumbnailGenerator {
                 parameters.thumbnailHeight - parameters.textHeight :
                 parameters.thumbnailHeight
         int scaledWidth = (originalImage.width * scaledHeight) / originalImage.height
-        BufferedImage scaledImage = scale(originalImage, scaledWidth, parameters.thumbnailHeight,
+        BufferedImage scaledImage = scale(originalImage, scaledWidth, scaledHeight,
                 parameters.useAffineTransformation)
         BufferedImage scaledWithTextImage = scaledImage
         if (hasCaption) {
@@ -237,7 +237,7 @@ class ThumbnailGenerator {
             BufferedImage.TYPE_INT_RGB)
         Graphics2D graphics = image.createGraphics()
 
-        graphics.setColor(parameters.backgroundColor)
+        graphics.setColor(parameters.captionBackgroundColor)
         graphics.fillRect(0, 0, sourceImage.width, parameters.thumbnailHeight)
 
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0))
