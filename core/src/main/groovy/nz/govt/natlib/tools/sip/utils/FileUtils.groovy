@@ -94,8 +94,8 @@ class FileUtils {
     }
 
     static List<File> findFiles(String localPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
-                                boolean sortFiles, String pattern, Timekeeper timekeeper,
-                                boolean includeSubdirectories = true) {
+                                boolean sortFiles, String pattern, Timekeeper timekeeper = null,
+                                boolean includeSubdirectories = true, boolean useDebug = false) {
         List<File> filesList = [ ]
         Path filesPath = Paths.get(localPath)
         if (!Files.exists(filesPath) || !Files.isDirectory(filesPath)) {
@@ -103,13 +103,29 @@ class FileUtils {
             return filesList
         }
 
-        log.info("Finding files for path=${filesPath.toFile().getCanonicalPath()} and pattern=${pattern}")
-        timekeeper.logElapsed()
+        String message = "Finding files for path=${filesPath.toFile().getCanonicalPath()} and pattern=${pattern}"
+        if (useDebug) {
+            log.debug(message)
+        } else {
+            log.info(message)
+        }
+        if (timekeeper != null) {
+            timekeeper.logElapsed(useDebug)
+        }
+
         boolean directoryOnly = false
         filesList = FilesFinder.getMatchingFilesFull(filesPath, isRegexNotGlob, matchFilenameOnly, sortFiles,
                 includeSubdirectories, directoryOnly, pattern)
-        log.info("Found total files=${GeneralUtils.TOTAL_FORMAT.format(filesList.size())} for path=${filesPath.toFile().getCanonicalPath()}")
-        timekeeper.logElapsed()
+
+        message = "Found total files=${GeneralUtils.TOTAL_FORMAT.format(filesList.size())} for path=${filesPath.toFile().getCanonicalPath()}"
+        if (useDebug) {
+            log.debug(message)
+        } else {
+            log.info(message)
+        }
+        if (timekeeper != null) {
+            timekeeper.logElapsed(useDebug)
+        }
 
         return filesList
     }
