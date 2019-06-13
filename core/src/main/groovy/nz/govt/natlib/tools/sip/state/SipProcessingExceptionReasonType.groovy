@@ -9,25 +9,37 @@ enum SipProcessingExceptionReasonType {
      * {@link SipProcessingExceptionReason#details}. The values are then substituted into the description.
      * Note that the <em>LAST</em> placeholder will have the exception name substituted in if the
      * {@link #getDescription} method is called with an exception.
+     *
+     * Note that summary is used as a directory folder name, so it's best to not have odd characters (like spaces).
      */
-    FILE_OF_LENGTH_ZERO(false, 'The given file=${a} is of length zero.'),
-    ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED(true, 'All files cannot be properly evaluated.'),
-    ALL_FILES_CANNOT_BE_PROCESSED(true, 'All files cannot be processed, reason=${a}'),
-    NO_MATCHING_SIP_DEFINITION(true, 'Unable to match an appropriate SIP definition to the files. Detailed reason=${a}.'),
-    INVALID_PAGE_FILENAME(false, 'The given file=${a} has an invalid filename (the filename does not conform to expected naming convention)'),
-    INVALID_PDF(false, 'The given file=${a} is an invalid PDF. Validation failure(s)=${b}.'),
-    DUPLICATE_FILE(false, 'Duplicate files file1=${a}, file2=${b}.'),
-    INVALID_PARAMETERS(true, 'Invalid parameters=${a}'),
-    MISSING_SEQUENCE_FILES(false, 'One or more skipped sequences precedes these files=${a}'),
-    GENERIC_ONE_PLACE(false, '${a}'),
-    GENERIC_THREE_PLACES(false, '${a} ${b} ${c}')
+    FILE_OF_LENGTH_ZERO(false, 'The given file=${a} is of length zero.', "has-zero-length-files"),
+    ALL_FILES_CANNOT_BE_PROPERTY_EVALUATED(true, 'All files cannot be properly evaluated.',
+            "has-incomprehensible-files"),
+    ALL_FILES_CANNOT_BE_PROCESSED(true, 'All files cannot be processed, reason=${a}',
+            "has-unprocessable-files"),
+    NO_MATCHING_SIP_DEFINITION(true, 'Unable to match an appropriate SIP definition to the files. Detailed reason=${a}.',
+            "no-matching-definition"),
+    INVALID_PAGE_FILENAME(false, 'The given file=${a} has an invalid filename (the filename does not conform to expected naming convention)',
+            "invalid-filenames"),
+    INVALID_PDF(false, 'The given file=${a} is an invalid PDF. Validation failure(s)=${b}.',
+            "invalid-pdfs"),
+    DUPLICATE_FILE(false, 'Duplicate files file1=${a}, file2=${b}.', "duplicate-files"),
+    INVALID_PARAMETERS(true, 'Invalid parameters=${a}', "invalid-parameters"),
+    MULTIPLE_DEFINITIONS(true, 'Multiple definitions=${a}', "multiple-definitions"),
+    MISSING_SEQUENCE_FILES(false, 'One or more skipped sequences precedes these files=${a}',
+            "missing-file-sequences"),
+    MANUAL_PROCESSING_REQUIRED(false, 'Manual processing specified=${a}', "manual-processing"),
+    GENERIC_ONE_PLACE(false, '${a}', "generic-problem"),
+    GENERIC_THREE_PLACES(false, '${a} ${b} ${c}', "generic-problem")
 
     private final boolean fatal
     private final String description
+    private final String summary
 
-    SipProcessingExceptionReasonType(boolean fatal, String description) {
+    SipProcessingExceptionReasonType(boolean fatal, String description, String summary) {
         this.fatal = fatal
         this.description = description
+        this.summary = summary
     }
 
     String getDescription() {
@@ -36,6 +48,10 @@ enum SipProcessingExceptionReasonType {
 
     String isFatal() {
         return this.fatal
+    }
+
+    String getSummary() {
+        return this.summary
     }
 
     /**

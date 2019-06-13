@@ -10,6 +10,7 @@ import java.nio.file.Path
 @Canonical
 @AutoClone
 class SipProcessingState {
+    final static String SUCCESSFUL = "successful"
 
     boolean complete = false
     String identifier
@@ -44,6 +45,18 @@ class SipProcessingState {
         tempPath.write(toString())
 
         return tempPath
+    }
+
+    String getFailureReasonSummary() {
+        if (successful) {
+            return SUCCESSFUL
+        } else {
+            String reasonSummary = SipProcessingException.DEFAULT_REASON_SUMMARY
+            if (!exceptions.isEmpty()) {
+                reasonSummary = exceptions.first().reasonSummary
+            }
+            return reasonSummary
+        }
     }
 
     String toString() {

@@ -4,6 +4,7 @@ import groovy.transform.Canonical
 
 @Canonical
 class SipProcessingExceptionReason {
+
     SipProcessingExceptionReasonType reasonType
     List<String> details = [ ]
     Exception exception = null
@@ -16,6 +17,10 @@ class SipProcessingExceptionReason {
             details.addAll(detail)
         }
         this.exception = exception
+    }
+
+    String getSummary() {
+        return reasonType.summary
     }
 
     String toString() {
