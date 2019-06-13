@@ -19,6 +19,7 @@ enum SipProcessingExceptionReasonType {
     DUPLICATE_FILE(false, 'Duplicate files file1=${a}, file2=${b}.'),
     INVALID_PARAMETERS(true, 'Invalid parameters=${a}'),
     MISSING_SEQUENCE_FILES(false, 'One or more skipped sequences precedes these files=${a}'),
+    GENERIC_ONE_PLACE(false, '${a}'),
     GENERIC_THREE_PLACES(false, '${a} ${b} ${c}')
 
     private final boolean fatal
