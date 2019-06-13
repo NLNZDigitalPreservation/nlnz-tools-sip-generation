@@ -4,6 +4,8 @@ package nz.govt.natlib.tools.sip.state
 import org.apache.commons.lang3.StringUtils
 
 class SipProcessingException extends Exception {
+    static final String DEFAULT_REASON_SUMMARY = "unknown"
+
     List<SipProcessingExceptionReason> reasons = [ ]
 
     static SipProcessingException createWithReason(SipProcessingExceptionReason sipProcessingExceptionReason) {
@@ -42,6 +44,14 @@ class SipProcessingException extends Exception {
 
     void addReason(SipProcessingExceptionReason exceptionReason) {
         reasons.add(exceptionReason)
+    }
+
+    String getReasonSummary() {
+        String reasonSummary = DEFAULT_REASON_SUMMARY
+        if (!reasons.isEmpty()) {
+            reasonSummary = reasons.first().summary
+        }
+        return reasonSummary
     }
 
     String toString() {
