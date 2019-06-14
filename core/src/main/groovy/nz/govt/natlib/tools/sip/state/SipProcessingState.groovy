@@ -16,11 +16,16 @@ class SipProcessingState {
     String identifier
     List<SipProcessingException> exceptions = [ ]
     Path processingOutputPath
+
+    List<File> sipFiles = [ ]
+    List<File> thumbnailPageFiles = [ ]
     List<File> validFiles = [ ]
     List<File> invalidFiles = [ ]
     List<File> ignoredFiles = [ ]
     List<File> unrecognizedFiles = [ ]
+
     int totalFilesProcessed
+
     IEEntityType ieEntityType = IEEntityType.UNKNOWN
 
     boolean hasExceptions() {
@@ -92,43 +97,34 @@ class SipProcessingState {
 
         stringBuilder.append("${initialOffset}    totalFilesProcessed=${totalFilesProcessed}")
         stringBuilder.append(System.lineSeparator())
-        stringBuilder.append("${initialOffset}    validFiles=${validFiles.size()}")
-        if (validFiles.size() > 0) {
-            stringBuilder.append(":")
-        }
-        stringBuilder.append(System.lineSeparator())
-        validFiles.each { File file ->
-            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
-            stringBuilder.append(System.lineSeparator())
-        }
-        stringBuilder.append("${initialOffset}    invalidFiles=${invalidFiles.size()}")
-        if (invalidFiles.size() > 0) {
-            stringBuilder.append(":")
-        }
-        stringBuilder.append(System.lineSeparator())
-        invalidFiles.each { File file ->
-            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
-            stringBuilder.append(System.lineSeparator())
-        }
-        stringBuilder.append("${initialOffset}    ignoredFiles=${ignoredFiles.size()}")
-        if (ignoredFiles.size() > 0) {
-            stringBuilder.append(":")
-        }
-        stringBuilder.append(System.lineSeparator())
-        ignoredFiles.each { File file ->
-            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
-            stringBuilder.append(System.lineSeparator())
-        }
-        stringBuilder.append("${initialOffset}    unrecognizedFiles=${unrecognizedFiles.size()}")
-        if (unrecognizedFiles.size() > 0) {
-            stringBuilder.append(":")
-        }
-        stringBuilder.append(System.lineSeparator())
-        unrecognizedFiles.each { File file ->
-            stringBuilder.append("${initialOffset}        ${file.getCanonicalPath()}")
-            stringBuilder.append(System.lineSeparator())
-        }
+
+        appendFileList("sipFiles", initialOffset, sipFiles, stringBuilder)
+
+        appendFileList("thumbnailPageFiles", initialOffset, thumbnailPageFiles, stringBuilder)
+
+        appendFileList("validFiles", initialOffset, validFiles, stringBuilder)
+
+        appendFileList("invalidFiles", initialOffset, invalidFiles, stringBuilder)
+
+        appendFileList("ignoredFiles", initialOffset, ignoredFiles, stringBuilder)
+
+        appendFileList("unrecognizedFiles", initialOffset, unrecognizedFiles, stringBuilder)
+
+        appendFileList("validFiles", initialOffset, validFiles, stringBuilder)
+
         return stringBuilder.toString()
+    }
+
+    private void appendFileList(String typeTitle, String initialOffset, List<File> files, StringBuilder stringBuilder) {
+        stringBuilder.append("${initialOffset}    ${typeTitle}=${files.size()}")
+        if (files.size() > 0) {
+            stringBuilder.append(":")
+        }
+        stringBuilder.append(System.lineSeparator())
+        files.each { File file ->
+            stringBuilder.append("${initialOffset}        ${file.canonicalPath}")
+            stringBuilder.append(System.lineSeparator())
+        }
     }
 
     private void appendException(StringBuilder stringBuilder, int offset, SipProcessingException exception) {
