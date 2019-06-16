@@ -59,33 +59,37 @@ class ThumbnailGenerator {
         BufferedImage pageImage = new BufferedImage(pageParameters.maximumPageWidth, pageParameters.pageHeight,
                 BufferedImage.TYPE_INT_RGB)
 
-        Graphics2D graphics = pageImage.createGraphics()
+        Graphics2D graphics
+        try {
+            graphics = pageImage.createGraphics()
+            graphics.setColor(parameters.backgroundColor)
+            graphics.fillRect(0, 0, pageParameters.maximumPageWidth, pageParameters.pageHeight)
 
-        graphics.setColor(parameters.backgroundColor)
-        graphics.fillRect(0, 0, pageParameters.maximumPageWidth, pageParameters.pageHeight)
+            graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0))
 
-        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0))
-
-        // Write each row
-        int yPosition = parameters.hasTitleText() ?
-                parameters.heightBetweenThumbnails + parameters.pageTitleTextHeight :
-                0
-        yPosition += parameters.heightBetweenThumbnails
-        pageParameters.thumbnailRows.each { List<BufferedImage> thumbnailRow ->
-            int rowX = parameters.widthBetweenThumbnails
-            thumbnailRow.each { BufferedImage thumbnailImage ->
-                graphics.drawImage(thumbnailImage, rowX, yPosition, null)
-                rowX += thumbnailImage.width + parameters.widthBetweenThumbnails
+            // Write each row
+            int yPosition = parameters.hasTitleText() ?
+                    parameters.heightBetweenThumbnails + parameters.pageTitleTextHeight :
+                    0
+            yPosition += parameters.heightBetweenThumbnails
+            pageParameters.thumbnailRows.each { List<BufferedImage> thumbnailRow ->
+                int rowX = parameters.widthBetweenThumbnails
+                thumbnailRow.each { BufferedImage thumbnailImage ->
+                    graphics.drawImage(thumbnailImage, rowX, yPosition, null)
+                    rowX += thumbnailImage.width + parameters.widthBetweenThumbnails
+                }
+                yPosition += parameters.thumbnailHeight + parameters.heightBetweenThumbnails
             }
-            yPosition += parameters.thumbnailHeight + parameters.heightBetweenThumbnails
+
+            // Write the title
+            writeText(graphics, parameters.pageTitleText, parameters.pageTitleFontName, Font.BOLD,
+                    parameters.pageTitleFontSize, parameters.fontColor, parameters.pageTitleFontJustification,
+                    0, pageImage.width, parameters.pageTitleTextHeight - 2)
+        } finally {
+            if (graphics != null) {
+                graphics.dispose()
+            }
         }
-
-        // Write the title
-        writeText(graphics, parameters.pageTitleText, parameters.pageTitleFontName, Font.BOLD,
-                parameters.pageTitleFontSize, parameters.fontColor, parameters.pageTitleFontJustification,
-                0, pageImage.width, parameters.pageTitleTextHeight - 2)
-
-        graphics.dispose()
 
         return pageImage
     }
@@ -137,8 +141,9 @@ class ThumbnailGenerator {
         SipProcessingException sipProcessingException = pdfValidator.validatePdf(pdfFile.toPath())
         List<BufferedImage> images = [ ]
         if (sipProcessingException == null) {
-            final PDDocument document = PDDocument.load(pdfFile)
+            PDDocument document
             try {
+                document = PDDocument.load(pdfFile)
                 PDFRenderer pdfRenderer = new PDFRenderer(document)
                 int numberOfPages = document.getNumberOfPages()
                 for (int page = 0; page < numberOfPages; ++page) {
@@ -172,18 +177,25 @@ class ThumbnailGenerator {
         int scaledWidth = scaledHeight * Math.sqrt(2.0)
         BufferedImage errorImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_RGB)
 
-        Graphics2D graphics = errorImage.createGraphics()
-        graphics.setColor(parameters.errorColor)
-        graphics.fillRect(0, 0, scaledWidth, scaledHeight)
+        Graphics2D graphics
+        BufferedImage errorWithTextImage
+        try {
+            graphics = errorImage.createGraphics()
+            graphics.setColor(parameters.errorColor)
+            graphics.fillRect(0, 0, scaledWidth, scaledHeight)
 
-        BufferedImage errorWithTextImage = errorImage
-        if (reason != null && !reason.isBlank()) {
-            int textX = 2
-            int textY = scaledHeight / 2
-            writeMultilineText(graphics, reason, parameters.fontName, Font.BOLD, parameters.fontSize,
-                    parameters.fontColor, textX, scaledWidth, 0, scaledHeight, parameters)
+            errorWithTextImage = errorImage
+            if (reason != null && !reason.isBlank()) {
+                int textX = 2
+                int textY = scaledHeight / 2
+                writeMultilineText(graphics, reason, parameters.fontName, Font.BOLD, parameters.fontSize,
+                        parameters.fontColor, textX, scaledWidth, 0, scaledHeight, parameters)
+            }
+        } finally {
+            if (graphics != null) {
+                graphics.dispose()
+            }
         }
-        graphics.dispose()
 
         if (hasCaption) {
             errorWithTextImage = writeCaption(errorImage, parameters, caption)
@@ -221,13 +233,18 @@ class ThumbnailGenerator {
             AffineTransformOp scaleOperation = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_BILINEAR)
             scaleOperation.filter(originalImage, scaledImage)
         } else {
-            // Paint scaled version of image to new image
-            Graphics2D graphics2D = scaledImage.createGraphics();
-            graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
-            graphics2D.drawImage(originalImage, 0, 0, width, height, null)
-
-            // clean up
-            graphics2D.dispose()
+            Graphics2D graphics
+            try {
+                // Paint scaled version of image to new image
+                graphics = scaledImage.createGraphics();
+                graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR)
+                graphics.drawImage(originalImage, 0, 0, width, height, null)
+            } finally {
+                // clean up
+                if (graphics != null) {
+                    graphics.dispose()
+                }
+            }
         }
         return scaledImage
     }
@@ -235,18 +252,24 @@ class ThumbnailGenerator {
     static BufferedImage writeCaption(BufferedImage sourceImage, ThumbnailParameters parameters, String caption) {
         BufferedImage image = new BufferedImage(sourceImage.width, parameters.thumbnailHeight,
             BufferedImage.TYPE_INT_RGB)
-        Graphics2D graphics = image.createGraphics()
+        Graphics2D graphics
+        try {
+            graphics = image.createGraphics()
 
-        graphics.setColor(parameters.captionBackgroundColor)
-        graphics.fillRect(0, 0, sourceImage.width, parameters.thumbnailHeight)
+            graphics.setColor(parameters.captionBackgroundColor)
+            graphics.fillRect(0, 0, sourceImage.width, parameters.thumbnailHeight)
 
-        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0))
-        graphics.drawImage(sourceImage, 0, 0, null)
+            graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0))
+            graphics.drawImage(sourceImage, 0, 0, null)
 
-        writeText(graphics, caption, parameters.fontName, Font.BOLD, parameters.fontSize, parameters.fontColor,
-                parameters.textJustification, 0, sourceImage.width - 2, parameters.thumbnailHeight - 2)
+            writeText(graphics, caption, parameters.fontName, Font.BOLD, parameters.fontSize, parameters.fontColor,
+                    parameters.textJustification, 0, sourceImage.width - 2, parameters.thumbnailHeight - 2)
 
-        graphics.dispose()
+        } finally {
+            if (graphics != null) {
+                graphics.dispose()
+            }
+        }
 
         return image
     }

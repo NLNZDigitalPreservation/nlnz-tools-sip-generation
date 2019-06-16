@@ -26,6 +26,7 @@ class PdfValidatorPdfBox implements PdfValidator {
         ValidationResult result = null
 
         PreflightParser parser = new PreflightParser(path.toFile())
+        PreflightDocument document
         try {
             /* Parse the PDF file with PreflightParser that inherits from the NonSequentialParser.
              * Some additional controls are present to check a set of PDF/A requirements.
@@ -37,7 +38,7 @@ class PdfValidatorPdfBox implements PdfValidator {
              * (that inherits from PDDocument)
              * This document process the end of PDF/A validation.
              */
-            PreflightDocument document = parser.getPreflightDocument()
+            document = parser.getPreflightDocument()
             document.validate()
 
             // Get validation result
@@ -49,6 +50,10 @@ class PdfValidatorPdfBox implements PdfValidator {
              * In this case, the exception contains an instance of ValidationResult
              */
             result = e.getResult()
+        } finally {
+            if (document != null) {
+                document.close()
+            }
         }
         // go through list of errors and create SipProcessingExceptinoReason and add them to SipProcessingException
         if (result != null && result.errorsList.size() > 0) {
