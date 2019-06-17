@@ -4,6 +4,7 @@ import nz.govt.natlib.tools.sip.state.SipProcessingException
 import nz.govt.natlib.tools.sip.state.SipProcessingExceptionReason
 import nz.govt.natlib.tools.sip.state.SipProcessingExceptionReasonType
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 import static org.hamcrest.core.Is.is
@@ -30,6 +31,7 @@ class PdfValidatorPdfBoxTest {
             'The given file=src/test/resources/nz/govt/natlib/tools/sip/pdf/pdfbox/PDFAMetaDataValidationTestTrailingControlChar.pdf is an invalid PDF. Validation failure(s)=errorCode=7.2, details=Error on MetaData, Author present in the document catalog dictionary doesn\'t match with XMP information.'
 
     static final String PDF_TRAILING_NULL = "PDFAMetaDataValidationTestTrailingNul.pdf"
+    static final String PDF_ROTATED_90_VALID = "A3-portrait-dimensioned-rotated-90.pdf"
 
     static final String PDF_TRAILING_SPACES = "PDFAMetaDataValidationTestTrailingSpaces.pdf"
     static final String PDF_TRAILING_SPACES_REASON =
@@ -97,6 +99,17 @@ class PdfValidatorPdfBoxTest {
     @Test
     void trailingNullIsValid() {
         File pdfFile = new File(TEST_FILE_LOCATION + PDF_TRAILING_NULL)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+
+        assertNull("PDF validation did not produce an exception", sipProcessingException)
+    }
+
+    @Test
+    @Ignore // This PDF, produced by LibreOffice and rotated by pdftk, is considered invalid by PdfBox, so we ignore
+            // this test.
+            // TODO Maybe we need a test of 'PDF is renderable', rather than valid/invalid.
+    void a3PortraitRotated90IsValid() {
+        File pdfFile = new File(TEST_FILE_LOCATION + PDF_ROTATED_90_VALID)
         SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
 
         assertNull("PDF validation did not produce an exception", sipProcessingException)

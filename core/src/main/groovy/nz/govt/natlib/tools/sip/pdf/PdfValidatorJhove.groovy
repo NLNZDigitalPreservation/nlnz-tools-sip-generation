@@ -51,14 +51,14 @@ class PdfValidatorJhove implements PdfValidator {
         List<SipProcessingExceptionReason> reasons = [ ]
 
         boolean invalidPdf = false
-        if (!repInfo.getWellFormed()) {
+        if (repInfo.getWellFormed() == RepInfo.FALSE) {
             invalidPdf = true
             SipProcessingExceptionReason reason =
                     new SipProcessingExceptionReason(SipProcessingExceptionReasonType.INVALID_PDF, null,
                             path.toString(), formatError("PDF not well formed", repInfo))
             reasons.add(reason)
         }
-        if (!repInfo.getValid()) {
+        if (repInfo.getValid() == RepInfo.FALSE) {
             invalidPdf = true
             SipProcessingExceptionReason reason =
                     new SipProcessingExceptionReason(SipProcessingExceptionReasonType.INVALID_PDF, null,

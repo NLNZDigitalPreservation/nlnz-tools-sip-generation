@@ -20,6 +20,10 @@ class PdfDimensionFinder {
                 float width = page.getMediaBox().getWidth()
                 // We accept rounding, as we're not trying to be excessively precise.
                 dimensions = new Point((int) width, (int) height)
+                int rotation = page.getRotation()
+                if (rotation == 90 || rotation == 270) {
+                    dimensions = new Point((int) dimensions.y, (int) dimensions.x)
+                }
             }
         } finally {
             if (pdDocument != null) {

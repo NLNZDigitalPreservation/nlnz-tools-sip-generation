@@ -15,6 +15,7 @@ class PdfValidatorJhoveTest {
     static final String TEST_FILE_LOCATION = "src/test/resources/nz/govt/natlib/tools/sip/pdf/jhove/"
 
     static final String PDF_MINIMAL_VALID = "T00_000_minimal-valid.pdf"
+    static final String PDF_ROTATED_90_VALID = "A3-portrait-dimensioned-rotated-90.pdf"
 
     static final String PDF_HEADER_INVALID_MAJOR_VERSION = "T01_001_header-invalid-major-version.pdf"
     static final String PDF_HEADER_INVALID_MAJOR_VERSION_REASON_1 =
@@ -49,6 +50,14 @@ class PdfValidatorJhoveTest {
     @Test
     void pdfMinimalValidIsValid() {
         File pdfFile = new File(TEST_FILE_LOCATION + PDF_MINIMAL_VALID)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+
+        assertNull("PDF validation did not produce an exception", sipProcessingException)
+    }
+
+    @Test
+    void pdfA3PortraitRotated90IsValid() {
+        File pdfFile = new File(TEST_FILE_LOCATION + PDF_ROTATED_90_VALID)
         SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
 
         assertNull("PDF validation did not produce an exception", sipProcessingException)
