@@ -82,7 +82,7 @@ dependencies {
     //compile "org.apache.ant:ant-compress:1.5"
 
     // For PDF processing/validation using Jhove.
-    compile "org.openpreservation.jhove:jhove-core:1.20.1"
+    compile "org.openpreservation.jhove:jhove-core:1.22.1"
     compile "org.openpreservation.jhove:jhove-modules:1.20.1"
 
     // No longer part of the JDK (i.e. not in OpenJDK 11)

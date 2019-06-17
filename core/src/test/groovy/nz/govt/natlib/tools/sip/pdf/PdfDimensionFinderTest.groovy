@@ -14,11 +14,14 @@ import static org.junit.Assert.assertTrue
 class PdfDimensionFinderTest {
     static final String TEST_FILE_LOCATION = "src/test/resources/nz/govt/natlib/tools/sip/pdf/"
     static final String TEST_A3_LANDSCAPE_FILENAME = "A3-landscape-dimensioned.pdf"
+    static final String TEST_A3_PORTRAIT_ROTATED_90_FILENAME = "A3-portrait-dimensioned-rotated-90.pdf"
     static final String TEST_A4_PORTRAIT_FILENAME = "A4-portrait-dimensioned.pdf"
     File TEST_A3_LANDSCAPE_FILE = new File(TEST_FILE_LOCATION + File.separator + TEST_A3_LANDSCAPE_FILENAME)
+    File TEST_A3_PORTRAIT_ROTATED_90_FILE = new File(TEST_FILE_LOCATION + File.separator + TEST_A3_PORTRAIT_ROTATED_90_FILENAME)
     File TEST_A4_PORTRAIT_FILE = new File(TEST_FILE_LOCATION + File.separator + TEST_A4_PORTRAIT_FILENAME)
 
     static final Point EXPECTED_A3_LANDSCAPE_DIMENSIONS = new Point(1190, 841)
+    static final Point EXPECTED_A3_PORTRAIT_ROTATED_90_DIMENSIONS = new Point(1190, 841)
     static final Point EXPECTED_A4_PORTRAIT_DIMENSIONS = new Point(595, 841)
 
     static final Point2D.Double EXPECTED_A3_TO_A4_RATIOS = new Point2D.Double(2.001, 1.0)
@@ -29,6 +32,11 @@ class PdfDimensionFinderTest {
     @Test
     void a3LandscapeFileDimensionedCorrectly() {
         fileDimensionedCorrectly(TEST_A3_LANDSCAPE_FILE, EXPECTED_A3_LANDSCAPE_DIMENSIONS)
+    }
+
+    @Test
+    void a3PortraitRotated90FileDimensionedCorrectly() {
+        fileDimensionedCorrectly(TEST_A3_PORTRAIT_ROTATED_90_FILE, EXPECTED_A3_PORTRAIT_ROTATED_90_DIMENSIONS)
     }
 
     @Test
@@ -83,6 +91,12 @@ class PdfDimensionFinderTest {
     void a3LandscapeIsSameHeightDoubleWidthToA4Portrait() {
         assertTrue("A3 landscape is same height but double width of A4 portrait",
         PdfDimensionFinder.isSameHeightDoubleWidth(TEST_A3_LANDSCAPE_FILE, TEST_A4_PORTRAIT_FILE, 0, 0, 0.01))
+    }
+
+    @Test
+    void a3PortraitRotated90IsSameHeightDoubleWidthToA4Portrait() {
+        assertTrue("A3 portrait rotated 90 is same height but double width of A4 portrait",
+                PdfDimensionFinder.isSameHeightDoubleWidth(TEST_A3_PORTRAIT_ROTATED_90_FILE, TEST_A4_PORTRAIT_FILE, 0, 0, 0.01))
     }
 
     @Test
