@@ -23,6 +23,7 @@ class FileUtils {
     static final String REPLACEMENT_FILENAME_SAFE_CHARACTER = "-"
     static final String FILE_PATH_SEPARATORS = '/\\'
     static final String REPLACEMENT_FILE_PATH_SEPARATOR = "_"
+    static final String TEMPORARY_DIRECTORY_PROPERTY_NAME = "java.io.tmpdir"
 
     static String fileNameAsSafeString(String stringWithUnsafeCharacters) {
         String safeString = stringWithUnsafeCharacters
@@ -303,4 +304,43 @@ class FileUtils {
         }
         return candidateFile
     }
+
+    static File getSystemTemporaryDirectory() {
+        File systemTemporaryDirectory = new File(System.getProperty(TEMPORARY_DIRECTORY_PROPERTY_NAME))
+
+        return systemTemporaryDirectory
+    }
+
+    static File writeResourceToTemporaryDirectory(String filename, String temporaryDirectoryPrefix, String resourcePath,
+                                                  String resourceName, File parentDirectory = null) {
+        File actualParentDirectory = parentDirectory == null ? getSystemTemporaryDirectory() : parentDirectory
+
+        Path temporaryDirectory = Files.createTempDirectory(actualParentDirectory.toPath(), temporaryDirectoryPrefix)
+        File tempFile = new File(temporaryDirectory.toFile(), filename)
+
+        File sourceFile = getResourceAsFile(resourcePath, resourceName)
+
+        if (sourceFile == null) {
+            log.warn("Unable to convert resourcePath=${resourcePath}, resourceName=${resourceName} to File.")
+            log.warn("No return of temporary file=${tempFile.canonicalPath}, as resource cannot be copied into it.")
+            tempFile = null
+        } else {
+            Files.copy(sourceFile.toPath(), tempFile.toPath())
+        }
+
+        return tempFile
+    }
+
+    static File getResourceAsFile(String resourcePath, String resourceName) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader()
+        String adjustedPath = (resourcePath == null || resourcePath.strip().isEmpty()) ?
+                resourceName : (resourcePath.endsWith("/") ?
+                    "${resourcePath}${resourceName}" : "${resourcePath}/${resourceName}")
+        URL url = loader.getResource(adjustedPath)
+
+        File resourceFile = url == null ? null : new File(url.toURI())
+
+        return resourceFile
+    }
+
 }
