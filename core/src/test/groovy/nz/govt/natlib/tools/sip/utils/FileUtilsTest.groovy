@@ -1,5 +1,7 @@
 package nz.govt.natlib.tools.sip.utils
 
+import org.junit.Ignore
+
 import static org.hamcrest.core.Is.is
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
@@ -19,6 +21,11 @@ class FileUtilsTest {
     static final File FOUR_SEGMENT_FILE_SLASH = new File("/parent3/parent2/parent1/filename.txt")
     static final File FIVE_SEGMENT_FILE = new File("parent4/parent3/parent2/parent1/filename.txt")
     static final File FIVE_SEGMENT_FILE_SLASH = new File("/parent4/parent3/parent2/parent1/filename.txt")
+
+    static final String SAMPLE_TEXT_FILE_NAME = "sample-text-file.txt"
+    static final String SAMPLE_TEXT_FILE_PACKAGE_PATH = "nz/govt/natlib/tools/sip/utils"
+    static final String SAMPLE_TEXT_FILE_CONTENTS = "This is a sample text file."
+
 
     @Test
     void convertsFilenamesProperly() {
@@ -196,5 +203,31 @@ class FileUtilsTest {
                 FileUtils.filePathAsSafeString(FIVE_SEGMENT_FILE_SLASH, totalSegments), is("_parent4_parent3_parent2_parent1_filename.txt"))
     }
 
+    @Test
+    void canWritesSampleRootResourceFileToTempFolder() {
+        File tempFile = FileUtils.writeResourceToTemporaryDirectory(SAMPLE_TEXT_FILE_NAME,
+                "FileUtilsTest-unit-test_", "", SAMPLE_TEXT_FILE_NAME, null)
+
+        String expectedContents = SAMPLE_TEXT_FILE_CONTENTS
+
+        assertTrue("tempFile=${tempFile.canonicalPath} exists", tempFile.exists())
+
+        String contents = tempFile.text
+        assertThat("Temp file contents=${contents} matches=${expectedContents}", contents, is(expectedContents))
+    }
+
+    @Test
+    void canWritesSamplePackageResourceFileToTempFolder() {
+        File tempFile = FileUtils.writeResourceToTemporaryDirectory(SAMPLE_TEXT_FILE_NAME,
+                "FileUtilsTest-unit-test_", SAMPLE_TEXT_FILE_PACKAGE_PATH,
+                SAMPLE_TEXT_FILE_NAME, null)
+
+        String expectedContents = SAMPLE_TEXT_FILE_CONTENTS
+
+        assertTrue("tempFile=${tempFile.canonicalPath} exists", tempFile.exists())
+
+        String contents = tempFile.text
+        assertThat("Temp file contents=${contents} matches=${expectedContents}", contents, is(expectedContents))
+    }
 
 }
