@@ -51,9 +51,9 @@ dependencies {
     compile localGroovy()
 
     // The latest version.
-    compile "com.google.guava:guava:27.0.1-jre"
+    compile "com.google.guava:guava:28.0-jre"
     // The latest version.
-    compile "org.apache.commons:commons-lang3:3.8.1"
+    compile "org.apache.commons:commons-lang3:3.9"
     // The latest version.
     compile "commons-io:commons-io:2.6"
 
@@ -89,6 +89,9 @@ dependencies {
     compile "com.sun.activation:javax.activation:1.2.0"
     compile "javax.xml.bind:jaxb-api:2.3.1"
     compile "com.sun.xml.bind:jaxb-impl:2.3.2"
+
+    // For command-line processing
+    compile "nz.govt.natlib.m11n.tools:automation-core:1.0.0-SNAPSHOT"
 
     // The latest version.
     testCompile "junit:junit:4.12"

@@ -1,5 +1,7 @@
 package nz.govt.natlib.tools.sip.utils
 
+import org.junit.After
+import org.junit.Before
 import org.junit.Ignore
 
 import static org.hamcrest.core.Is.is
@@ -26,6 +28,25 @@ class FileUtilsTest {
     static final String SAMPLE_TEXT_FILE_PACKAGE_PATH = "nz/govt/natlib/tools/sip/utils"
     static final String SAMPLE_TEXT_FILE_CONTENTS = "This is a sample text file."
 
+    List<File> filesToDelete
+
+    @Before
+    void setup() {
+        filesToDelete = [ ]
+    }
+
+    @After
+    void teardown() {
+        filesToDelete.each { File file ->
+            if (file.exists()) {
+                if (file.isDirectory()) {
+                    org.apache.commons.io.FileUtils.deleteDirectory(file)
+                } else {
+                    file.delete()
+                }
+            }
+        }
+    }
 
     @Test
     void convertsFilenamesProperly() {
@@ -207,6 +228,7 @@ class FileUtilsTest {
     void canWritesSampleRootResourceFileToTempFolder() {
         File tempFile = FileUtils.writeResourceToTemporaryDirectory(SAMPLE_TEXT_FILE_NAME,
                 "FileUtilsTest-unit-test_", "", SAMPLE_TEXT_FILE_NAME, null)
+        filesToDelete.add(tempFile)
 
         String expectedContents = SAMPLE_TEXT_FILE_CONTENTS
 
@@ -214,6 +236,8 @@ class FileUtilsTest {
 
         String contents = tempFile.text
         assertThat("Temp file contents=${contents} matches=${expectedContents}", contents, is(expectedContents))
+
+        tempFile.parentFile.delete()
     }
 
     @Test
@@ -221,6 +245,7 @@ class FileUtilsTest {
         File tempFile = FileUtils.writeResourceToTemporaryDirectory(SAMPLE_TEXT_FILE_NAME,
                 "FileUtilsTest-unit-test_", SAMPLE_TEXT_FILE_PACKAGE_PATH,
                 SAMPLE_TEXT_FILE_NAME, null)
+        filesToDelete.add(tempFile)
 
         String expectedContents = SAMPLE_TEXT_FILE_CONTENTS
 

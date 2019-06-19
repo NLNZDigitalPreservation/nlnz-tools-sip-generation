@@ -33,6 +33,7 @@ class ThumbnailGeneratorTest {
     static final String EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME = "sample-multi-page-a4-pdf-with-images_2.jpeg"
     static final String EXPECTED_FILE_THUMBNAIL_INVALID_PDF_NAME = "sample-invalid-pdf_thumbnail.jpeg"
     static final String EXPECTED_FILE_THUMBNAIL_PAGE_NAME = "page-of-thumbnails-from-12-pdf-files-01.jpeg"
+    static final String EXPECTED_FILE_PDFTOPPM_THUMBNAIL_PAGE_NAME = "page-of-thumbnails-from-12-pdf-files-pdftoppm-01.jpeg"
 
     static File WORKING_DIRECTORY
     static File RESOURCES_DIRECTORY
@@ -47,6 +48,7 @@ class ThumbnailGeneratorTest {
     static File PDF_FILE_INVALID_PDF
     static File EXPECTED_FILE_INVALID_PDF_THUMBNAIL
     static File EXPECTED_FILE_THUMBNAIL_PAGE
+    static File EXPECTED_FILE_PDFTOPPM_THUMBNAIL_PAGE
 
     static ThumbnailParameters DEFAULT_PARAMETERS
 
@@ -56,12 +58,14 @@ class ThumbnailGeneratorTest {
         bufferedImages.eachWithIndex { BufferedImage bufferedImage, int index ->
             String filenamePrefix = "${namePrefix}_${index}_"
             File thumbnailFile = File.createTempFile(filenamePrefix, ".jpeg")
+            thumbnailFile.deleteOnExit()
             ThumbnailGenerator.writeImage(bufferedImage, thumbnailFile.getCanonicalPath(), parameters.dpi)
         }
     }
 
     static void generatePdfThumbnail(File pdfFile, String filenamePrefix, ThumbnailParameters parameters) {
         File thumbnailFile = File.createTempFile(filenamePrefix, ".jpeg")
+        thumbnailFile.deleteOnExit()
 
         ThumbnailGenerator.writeThumbnail(pdfFile, parameters, thumbnailFile)
     }
@@ -163,6 +167,7 @@ class ThumbnailGeneratorTest {
         EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2 = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME)
         EXPECTED_FILE_INVALID_PDF_THUMBNAIL = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_INVALID_PDF_NAME)
         EXPECTED_FILE_THUMBNAIL_PAGE = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_PAGE_NAME)
+        EXPECTED_FILE_PDFTOPPM_THUMBNAIL_PAGE = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_PDFTOPPM_THUMBNAIL_PAGE_NAME)
 
         DEFAULT_PARAMETERS = new ThumbnailParameters(thumbnailHeight: 250, useAffineTransformation: false,
                 textJustification: ThumbnailParameters.TextJustification.RIGHT)
@@ -208,6 +213,20 @@ class ThumbnailGeneratorTest {
         verifyGeneratorCreatesExpectedThumbnailPage(PDF_FILES_LIST_1, EXPECTED_FILE_THUMBNAIL_PAGE, parameters)
     }
 
+    // We ignore this test as there's no guarantee that pdftoppm is installed on the test system.
+    // Ensure that this file is checked in with the @Ignore NOT commented out.
+    @Test
+    @Ignore
+    void verifyTestPage1GeneratesWithPdftoppmAsExpected() {
+        ThumbnailParameters parameters = DEFAULT_PARAMETERS.clone()
+
+        parameters.generateWithPdftoppm = true
+        parameters.maximumPageWidth = 1200
+        parameters.pageTitleText = "ThumbnailGeneratorTest (pdftoppm) with ${PDF_FILES_LIST_1.size()} pdf files"
+
+        verifyGeneratorCreatesExpectedThumbnailPage(PDF_FILES_LIST_1, EXPECTED_FILE_PDFTOPPM_THUMBNAIL_PAGE, parameters)
+    }
+
     // This method generates the PDF test page. If the algorithm or layout/format changes, then regenerate the test
     // page and check it in as required.
     // The generated jpeg will appear in the System temp directory.
@@ -215,11 +234,31 @@ class ThumbnailGeneratorTest {
     @Ignore
     void generateTestPageJpeg() {
         File pdfPageFile = File.createTempFile("GENERATED_PDF_PAGE_TEST_", ".jpeg")
+        pdfPageFile.deleteOnExit()
 
         ThumbnailParameters parameters = DEFAULT_PARAMETERS.clone()
         parameters.maximumPageWidth = 1200
         parameters.pageTitleFontJustification = ThumbnailParameters.TextJustification.RIGHT
         parameters.pageTitleText = "ThumbnailGeneratorTest with ${PDF_FILES_LIST_1.size()} pdf files"
+
+        ThumbnailGenerator.writeThumbnailPage(PDF_FILES_LIST_1, parameters, pdfPageFile)
+    }
+
+    // This method generates the PDF test page using pdftoppm. If the algorithm or layout/format changes, then
+    // regenerate the test page and check it in as required.
+    // The generated jpeg will appear in the System temp directory.
+    @Test
+    @Ignore
+    void generateTestPageJpegUsingCommandLinePdfToThumbnailFileGenerator() {
+        File pdfPageFile = File.createTempFile("GENERATED_PDF_PAGE_TEST_pdftoppm_", ".jpeg")
+        //pdfPageFile.deleteOnExit()
+
+        ThumbnailParameters parameters = DEFAULT_PARAMETERS.clone()
+
+        parameters.generateWithPdftoppm = true
+        parameters.maximumPageWidth = 1200
+        parameters.pageTitleFontJustification = ThumbnailParameters.TextJustification.RIGHT
+        parameters.pageTitleText = "ThumbnailGeneratorTest (pdftoppm) with ${PDF_FILES_LIST_1.size()} pdf files"
 
         ThumbnailGenerator.writeThumbnailPage(PDF_FILES_LIST_1, parameters, pdfPageFile)
     }

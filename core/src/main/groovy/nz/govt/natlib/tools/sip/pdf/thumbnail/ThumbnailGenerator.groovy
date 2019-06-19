@@ -8,11 +8,13 @@ import nz.govt.natlib.tools.sip.pdf.PdfValidatorType
 import nz.govt.natlib.tools.sip.pdf.thumbnail.ThumbnailParameters.TextJustification
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 import nz.govt.natlib.tools.sip.state.SipProcessingExceptionReason
+import org.apache.commons.io.FileUtils
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.ImageType
 import org.apache.pdfbox.rendering.PDFRenderer
 import org.apache.pdfbox.tools.imageio.ImageIOUtil
 
+import javax.imageio.ImageIO
 import java.awt.AlphaComposite
 import java.awt.Color
 import java.awt.Font
@@ -22,6 +24,7 @@ import java.awt.RenderingHints
 import java.awt.geom.AffineTransform
 import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
+import java.nio.file.Files
 
 @Log4j2
 class ThumbnailGenerator {
@@ -137,6 +140,18 @@ class ThumbnailGenerator {
     }
 
     static List<BufferedImage> generateImagesFromPdf(File pdfFile, ThumbnailParameters parameters) throws IOException {
+        List<BufferedImage> images
+        if (parameters.generateWithPdftoppm) {
+            images = generateImagesFromPdfWithPdftoppm(pdfFile, parameters)
+        } else {
+            images = generateImagesFromPdfWithRenderer(pdfFile, parameters)
+        }
+
+        return images
+    }
+
+    static List<BufferedImage> generateImagesFromPdfWithRenderer(File pdfFile, ThumbnailParameters parameters)
+            throws IOException {
         PdfValidator pdfValidator = PdfValidatorFactory.getValidator(PdfValidatorType.JHOVE_VALIDATOR)
         SipProcessingException sipProcessingException = pdfValidator.validatePdf(pdfFile.toPath())
         List<BufferedImage> images = [ ]
@@ -165,6 +180,36 @@ class ThumbnailGenerator {
             String reasonDescription = reason == null ? "no reason given" : reason.toString()
             images.add(errorImage(reasonDescription, pdfFile.getName(), parameters))
         }
+        return images
+    }
+
+    static List<BufferedImage> generateImagesFromPdfWithPdftoppm(File pdfFile, ThumbnailParameters parameters) {
+
+        List<BufferedImage> images = [ ]
+        List<File> thumbnailFiles = [ ]
+        try {
+            File tempDirectory = Files.createTempDirectory(FileUtils.tempDirectory.toPath(), "ThumbnailGenerator_").toFile()
+            tempDirectory.deleteOnExit()
+            boolean wouldHaveCaption = true
+            boolean throwExceptionOnFailure = true
+            thumbnailFiles = CommandLinePdfToThumbnailFileGenerator.generateThumbnails(pdfFile,
+                    tempDirectory, pdfFile.name, ".png", parameters, wouldHaveCaption, throwExceptionOnFailure)
+        } catch (SipProcessingException sipProcessingException) {
+            SipProcessingExceptionReason reason = sipProcessingException.reasons.isEmpty() ? null :
+                    sipProcessingException.reasons.first()
+            String reasonDescription = reason == null ? "no reason given" : reason.toString()
+            images.add(errorImage(reasonDescription, pdfFile.getName(), parameters))
+        }
+        int numberOfPages = thumbnailFiles.size()
+        thumbnailFiles.eachWithIndex { File thumbnailFile, int page ->
+            BufferedImage pdfImage = ImageIO.read(thumbnailFile)
+            String pageNumber = numberOfPages > 1 ? " - ${page}" : ""
+            String caption = "${pdfFile.getName()}${pageNumber}"
+            BufferedImage scaledWithTextImage = scaleAndWriteCaption(pdfImage, parameters, caption)
+            images.add(scaledWithTextImage)
+            thumbnailFile.delete()
+        }
+
         return images
     }
 
@@ -206,9 +251,7 @@ class ThumbnailGenerator {
     static BufferedImage scaleAndWriteCaption(BufferedImage originalImage, ThumbnailParameters parameters,
                                            String caption) {
         boolean hasCaption = caption != null && caption.length() > 0
-        int scaledHeight = hasCaption ?
-                parameters.thumbnailHeight - parameters.textHeight :
-                parameters.thumbnailHeight
+        int scaledHeight = parameters.adjustedThumbnailHeight(hasCaption)
         int scaledWidth = (originalImage.width * scaledHeight) / originalImage.height
         BufferedImage scaledImage = scale(originalImage, scaledWidth, scaledHeight,
                 parameters.useAffineTransformation)
@@ -319,6 +362,7 @@ class ThumbnailGenerator {
         }
         return currentIndex
     }
+
     static void writeText(Graphics2D graphics, String text, String fontName, int fontStyle, int fontSize,
                           Color fontColor, TextJustification justification, int xLeftLocation, int xRightLocation,
                           int yLocation) {
@@ -346,5 +390,4 @@ class ThumbnailGenerator {
             }
         }
     }
-
 }
