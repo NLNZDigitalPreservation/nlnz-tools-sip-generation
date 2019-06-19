@@ -305,17 +305,17 @@ class FileUtils {
         return candidateFile
     }
 
-    static File getSystemTemporaryDirectory() {
-        File systemTemporaryDirectory = new File(System.getProperty(TEMPORARY_DIRECTORY_PROPERTY_NAME))
-
-        return systemTemporaryDirectory
-    }
-
     static File writeResourceToTemporaryDirectory(String filename, String temporaryDirectoryPrefix, String resourcePath,
-                                                  String resourceName, File parentDirectory = null) {
-        File actualParentDirectory = parentDirectory == null ? getSystemTemporaryDirectory() : parentDirectory
+                                                  String resourceName, File parentDirectory = null,
+                                                  boolean deleteOnExit = true) {
+        File actualParentDirectory = parentDirectory == null ?
+                org.apache.commons.io.FileUtils.tempDirectory :
+                parentDirectory
 
         Path temporaryDirectory = Files.createTempDirectory(actualParentDirectory.toPath(), temporaryDirectoryPrefix)
+        if (deleteOnExit) {
+            temporaryDirectory.toFile().deleteOnExit()
+        }
         File tempFile = new File(temporaryDirectory.toFile(), filename)
 
         File sourceFile = getResourceAsFile(resourcePath, resourceName)

@@ -29,6 +29,7 @@ enum SipProcessingExceptionReasonType {
     MISSING_SEQUENCE_FILES(false, 'One or more skipped sequences precedes these files=${a}',
             "missing-file-sequences"),
     MANUAL_PROCESSING_REQUIRED(false, 'Manual processing specified=${a}', "manual-processing"),
+    SHELL_COMMAND_FAILURE(false, 'Shell command failure, reason=${a}', "shell-command-failure"),
     GENERIC_ONE_PLACE(false, '${a}', "generic-problem"),
     GENERIC_THREE_PLACES(false, '${a} ${b} ${c}', "generic-problem")
 

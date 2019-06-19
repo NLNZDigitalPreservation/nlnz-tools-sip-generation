@@ -38,7 +38,15 @@ class ThumbnailParameters {
     int widthBetweenThumbnails = 5
     int heightBetweenThumbnails = 5
 
+    // For pdftoppm command
+    int quality = 30
+    boolean generateWithPdftoppm = false
+
     boolean hasTitleText() {
         return !(pageTitleText == null || pageTitleText.isEmpty())
+    }
+
+    int adjustedThumbnailHeight(boolean hasCaption = true) {
+        return hasCaption ? thumbnailHeight - textHeight : thumbnailHeight
     }
 }
