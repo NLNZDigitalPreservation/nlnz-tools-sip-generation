@@ -5,6 +5,7 @@ import groovy.transform.Canonical
 import nz.govt.natlib.tools.sip.IEEntityType
 import org.apache.commons.lang3.StringUtils
 
+import java.nio.charset.StandardCharsets
 import java.nio.file.Path
 
 @Canonical
@@ -47,7 +48,9 @@ class SipProcessingState {
         if (deleteOnExit) {
             tempFile.deleteOnExit()
         }
-        tempPath.write(toString())
+        tempPath.withWriter(StandardCharsets.UTF_8.name()) { Writer writer ->
+            writer.write(toString())
+        }
 
         return tempPath
     }
@@ -109,8 +112,6 @@ class SipProcessingState {
         appendFileList("ignoredFiles", initialOffset, ignoredFiles, stringBuilder)
 
         appendFileList("unrecognizedFiles", initialOffset, unrecognizedFiles, stringBuilder)
-
-        appendFileList("validFiles", initialOffset, validFiles, stringBuilder)
 
         return stringBuilder.toString()
     }
