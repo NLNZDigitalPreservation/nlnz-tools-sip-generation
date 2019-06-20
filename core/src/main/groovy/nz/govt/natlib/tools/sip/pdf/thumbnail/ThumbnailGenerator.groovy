@@ -9,6 +9,7 @@ import nz.govt.natlib.tools.sip.pdf.thumbnail.ThumbnailParameters.TextJustificat
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 import nz.govt.natlib.tools.sip.state.SipProcessingExceptionReason
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.FilenameUtils
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.ImageType
 import org.apache.pdfbox.rendering.PDFRenderer
@@ -192,8 +193,9 @@ class ThumbnailGenerator {
             tempDirectory.deleteOnExit()
             boolean wouldHaveCaption = true
             boolean throwExceptionOnFailure = true
-            thumbnailFiles = CommandLinePdfToThumbnailFileGenerator.generateThumbnails(pdfFile,
-                    tempDirectory, pdfFile.name, ".png", parameters, wouldHaveCaption, throwExceptionOnFailure)
+            thumbnailFiles = CommandLinePdfToThumbnailFileGenerator.generateThumbnails(pdfFile, tempDirectory,
+                    FilenameUtils.removeExtension(pdfFile.name), ".png", parameters, wouldHaveCaption,
+                    throwExceptionOnFailure)
         } catch (SipProcessingException sipProcessingException) {
             SipProcessingExceptionReason reason = sipProcessingException.reasons.isEmpty() ? null :
                     sipProcessingException.reasons.first()

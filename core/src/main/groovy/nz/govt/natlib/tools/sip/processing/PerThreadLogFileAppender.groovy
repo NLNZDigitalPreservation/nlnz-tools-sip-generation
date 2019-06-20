@@ -14,6 +14,7 @@ import org.apache.logging.log4j.core.filter.ThreadContextMapFilter
 import org.apache.logging.log4j.core.layout.PatternLayout
 import org.apache.logging.log4j.core.util.KeyValuePair
 
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.concurrent.locks.ReentrantLock
 
@@ -135,6 +136,7 @@ class PerThreadLogFileAppender {
             Layout layout = PatternLayout.newBuilder().
                     withPattern(DEFAULT_PATTERN).
                     withConfiguration(configuration).
+                    withCharset(StandardCharsets.UTF_8).
                     build()
 
             KeyValuePair threadNamePair = KeyValuePair.newBuilder()
