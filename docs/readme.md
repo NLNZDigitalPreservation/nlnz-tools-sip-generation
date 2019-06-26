@@ -48,6 +48,12 @@ folders/files generated in building and testing the documentation that should no
     - theme_overrides.css
 - source/guides/
     - developer-guide.rst
+    - faq.rst
+    - overview-history.rst
+    - release-notes.rst
+    - troubleshooting-guide.rst
+    - upgrade-guide.rst
+    - user-guide.rst
 - conf.py
 - index.rst
 - make.bat

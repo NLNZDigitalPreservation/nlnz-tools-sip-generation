@@ -8,7 +8,7 @@ Introduction
 
 This guide, designed for a NLNZ Tools SIP Generation developer, covers release notes from `1.0.0-SNAPSHOT`. Versions are
 in reverse chronological order, with the most recent version first. While the
-*NLNZ Tools SIP Generation Developer Guide* and *NLNZ Tools SIP Generation User Manual* are accurate for the current release, the
+*NLNZ Tools SIP Generation Developer Guide* and *NLNZ Tools SIP Generation User Guide* are accurate for the current release, the
 *Release Notes* can give some idea of how things have changed since the last major release.
 
 Contents of this document

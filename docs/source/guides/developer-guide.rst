@@ -48,6 +48,10 @@ Major contributors to NLNZ Tools SIP Generation are NLNZ (The National Library o
 (https://natlib.govt.nz/). This institution currently drive most development. All contributors are welcome. Making your
 interest in NLNZ Tools SIP Generation known can help to ensure that the tools meets your needs.
 
+Contributors
+------------
+See individual git commits to see who contributors are.
+
 
 Basic packages and classes
 ==========================
@@ -96,6 +100,14 @@ Build commands
 See the *Build commands for Gradle-based projects* section of the *Java Development Guide* of the
 *National Library of New Zealand Developer Guidelines* for a description of the build commands used for this project.
 These guidelines can be found at https://nlnz-developer-guidelines.readthedocs.io .
+
+Versioning
+----------
+See the ``build.gradle`` file for the current jar version that will be generated.
+
+A detailed versioning discussion is found in the *Build commands for Gradle-based projects* section of the
+*Java Development Guide* of the *National Library of New Zealand Developer Guidelines*. These guidelines can be found at
+https://nlnz-developer-guidelines.readthedocs.io . See the section *Git Development Guide*.
 
 
 Developer Guidelines
