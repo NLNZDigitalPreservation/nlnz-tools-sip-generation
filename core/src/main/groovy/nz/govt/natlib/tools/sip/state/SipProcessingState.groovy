@@ -12,6 +12,7 @@ import java.nio.file.Path
 @AutoClone
 class SipProcessingState {
     final static String SUCCESSFUL = "successful"
+    final static String EMPTY_SIP_AS_XML = ""
 
     boolean complete = false
     String identifier
@@ -28,6 +29,8 @@ class SipProcessingState {
     int totalFilesProcessed
 
     IEEntityType ieEntityType = IEEntityType.UNKNOWN
+
+    String sipAsXml = EMPTY_SIP_AS_XML
 
     boolean hasExceptions() {
         return exceptions.size() > 0
