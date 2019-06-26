@@ -17,7 +17,7 @@ This guide, designed for non-technical users, provides a background and history 
 Contents of this document
 -------------------------
 
-Following this introduction, NLNZ Tools SIP Generation and History Guide includes the following sections:
+Following this introduction, this Overview and History Guide includes the following sections:
 
 -   **Overview** - Covers what the NLNZ Tools SIP Generation is and what it is not.
 
@@ -79,3 +79,12 @@ Release history
 ===============
 
 See :doc:`Release Notes <release-notes>` for release notes on specific versions.
+
+
+Copyright
+=========
+
+|copyright| 2018—2019 National Library of New Zealand. All rights reserved. MIT license.
+
+
+.. |copyright|   unicode:: U+000A9 .. COPYRIGHT SIGN

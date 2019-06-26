@@ -1,12 +1,12 @@
-===========
-User Manual
-===========
+==========
+User Guide
+==========
 
 Introduction
 ============
 
-About the Web Curator Tool
---------------------------
+About NLNZ Tools Sip Generation
+-------------------------------
 
 NLNZ Tools SIP Generation is a common set of classes related to the generation of SIPs for ingestion into the Rosetta
 archiving system. The aim is to provide core functionality that is shared across other tools that are specific to

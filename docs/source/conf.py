@@ -105,7 +105,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'nlnz-tools-sip-generationdoc'
+htmlhelp_basename = 'nlnz-tools-sip-generation-doc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
