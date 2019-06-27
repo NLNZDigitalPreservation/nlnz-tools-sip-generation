@@ -82,6 +82,15 @@ Building the NLNZ Tools SIP Generation from source requires the following:
 As the artifact targets are Java-based, it should be possible to build the artifacts on either Linux, Solaris or Windows
 targets.
 
+Dependencies
+~~~~~~~~~~~~
+Most of this project's dependencies can be pulled from Maven Central, but this project also depends on
+*nlnz-m11n-tools-automation* for some of its functionality. *nlnz-m11n-tools-automation* need to be built and its
+artifact available for this project to build.
+
+The nlnz-m11n-tools-automation project can be found at
+https://github.com/NLNZDigitalPreservation/nlnz-m11n-tools-automation .
+
 Development platforms
 ~~~~~~~~~~~~~~~~~~~~~
 The following platforms have been used during the development of the NLNZ Tools Sip Generation:
@@ -96,10 +105,13 @@ used.
 
 Build commands
 --------------
-
 See the *Build commands for Gradle-based projects* section of the *Java Development Guide* of the
 *National Library of New Zealand Developer Guidelines* for a description of the build commands used for this project.
 These guidelines can be found at https://nlnz-developer-guidelines.readthedocs.io .
+
+The primary build command for this project is::
+
+    gradle clean build publishToMavenLocal
 
 Versioning
 ----------
