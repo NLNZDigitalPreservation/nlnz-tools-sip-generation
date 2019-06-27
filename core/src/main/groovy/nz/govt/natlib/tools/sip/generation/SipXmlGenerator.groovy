@@ -29,9 +29,9 @@ class SipXmlGenerator {
             //dublinCore.addElement("dc:identifier", getValue("dc:identifier", sipParameters, ))
 
             dublinCore.addElement("dc:title", sip.title)
-            dublinCore.addElement("dc:date", sip.year.toString())
-            dublinCore.addElement("dcterms:available", sip.month.toString())
-            dublinCore.addElement("dc:coverage", sip.dayOfMonth.toString())
+            dublinCore.addElement("dc:date", sip.dcDate)
+            dublinCore.addElement("dcterms:available", sip.dcTermsAvailable)
+            dublinCore.addElement("dc:coverage", sip.dcCoverage)
 
             ieParser.setIEDublinCore(dublinCore)
 

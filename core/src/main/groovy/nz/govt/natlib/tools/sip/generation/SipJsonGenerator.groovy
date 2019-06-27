@@ -18,9 +18,15 @@ class SipJsonGenerator {
         JsonBuilder jsonBuilder = new JsonBuilder()
         Map<String, Object> jsonRoot = jsonBuilder {
             title sip.title
+
             year sip.year
+            dcDate sip.dcDate
+
             month sip.month
+            dcTermsAvailable sip.dcTermsAvailable
+
             dayOfMonth sip.dayOfMonth
+            dcCoverage sip.dcCoverage
 
             ieEntityType sip.ieEntityType.getFieldValue()
             objectIdentifierType sip.objectIdentifierType

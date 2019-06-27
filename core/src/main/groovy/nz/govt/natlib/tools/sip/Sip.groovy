@@ -20,10 +20,17 @@ class Sip {
     // Title
     String title
 
-    // Date
+    // Date fields
+    // These fields are used for the date, but they are not all date fields in the dc schema.
+    // Maps to dc:date
     Integer year
+    String dcDate
+    // Maps to dcterms:available
     Integer month
+    String dcTermsAvailable
+    // Maps to dc:coverage
     Integer dayOfMonth
+    String dcCoverage
 
     // Type and policy
     IEEntityType ieEntityType
@@ -69,15 +76,24 @@ class Sip {
     void setDate(Date date) {
         Calendar calendar = Calendar.getInstance()
         calendar.setTime(date)
+
         this.year = calendar.get(Calendar.YEAR) - 1900
         this.month = calendar.get(Calendar.MONTH) + 1
         this.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        updateFromDateFields()
     }
 
     void setDate(LocalDate localDate) {
         this.year = localDate.getYear()
         this.month = localDate.getMonthValue()
         this.dayOfMonth = localDate.getDayOfMonth()
+        updateFromDateFields()
+    }
+
+    void updateFromDateFields() {
+        this.dcDate = "${this.year}".toString()
+        this.dcTermsAvailable = "${this.month}".toString()
+        this.dcCoverage = "${this.dayOfMonth}".toString()
     }
 
     LocalDate getLocalDate() {

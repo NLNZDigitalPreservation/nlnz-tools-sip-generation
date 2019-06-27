@@ -20,9 +20,28 @@ class SipTest {
         testSip.year = 2018
         testSip.month = 11
         testSip.dayOfMonth = 22
+        testSip.updateFromDateFields()
 
         LocalDate verifyDate = new LocalDate(2018, 11, 22)
         assertThat("LocalDate is correct", testSip.getLocalDate(), is(verifyDate))
+        assertThat("dcDate converted correctly", testSip.dcDate, is("2018"))
+        assertThat("dcTermsAvailable converted correctly", testSip.dcTermsAvailable, is("11"))
+        assertThat("dcCoverage converted correctly", testSip.dcCoverage, is("22"))
+    }
+
+    @Test
+    void dateUpdatesCorrectly() {
+        testSip = new Sip()
+        testSip.year = 2018
+        testSip.month = 11
+        testSip.dayOfMonth = 22
+        testSip.updateFromDateFields()
+
+        LocalDate verifyDate = new LocalDate(2018, 11, 22)
+        assertThat("LocalDate is correct", testSip.getLocalDate(), is(verifyDate))
+        assertThat("dcDate converted correctly", testSip.dcDate, is("2018"))
+        assertThat("dcTermsAvailable converted correctly", testSip.dcTermsAvailable, is("11"))
+        assertThat("dcCoverage converted correctly", testSip.dcCoverage, is("22"))
     }
 
     @Test
@@ -34,6 +53,9 @@ class SipTest {
         assertThat("year is correct", testSip.year, is(2018))
         assertThat("month is correct", testSip.month, is(11))
         assertThat("dayOfMonth is correct", testSip.dayOfMonth, is(22))
+        assertThat("dcDate converted correctly", testSip.dcDate, is("2018"))
+        assertThat("dcTermsAvailable converted correctly", testSip.dcTermsAvailable, is("11"))
+        assertThat("dcCoverage converted correctly", testSip.dcCoverage, is("22"))
     }
 
     @Test
@@ -46,6 +68,9 @@ class SipTest {
         assertThat("year is correct", testSip.year, is(2018))
         assertThat("month is correct", testSip.month, is(11))
         assertThat("dayOfMonth is correct", testSip.dayOfMonth, is(22))
+        assertThat("dcDate converted correctly", testSip.dcDate, is("2018"))
+        assertThat("dcTermsAvailable converted correctly", testSip.dcTermsAvailable, is("11"))
+        assertThat("dcCoverage converted correctly", testSip.dcCoverage, is("22"))
     }
 
     @Test

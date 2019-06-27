@@ -120,6 +120,8 @@ class SipTestHelper {
         sip.month = SIP_MONTH
         sip.dayOfMonth = SIP_DAY_OF_MONTH
 
+        sip.updateFromDateFields()
+
         sip.ieEntityType = SIP_IE_ENTITY_TYPE
         sip.objectIdentifierType = SIP_OBJECT_IDENTIFIER_TYPE
         sip.objectIdentifierValue = SIP_OBJECT_IDENTIFIER_VALUE
@@ -164,6 +166,9 @@ class SipTestHelper {
         assertThat("year", sip.year, is(SIP_YEAR))
         assertThat("month", sip.month, is(SIP_MONTH))
         assertThat("dayOfMonth", sip.dayOfMonth, is(SIP_DAY_OF_MONTH))
+        assertThat("dcDate", sip.dcDate, is("${SIP_YEAR}".toString()))
+        assertThat("dcTermsAvailable", sip.dcTermsAvailable, is("${SIP_MONTH}".toString()))
+        assertThat("dcCoverage", sip.dcCoverage, is("${SIP_DAY_OF_MONTH}".toString()))
         assertThat("ieEntityType", sip.ieEntityType, is(SIP_IE_ENTITY_TYPE))
         assertThat("objectIdentifierType", sip.objectIdentifierType, is(SIP_OBJECT_IDENTIFIER_TYPE))
         assertThat("objectIdentifierValue", sip.objectIdentifierValue, is(SIP_OBJECT_IDENTIFIER_VALUE))
@@ -209,6 +214,9 @@ class SipTestHelper {
         assertThat("year", sip.year, is(2015))
         assertThat("month", sip.month, is(7))
         assertThat("dayOfMonth", sip.dayOfMonth, is(29))
+        assertThat("dcDate", sip.dcDate, is("2015"))
+        assertThat("dcTermsAvailable", sip.dcTermsAvailable, is("7"))
+        assertThat("dcCoverage", sip.dcCoverage, is("29"))
         assertThat("ieEntityType", sip.ieEntityType, is(IEEntityType.NewspaperIE))
         assertThat("objectIdentifierType", sip.objectIdentifierType, is("ALMAMMS"))
         assertThat("objectIdentifierValue", sip.objectIdentifierValue, is("9917982663502836"))

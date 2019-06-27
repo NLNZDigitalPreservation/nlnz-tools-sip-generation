@@ -32,6 +32,7 @@ class SipXmlExtractor {
         sip.year = extractYear()
         sip.month = extractMonth()
         sip.dayOfMonth = extractDayOfMonth()
+        sip.updateFromDateFields()
 
         sip.ieEntityType = extractIEEntityType()
         sip.objectIdentifierType = extractObjectIdentifierType()
@@ -90,18 +91,33 @@ class SipXmlExtractor {
     }
 
     Integer extractYear() {
-        String yearString = extractIeDmdRecord().'dc:date' as String
-        return Integer.parseInt(yearString)
+        return Integer.parseInt(extractDcDate())
+    }
+
+    String extractDcDate() {
+        String dcDateString = extractIeDmdRecord().'dc:date' as String
+
+        return dcDateString
     }
 
     Integer extractMonth() {
-        String monthString = extractIeDmdRecord().'dcterms:available' as String
-        return Integer.parseInt(monthString)
+        return Integer.parseInt(extractDcTermsAvailable())
+    }
+
+    String extractDcTermsAvailable() {
+        String dcTermsAvailableString = extractIeDmdRecord().'dcterms:available' as String
+
+        return dcTermsAvailableString
     }
 
     Integer extractDayOfMonth() {
-        String dayOfMonthString = extractIeDmdRecord().'dc:coverage' as String
-        return Integer.parseInt(dayOfMonthString)
+        return Integer.parseInt(extractDcCoverage())
+    }
+
+    String extractDcCoverage() {
+        String dcCoverageString = extractIeDmdRecord().'dc:coverage' as String
+
+        return dcCoverageString
     }
 
     GPathResult extractIeAmdRecord() {
