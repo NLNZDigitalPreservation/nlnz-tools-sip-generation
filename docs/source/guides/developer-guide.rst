@@ -85,11 +85,14 @@ targets.
 Dependencies
 ~~~~~~~~~~~~
 Most of this project's dependencies can be pulled from Maven Central, but this project also depends on
-*nlnz-m11n-tools-automation* for some of its functionality. *nlnz-m11n-tools-automation* need to be built and its
-artifact available for this project to build.
+*nlnz-m11n-tools-automation* and *rosetta-dps-sdk-projects-maven-lib* for some of its functionality.
 
-The nlnz-m11n-tools-automation project can be found at
-https://github.com/NLNZDigitalPreservation/nlnz-m11n-tools-automation .
+*nlnz-m11n-tools-automation* need to be built and its artifact available for this project to build. The
+nlnz-m11n-tools-automation project can be found at https://github.com/NLNZDigitalPreservation/nlnz-m11n-tools-automation .
+
+The jar and ``pom.xml`` provided by the *rosetta-dps-sdk-projects-maven-lib* project needs to be installed as well. The
+project can be found at https://github.com/NLNZDigitalPreservation/rosetta-dps-sdk-projects-maven-lib . Follow the
+instructions to install the necessary artifacts.
 
 Development platforms
 ~~~~~~~~~~~~~~~~~~~~~
