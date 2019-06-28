@@ -7,6 +7,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
 
+import java.util.regex.Pattern
+
 import static org.hamcrest.core.Is.is
 import static org.junit.Assert.assertThat
 import static org.junit.Assert.assertTrue
@@ -71,10 +73,11 @@ class FileUtilsTest {
         int totalSegments = 1
         
         String expected = "filename.txt"
+        String osPrefix = getOsPrefix()
         // Can't really test ZERO_SEGMENT_FILE, since it will automatically have its parent because of how File is constructed.
         // For ZERO_SEGMENT_FILE_SLASH, it's treated as the root folder, which means it is a blank
-        assertThat("Full=${ZERO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=''",
-                FileUtils.filePathAsSafeString(ZERO_SEGMENT_FILE_SLASH, totalSegments), is(""))
+        assertThat("Full=${ZERO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is='${osPrefix}'",
+                FileUtils.filePathAsSafeString(ZERO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}".toString()))
         assertThat("Full=${ONE_SEGMENT_FILE} with totalSegments=${totalSegments} is=filename.txt",
                 FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments), is("filename.txt"))
         assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${expected}",
@@ -138,7 +141,7 @@ class FileUtilsTest {
         assertTrue("Full=${TWO_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments).endsWith("parent1_filename.txt"))
         assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent1_filename.txt",
-                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent1_filename.txt".toString() q))
+                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent1_filename.txt".toString()))
         assertThat("Full=${THREE_SEGMENT_FILE} with totalSegments=${totalSegments} is=${expected}",
                 FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments), is(expected))
         assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${expected}",
@@ -268,7 +271,8 @@ class FileUtilsTest {
         String osPrefix
         if (SystemUtils.IS_OS_WINDOWS) {
             File testFile = new File("abc.txt")
-            osPrefix = testFile.getCanonicalPath().split(File.separator).first().replace(":", "_")
+            List<String> splitPath = testFile.getCanonicalPath().split(Pattern.quote(File.separator))
+            osPrefix = splitPath.first().replace(":", "_")
         } else {
             osPrefix = ""
         }
