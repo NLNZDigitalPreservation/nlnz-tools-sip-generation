@@ -1,5 +1,8 @@
 package nz.govt.natlib.tools.sip.utils
 
+import org.apache.commons.io.FilenameUtils
+import org.apache.commons.lang.SystemUtils
+import org.apache.groovy.util.SystemUtil
 import org.junit.After
 import org.junit.Before
 import org.junit.Ignore
@@ -12,20 +15,20 @@ import org.junit.Test
 
 class FileUtilsTest {
     static final File ZERO_SEGMENT_FILE = new File("")
-    static final File ZERO_SEGMENT_FILE_SLASH = new File("/")
-    static final File ONE_SEGMENT_FILE = new File("filename.txt")
-    static final File ONE_SEGMENT_FILE_SLASH = new File("/filename.txt")
-    static final File TWO_SEGMENT_FILE = new File("parent1/filename.txt")
-    static final File TWO_SEGMENT_FILE_SLASH = new File("/parent1/filename.txt")
-    static final File THREE_SEGMENT_FILE = new File("parent2/parent1/filename.txt")
-    static final File THREE_SEGMENT_FILE_SLASH = new File("/parent2/parent1/filename.txt")
-    static final File FOUR_SEGMENT_FILE = new File("parent3/parent2/parent1/filename.txt")
-    static final File FOUR_SEGMENT_FILE_SLASH = new File("/parent3/parent2/parent1/filename.txt")
-    static final File FIVE_SEGMENT_FILE = new File("parent4/parent3/parent2/parent1/filename.txt")
-    static final File FIVE_SEGMENT_FILE_SLASH = new File("/parent4/parent3/parent2/parent1/filename.txt")
+    static final File ZERO_SEGMENT_FILE_SLASH = new File(FilenameUtils.separatorsToSystem("/"))
+    static final File ONE_SEGMENT_FILE = new File(FilenameUtils.separatorsToSystem("filename.txt"))
+    static final File ONE_SEGMENT_FILE_SLASH = new File(FilenameUtils.separatorsToSystem("/filename.txt"))
+    static final File TWO_SEGMENT_FILE = new File(FilenameUtils.separatorsToSystem("parent1/filename.txt"))
+    static final File TWO_SEGMENT_FILE_SLASH = new File(FilenameUtils.separatorsToSystem("/parent1/filename.txt"))
+    static final File THREE_SEGMENT_FILE = new File(FilenameUtils.separatorsToSystem("parent2/parent1/filename.txt"))
+    static final File THREE_SEGMENT_FILE_SLASH = new File(FilenameUtils.separatorsToSystem("/parent2/parent1/filename.txt"))
+    static final File FOUR_SEGMENT_FILE = new File(FilenameUtils.separatorsToSystem("parent3/parent2/parent1/filename.txt"))
+    static final File FOUR_SEGMENT_FILE_SLASH = new File(FilenameUtils.separatorsToSystem("/parent3/parent2/parent1/filename.txt"))
+    static final File FIVE_SEGMENT_FILE = new File(FilenameUtils.separatorsToSystem("parent4/parent3/parent2/parent1/filename.txt"))
+    static final File FIVE_SEGMENT_FILE_SLASH = new File(FilenameUtils.separatorsToSystem("/parent4/parent3/parent2/parent1/filename.txt"))
 
     static final String SAMPLE_TEXT_FILE_NAME = "sample-text-file.txt"
-    static final String SAMPLE_TEXT_FILE_PACKAGE_PATH = "nz/govt/natlib/tools/sip/utils"
+    static final String SAMPLE_TEXT_FILE_PACKAGE_PATH = FilenameUtils.separatorsToSystem("nz/govt/natlib/tools/sip/utils")
     static final String SAMPLE_TEXT_FILE_CONTENTS = "This is a sample text file."
 
     List<File> filesToDelete
@@ -52,6 +55,7 @@ class FileUtilsTest {
     void convertsFilenamesProperly() {
         checkAndConvertFilename("/this/is/a/path", "_this_is_a_path")
         checkAndConvertFilename("\\this\\is\\a\\path", "_this_is_a_path")
+        checkAndConvertFilename("C:\\this\\is\\a\\path", "C__this_is_a_path")
         checkAndConvertFilename("dollars/\$are\$/removed", "dollars_-are-_removed")
         checkAndConvertFilename("/asterisks*have-/dashes*instead", "_asterisks-have-_dashes-instead")
         checkAndConvertFilename("no more spaces either ", "no-more-spaces-either-")
@@ -98,10 +102,11 @@ class FileUtilsTest {
         int totalSegments = 2
 
         String expected = "parent1_filename.txt"
+        String osPrefix = getOsPrefix()
         assertTrue("Full=${ONE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=filename.txt, actual=${FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments).endsWith("filename.txt"))
         assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_filename.txt",
-                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("_filename.txt"))
+                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_filename.txt".toString()))
         assertThat("Full=${TWO_SEGMENT_FILE} with totalSegments=${totalSegments} is=${expected}",
                 FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments), is(expected))
         assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${expected}",
@@ -125,14 +130,15 @@ class FileUtilsTest {
         int totalSegments = 3
 
         String expected = "parent2_parent1_filename.txt"
+        String osPrefix = getOsPrefix()
         assertTrue("Full=${ONE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=filename.txt, actual=${FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments).endsWith("filename.txt"))
-        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_filename.txt",
-                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("_filename.txt"))
+        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_filename.txt",
+                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_filename.txt".toString()))
         assertTrue("Full=${TWO_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments).endsWith("parent1_filename.txt"))
-        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent1_filename.txt",
-                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("_parent1_filename.txt"))
+        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent1_filename.txt",
+                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent1_filename.txt".toString() q))
         assertThat("Full=${THREE_SEGMENT_FILE} with totalSegments=${totalSegments} is=${expected}",
                 FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments), is(expected))
         assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${expected}",
@@ -152,18 +158,19 @@ class FileUtilsTest {
         int totalSegments = 4
         
         String expected = "parent3_parent2_parent1_filename.txt"
+        String osPrefix = getOsPrefix()
         assertTrue("Full=${ONE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=filename.txt, actual=${FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments).endsWith("filename.txt"))
-        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_filename.txt",
-                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("_filename.txt"))
+        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_filename.txt",
+                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_filename.txt".toString()))
         assertTrue("Full=${TWO_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments).endsWith("parent1_filename.txt"))
-        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent1_filename.txt",
-                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("_parent1_filename.txt"))
+        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent1_filename.txt",
+                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent1_filename.txt".toString()))
         assertTrue("Full=${THREE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent2_parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments).endsWith("parent2_parent1_filename.txt"))
-        assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent2_parent1_filename.txt}",
-                FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE_SLASH, totalSegments), is("_parent2_parent1_filename.txt"))
+        assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent2_parent1_filename.txt}",
+                FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent2_parent1_filename.txt".toString()))
         assertThat("Full=${FOUR_SEGMENT_FILE} with totalSegments=${totalSegments} is=${expected}",
                 FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE, totalSegments), is(expected))
         assertThat("Full=${FOUR_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${expected}",
@@ -178,50 +185,52 @@ class FileUtilsTest {
     void verifyThatFilePathAsSafeStringWorksForFullPath() {
         int totalSegments = 0
 
+        String osPrefix = getOsPrefix()
         assertTrue("Full=${ONE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=filename.txt, actual=${FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments).endsWith("filename.txt"))
-        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_filename.txt",
-                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("_filename.txt"))
+        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_filename.txt",
+                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_filename.txt".toString()))
         assertTrue("Full=${TWO_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments).endsWith("parent1_filename.txt"))
-        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent1_filename.txt",
-                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("_parent1_filename.txt"))
+        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent1_filename.txt",
+                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent1_filename.txt".toString()))
         assertTrue("Full=${THREE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent2_parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments).endsWith("parent2_parent1_filename.txt"))
-        assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent2_parent1_filename.txt}",
-                FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE_SLASH, totalSegments), is("_parent2_parent1_filename.txt"))
+        assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent2_parent1_filename.txt}",
+                FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent2_parent1_filename.txt".toString()))
         assertTrue("Full=${FOUR_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent3_parent2_parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE, totalSegments).endsWith("parent3_parent2_parent1_filename.txt"))
-        assertThat("Full=${FOUR_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent3_parent2_parent1_filename.txt}",
-                FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE_SLASH, totalSegments), is("_parent3_parent2_parent1_filename.txt"))
-        assertThat("Full=${FIVE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent4_parent3_parent2_parent1_filename.txt}",
-                FileUtils.filePathAsSafeString(FIVE_SEGMENT_FILE_SLASH, totalSegments), is("_parent4_parent3_parent2_parent1_filename.txt"))
+        assertThat("Full=${FOUR_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent3_parent2_parent1_filename.txt}",
+                FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent3_parent2_parent1_filename.txt".toString()))
+        assertThat("Full=${FIVE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent4_parent3_parent2_parent1_filename.txt}",
+                FileUtils.filePathAsSafeString(FIVE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent4_parent3_parent2_parent1_filename.txt".toString()))
     }
 
     @Test
     void verifyThatFilePathAsSafeStringWorksForNoOption() {
         int totalSegments = 0
 
+        String osPrefix = getOsPrefix()
         assertTrue("Full=${ONE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=filename.txt, actual=${FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments).endsWith("filename.txt"))
-        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_filename.txt",
-                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("_filename.txt"))
+        assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_filename.txt",
+                FileUtils.filePathAsSafeString(ONE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_filename.txt".toString()))
         assertTrue("Full=${TWO_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE, totalSegments).endsWith("parent1_filename.txt"))
-        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent1_filename.txt",
-                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("_parent1_filename.txt"))
+        assertThat("Full=${TWO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent1_filename.txt",
+                FileUtils.filePathAsSafeString(TWO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent1_filename.txt".toString()))
         assertTrue("Full=${THREE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent2_parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE, totalSegments).endsWith("parent2_parent1_filename.txt"))
-        assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent2_parent1_filename.txt}",
-                FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE_SLASH, totalSegments), is("_parent2_parent1_filename.txt"))
+        assertThat("Full=${THREE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent2_parent1_filename.txt}",
+                FileUtils.filePathAsSafeString(THREE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent2_parent1_filename.txt".toString()))
         assertTrue("Full=${FOUR_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent3_parent2_parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE, totalSegments).endsWith("parent3_parent2_parent1_filename.txt"))
-        assertThat("Full=${FOUR_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent3_parent2_parent1_filename.txt}",
-                FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE_SLASH, totalSegments), is("_parent3_parent2_parent1_filename.txt"))
+        assertThat("Full=${FOUR_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent3_parent2_parent1_filename.txt}",
+                FileUtils.filePathAsSafeString(FOUR_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent3_parent2_parent1_filename.txt".toString()))
         assertTrue("Full=${FIVE_SEGMENT_FILE} with totalSegments=${totalSegments} ends with=parent4_parent3_parent2_parent1_filename.txt, actual=${FileUtils.filePathAsSafeString(FIVE_SEGMENT_FILE, totalSegments)}",
                 FileUtils.filePathAsSafeString(FIVE_SEGMENT_FILE, totalSegments).endsWith("parent4_parent3_parent2_parent1_filename.txt"))
-        assertThat("Full=${FIVE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=_parent4_parent3_parent2_parent1_filename.txt}",
-                FileUtils.filePathAsSafeString(FIVE_SEGMENT_FILE_SLASH, totalSegments), is("_parent4_parent3_parent2_parent1_filename.txt"))
+        assertThat("Full=${FIVE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${osPrefix}_parent4_parent3_parent2_parent1_filename.txt}",
+                FileUtils.filePathAsSafeString(FIVE_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}_parent4_parent3_parent2_parent1_filename.txt".toString()))
     }
 
     @Test
@@ -255,4 +264,15 @@ class FileUtilsTest {
         assertThat("Temp file contents=${contents} matches=${expectedContents}", contents, is(expectedContents))
     }
 
+    static String getOsPrefix() {
+        String osPrefix
+        if (SystemUtils.IS_OS_WINDOWS) {
+            File testFile = new File("abc.txt")
+            osPrefix = testFile.getCanonicalPath().split(File.separator).first().replace(":", "_")
+        } else {
+            osPrefix = ""
+        }
+
+        return osPrefix
+    }
 }

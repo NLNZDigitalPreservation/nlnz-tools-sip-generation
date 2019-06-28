@@ -21,7 +21,7 @@ class FileUtils {
     static final String MD5_HASH_ZERO_LENGTH_FILE = "d41d8cd98f00b204e9800998ecf8427e"
     static final String FILENAME_UNSAFE_CHARACTERS = ' *$'
     static final String REPLACEMENT_FILENAME_SAFE_CHARACTER = "-"
-    static final String FILE_PATH_SEPARATORS = '/\\'
+    static final String FILE_PATH_SEPARATORS = ':/\\'
     static final String REPLACEMENT_FILE_PATH_SEPARATOR = "_"
     static final String TEMPORARY_DIRECTORY_PROPERTY_NAME = "java.io.tmpdir"
 
