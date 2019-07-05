@@ -1,6 +1,7 @@
 package nz.govt.natlib.tools.sip.pdf.thumbnail
 
 import groovy.util.logging.Log4j2
+import org.apache.commons.io.FilenameUtils
 import org.apache.pdfbox.tools.imageio.ImageIOUtil
 import org.junit.BeforeClass
 import org.junit.Ignore
@@ -20,7 +21,7 @@ import java.awt.image.BufferedImage
 // TODO Fix up this test so it runs more reliably.
 @Ignore
 class ThumbnailGeneratorTest {
-    static final String TEST_FILE_RESOURCES_PATH = "src/test/resources/nz/govt/natlib/tools/sip/pdf/thumbnail"
+    static final String TEST_FILE_RESOURCES_PATH = FilenameUtils.separatorsToSystem("src/test/resources/nz/govt/natlib/tools/sip/pdf/thumbnail")
 
     static final String SINGLE_A3_WIDE_PAGE_PDF_NAME = "sample-a3-wide-pdf-with-some-images.pdf"
     static final String SINGLE_A4_PAGE_PDF_NAME = "sample-a4-pdf-with-an-image.pdf"
