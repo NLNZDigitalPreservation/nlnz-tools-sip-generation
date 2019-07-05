@@ -8,7 +8,14 @@ import nz.govt.natlib.tools.sip.logging.Timekeeper
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 import org.apache.commons.io.FilenameUtils
 
-import java.nio.file.*
+import java.nio.file.AtomicMoveNotSupportedException
+import java.nio.file.FileVisitResult
+import java.nio.file.FileVisitor
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+import java.nio.file.attribute.BasicFileAttributes
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -23,7 +30,71 @@ class FileUtils {
     static final String REPLACEMENT_FILENAME_SAFE_CHARACTER = "-"
     static final String FILE_PATH_SEPARATORS = ':/\\'
     static final String REPLACEMENT_FILE_PATH_SEPARATOR = "_"
-    static final String TEMPORARY_DIRECTORY_PROPERTY_NAME = "java.io.tmpdir"
+
+    @Log4j2
+    static class AtomicDirectoryMoveFileVisitor implements FileVisitor<Path> {
+        boolean move
+        Path sourceRootDirectory
+        Path targetRootDirectory
+        boolean useAtomicOption
+        boolean includeDetailedTimings
+        Timekeeper atomicTimekeeper
+
+        AtomicDirectoryMoveFileVisitor(boolean move, Path sourceRootDirectory, Path targetRootDirectory,
+                                       boolean useAtomicOption, boolean includeDetailedTimings = false,
+                                       Timekeeper atomicTimekeeper = null) {
+            this.move = move
+            this.sourceRootDirectory = sourceRootDirectory
+            this.targetRootDirectory = targetRootDirectory
+            this.useAtomicOption = useAtomicOption
+            this.includeDetailedTimings = includeDetailedTimings
+            this.atomicTimekeeper = atomicTimekeeper
+        }
+
+        @Override
+        FileVisitResult preVisitDirectory(Path dirPath, BasicFileAttributes attrs) throws IOException {
+            Path relativePath = sourceRootDirectory.relativize(dirPath)
+            Path targetDirectory = targetRootDirectory.resolve(relativePath)
+            if (Files.notExists(targetDirectory)) {
+                Files.createDirectories(targetDirectory)
+            }
+            return FileVisitResult.CONTINUE
+        }
+
+        @Override
+        FileVisitResult visitFile(Path filePath, BasicFileAttributes attrs) throws IOException {
+            // Given a file
+            Path relativePath = sourceRootDirectory.relativize(filePath)
+            Path targetFile = targetRootDirectory.resolve(relativePath)
+            boolean moveCopyResult = atomicMoveOrCopy(move, filePath.toFile(), targetFile.toFile(), useAtomicOption,
+                    includeDetailedTimings, atomicTimekeeper)
+
+            if (!moveCopyResult) {
+                String message = "Failed to move file=${filePath} from source=${sourceRootDirectory} to target=${targetRootDirectory}"
+                throw new IOException(message)
+            }
+            return FileVisitResult.CONTINUE
+        }
+
+        @Override
+        FileVisitResult visitFileFailed(Path filePath, IOException exc) throws IOException {
+            return FileVisitResult.TERMINATE
+        }
+
+        @Override
+        FileVisitResult postVisitDirectory(Path dirPath, IOException exc) throws IOException {
+            if (move) {
+                File directory = dirPath.toFile()
+                if (Files.isDirectory(dirPath) && dirPath.toFile().list().length == 0) {
+                    directory.delete()
+                } else {
+                    String message = "After move, directory not empty, failed to delete directory=${dirPath} from source=${sourceRootDirectory} to target=${targetRootDirectory}"
+                    throw new IOException(message)
+                }
+            }
+            return FileVisitResult.CONTINUE
+        }
+    }
 
     static String fileNameAsSafeString(String stringWithUnsafeCharacters) {
         String safeString = stringWithUnsafeCharacters
@@ -167,9 +238,102 @@ class FileUtils {
         }
     }
 
+    static boolean atomicMoveOrCopyDirectory(boolean moveDirectory, File sourceDirectory, File targetDirectory,
+                                             boolean useAtomicOption, boolean includeDetailedTimings = false,
+                                             Timekeeper atomicTimekeeper = null) {
+        if (sourceDirectory.isFile()) {
+            throw new SipProcessingException("atomicMoveOrCopyDirectory is for directories, not files. sourceDirectory=${sourceDirectory.canonicalPath} is a file. Use atomicMoveOrCopyDirectory instead.")
+        }
+        // Handle the case of being interrupted by copying/moving to the destination file (which leads to a bunch
+        // partial copies -- especially in a multithreaded case -- that need to be manually checked to verify that
+        // they are incomplete versions).
+        // Instead, copy/move the file to a temporary-named file and then rename the file when the copy is complete.
+        //
+        // We only do a 'move' if we can do an atomic move, otherwise we do the following:
+        // 1. Copy the file across with a '.tmpcopy' extension.
+        // 2. Rename the file to the targetFile name.
+        // 3. Delete the sourceFile.
+        // This guarantees that we never delete the source file until the file has been copied and renamed.
+        if (sourceDirectory.exists() && targetDirectory.exists() && Files.isSameFile(sourceDirectory.toPath(), targetDirectory.toPath())) {
+            log.warn("atomicMoveOrCopyDirectory: NO move/copy -- source and target are the same PHYSICAL directory!")
+            log.warn("    sourceDirectory=${sourceDirectory.canonicalPath}")
+            log.warn("    targetDirectory=${targetDirectory.canonicalPath}")
+            return false
+        }
+        Timekeeper theTimekeeper = atomicTimekeeper
+        if (includeDetailedTimings && atomicTimekeeper == null) {
+            theTimekeeper = new DefaultTimekeeper()
+            theTimekeeper.start()
+        }
+        boolean deleteSourceDirectory = moveDirectory && !useAtomicOption // because atomic move will automatically delete sourceDirectory
+        boolean doCopy = !moveDirectory
+        boolean renameSuccessful = false
+        File temporaryTargetDirectory = nonDuplicateFile(targetDirectory, true, "-",
+                true, ".tmpcopy")
+        if (includeDetailedTimings) {
+            GeneralUtils.markElapsed(theTimekeeper, "sourceDirectory=${sourceDirectory.name}",
+                    "Establish non-duplicate directory for sourceDirectory path=" + sourceDirectory.getCanonicalPath())
+        }
+        if (moveDirectory) {
+            // The only valid move option is StandardCopyOption.REPLACE_EXISTING, which we don't want to do
+            if (useAtomicOption) {
+                try {
+                    Path resultingPath = Files.move(sourceDirectory.toPath(), targetDirectory.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                    GeneralUtils.markElapsed(theTimekeeper, "sourceDirectory=${sourceDirectory.name}", "Atomic move completed")
+                    renameSuccessful = true
+                } catch (IOException e) { // AtomicMoveNotSupportedException but also IOException
+                    log.debug("Attempt at atomic file move file sourceDirectory=${sourceDirectory.name} to " +
+                            "targetFile=${targetDirectory.getCanonicalPath()} failed, trying a non-atomic move approach.", e)
+                    renameSuccessful = atomicMoveOrCopyDirectory(moveDirectory, sourceDirectory, targetDirectory, false,
+                            false, theTimekeeper)
+                    GeneralUtils.markElapsed(theTimekeeper, "sourceDirectory=${sourceDirectory.name}",
+                            "Non-atomic move completed")
+                }
+            } else {
+                doCopy = true
+            }
+        }
+        if (doCopy) {
+            AtomicDirectoryMoveFileVisitor atomicFileMover = new AtomicDirectoryMoveFileVisitor(moveDirectory,
+                    sourceDirectory.toPath(), temporaryTargetDirectory.toPath(), useAtomicOption, includeDetailedTimings, atomicTimekeeper)
+            Files.walkFileTree(sourceDirectory.toPath(), atomicFileMover)
+            GeneralUtils.markElapsed(theTimekeeper,
+                    "sourceDirectory=${sourceDirectory.name}, temporaryTargetDirectory=${temporaryTargetDirectory}", "Copy completed")
+            renameSuccessful = temporaryTargetDirectory.renameTo(targetDirectory)
+            GeneralUtils.markElapsed(theTimekeeper,
+                    "sourceDirectory=${sourceDirectory.name}, targetDirectory=${targetDirectory}", "Rename completed")
+            if (renameSuccessful) {
+                if (moveDirectory) {
+                    // Note that the sourceDirectory should be empty by now (but also should have been deleted by the FileVisitor)
+                    if (Files.exists(sourceDirectory.toPath())) {
+                        log.warn("sourceDirectory=${sourceDirectory.canonicalPath} should have been deleted by AtomicDirectoryMoveFileVisitor")
+                        org.apache.commons.io.FileUtils.forceDelete(sourceDirectory)
+                        GeneralUtils.markElapsed(theTimekeeper, "sourceDirectory=${sourceDirectory.name}", "Delete completed")
+                    }
+                }
+            } else {
+                GeneralUtils.printAndFlush("\n")
+                log.error("Unable to rename temporaryTargetDirectory=${temporaryTargetDirectory.canonicalPath} " +
+                        "to targetDirectory=${targetDirectory.canonicalPath}")
+                if (deleteSourceDirectory) {
+                    log.error("Not deleting sourceDirectory=${sourceDirectory.canonicalPath}, as rename was NOT successful")
+                }
+            }
+        }
+
+        if (includeDetailedTimings && theTimekeeper != null) {
+            GeneralUtils.markElapsed(theTimekeeper, "sourceDirectory=${sourceDirectory.name}, targetDirectory=${targetDirectory}", "Operation completed.")
+            theTimekeeper.listMarkers()
+        }
+        return renameSuccessful
+    }
+
     static boolean atomicMoveOrCopy(boolean moveFile, File sourceFile, File targetFile,
                                     boolean useAtomicOption = true, boolean includeDetailedTimings = false,
                                     Timekeeper atomicTimekeeper = null) {
+        if (sourceFile.isDirectory()) {
+            throw new SipProcessingException("atomicMoveOrCopy is for files, not directories. sourceFile=${sourceFile.canonicalPath} is a directory. Use atomicMoveOrCopyDirectory instead.")
+        }
         // Handle the case of being interrupted by copying/moving to the destination file (which leads to a bunch
         // partial copies -- especially in a multithreaded case -- that need to be manually checked to verify that
         // they are incomplete versions).
@@ -343,4 +507,9 @@ class FileUtils {
         return resourceFile
     }
 
+    static List<String> asSegments(Path path) {
+        path.iterator().collect { Path subPath ->
+            subPath.toString()
+        }
+    }
 }
