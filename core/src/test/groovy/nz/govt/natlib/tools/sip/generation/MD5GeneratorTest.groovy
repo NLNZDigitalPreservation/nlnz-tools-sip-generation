@@ -1,5 +1,7 @@
 package nz.govt.natlib.tools.sip.generation
 
+import java.nio.file.Path
+
 import static org.hamcrest.core.Is.is
 
 import nz.govt.natlib.tools.sip.SipTestHelper
@@ -20,7 +22,7 @@ class MD5GeneratorTest {
 
     @Test
     void calculatesMD5FileHashCorrectly() {
-        File pdfFile = SipTestHelper.getFileFromResourceOrFile(TSTPB1_20181123_001_PDF_FILENAME, RESOURCES_FOLDER)
+        Path pdfFile = SipTestHelper.getFileFromResourceOrFile(TSTPB1_20181123_001_PDF_FILENAME, RESOURCES_FOLDER)
         String calculatedMD5Hash = MD5Generator.calculateMd5Hash(pdfFile)
 
         assertThat("${TSTPB1_20181123_001_PDF_FILENAME} MD5 hash matches", calculatedMD5Hash,

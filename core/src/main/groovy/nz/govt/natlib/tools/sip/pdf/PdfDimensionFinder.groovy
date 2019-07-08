@@ -5,14 +5,15 @@ import org.apache.pdfbox.pdmodel.PDPage
 
 import java.awt.Point
 import java.awt.geom.Point2D
+import java.nio.file.Path
 
 class PdfDimensionFinder {
 
-    static Point getDimensions(final File pdfFile, int pageNumber = 0) {
+    static Point getDimensions(final Path pdfFile, int pageNumber = 0) {
         Point dimensions = new Point(-1, -1)
         PDDocument pdDocument
         try {
-            pdDocument = PDDocument.load(pdfFile)
+            pdDocument = PDDocument.load(pdfFile.toFile())
             int numberOfPages = pdDocument.getNumberOfPages()
             if (numberOfPages > pageNumber) {
                 PDPage page = pdDocument.getPage(pageNumber)
@@ -33,7 +34,7 @@ class PdfDimensionFinder {
         return dimensions
     }
 
-    static Point2D.Double getDimensionalRatio(final File pdfFile1, final File pdfFile2, int pdfFile1Page = 0,
+    static Point2D.Double getDimensionalRatio(final Path pdfFile1, final Path pdfFile2, int pdfFile1Page = 0,
                                               int pdfFile2Page = 0) {
         Point pdfFile1Point = getDimensions(pdfFile1, pdfFile1Page)
         Point pdfFile2Point = getDimensions(pdfFile2, pdfFile2Page)
@@ -75,25 +76,25 @@ class PdfDimensionFinder {
         return minimumVariation > Math.abs(0.5 - ratio.x)
     }
 
-    static boolean isSameSize(final File pdfFile1, final File pdfFile2, int pdfFile1Page = 0, int pdfFile2Page = 0,
+    static boolean isSameSize(final Path pdfFile1, final Path pdfFile2, int pdfFile1Page = 0, int pdfFile2Page = 0,
                               double minimumVariation) {
         Point2D.Double ratio = getDimensionalRatio(pdfFile1, pdfFile2, pdfFile1Page, pdfFile2Page)
         return isSameSize(ratio, minimumVariation)
     }
 
-    static boolean isSameHeight(final File pdfFile1, final File pdfFile2, int pdfFile1Page = 0, int pdfFile2Page = 0,
+    static boolean isSameHeight(final Path pdfFile1, final Path pdfFile2, int pdfFile1Page = 0, int pdfFile2Page = 0,
                                 double minimumVariation = 0.01) {
         Point2D.Double ratio = getDimensionalRatio(pdfFile1, pdfFile2, pdfFile1Page, pdfFile2Page)
         return isSameHeightDoubleWidth(ratio, minimumVariation)
     }
 
-    static boolean isSameWidth(final File pdfFile1, final File pdfFile2, int pdfFile1Page = 0, int pdfFile2Page = 0,
+    static boolean isSameWidth(final Path pdfFile1, final Path pdfFile2, int pdfFile1Page = 0, int pdfFile2Page = 0,
                                double minimumVariation = 0.01) {
         Point2D.Double ratio = getDimensionalRatio(pdfFile1, pdfFile2, pdfFile1Page, pdfFile2Page)
         return isSameWidth(ratio, minimumVariation)
     }
 
-    static boolean isSameHeightDoubleWidth(final File pdfFile1, final File pdfFile2, int pdfFile1Page = 0,
+    static boolean isSameHeightDoubleWidth(final Path pdfFile1, final Path pdfFile2, int pdfFile1Page = 0,
                                            int pdfFile2Page = 0, double minimumVariation = 0.01) {
         Point2D.Double ratio = getDimensionalRatio(pdfFile1, pdfFile2, pdfFile1Page, pdfFile2Page)
         return isSameHeightDoubleWidth(ratio, minimumVariation)
@@ -103,7 +104,7 @@ class PdfDimensionFinder {
         return isSameHeight(ratio, minimumVariation) && isDoubleWidth(ratio, minimumVariation)
     }
 
-    static boolean isSameHeightHalfWidth(final File pdfFile1, final File pdfFile2, int pdfFile1Page = 0,
+    static boolean isSameHeightHalfWidth(final Path pdfFile1, final Path pdfFile2, int pdfFile1Page = 0,
                                          int pdfFile2Page = 0, double minimumVariation = 0.01) {
         Point2D.Double ratio = getDimensionalRatio(pdfFile1, pdfFile2, pdfFile1Page, pdfFile2Page)
         return isSameHeightHalfWidth(ratio, minimumVariation)

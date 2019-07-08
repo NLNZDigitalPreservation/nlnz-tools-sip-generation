@@ -1,5 +1,9 @@
 package nz.govt.natlib.tools.sip.generation
 
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.stream.Stream
+
 import static org.hamcrest.core.Is.is
 
 import nz.govt.natlib.tools.sip.Sip
@@ -18,32 +22,32 @@ import org.junit.Test
 class SeriesMultipleFilesTest {
     static final String RESOURCES_FOLDER = "scenario-series-sequential"
     static final String RESOURCES_FOLDER_PARENT = "sip-creation-tests"
-    static final Comparator<File> FILENAME_COMPARATOR = { File a, File b ->
-        a.getName() <=> b.getName()
+    static final Comparator<Path> FILENAME_COMPARATOR = { Path a, Path b ->
+        a.fileName.toString() <=> b.fileName.toString()
     }
 
     @Test
     void correctlyAssembleSipFromFiles() {
-        File parentFolder = SipTestHelper.getFileFromResourceOrFile(RESOURCES_FOLDER, RESOURCES_FOLDER_PARENT)
+        Path parentFolder = SipTestHelper.getFileFromResourceOrFile(RESOURCES_FOLDER, RESOURCES_FOLDER_PARENT)
 
-        assertTrue("Folder=${parentFolder} must be a directory containing files for processing", parentFolder.isDirectory())
-        if (parentFolder.isDirectory()) {
-            List<File> matchingFiles = getMatchingFiles(parentFolder, ".*?\\.pdf")
+        assertTrue("Folder=${parentFolder.normalize().toString()} must be a directory containing files for processing", Files.isDirectory(parentFolder))
+        if (Files.isDirectory(parentFolder)) {
+            List<Path> matchingFiles = getMatchingFiles(parentFolder, ".*?\\.pdf")
             Sip sip = SipTestHelper.sipOneWithoutFiles()
 
             int fileIndex = 0
             Collections.sort(matchingFiles, FILENAME_COMPARATOR)
-            matchingFiles.each { File file ->
+            matchingFiles.each { Path file ->
                 fileIndex += 1
                 Sip.FileWrapper fileWrapper = new Sip.FileWrapper()
                 fileWrapper.mimeType = SipTestHelper.SIP_FILE_MIME_TYPE
                 fileWrapper.file = file
-                fileWrapper.fileOriginalPath = file.getName()
-                fileWrapper.fileOriginalName = file.getName()
+                fileWrapper.fileOriginalPath = file.fileName.toString()
+                fileWrapper.fileOriginalName = file.fileName.toString()
                 fileWrapper.label = "${SipTestHelper.SIP_FILE_LABEL_BASE}${fileIndex}"
                 fileWrapper.creationDate = SipTestHelper.SIP_FILE_CREATION_DATE
                 fileWrapper.modificationDate = SipTestHelper.SIP_FILE_MODIFICATION_DATE
-                fileWrapper.fileSizeBytes = file.length()
+                fileWrapper.fileSizeBytes = Files.size(file)
                 fileWrapper.fixityType = SipTestHelper.SIP_FILE_FIXITY_TYPE
                 fileWrapper.fixityValue = MD5Generator.calculateMd5Hash(file)
 
@@ -80,10 +84,14 @@ class SeriesMultipleFilesTest {
         assertNotNull("fileWrapper.fixityValue={fileWrapper.fixityValue}", fileWrapper.fixityValue)
     }
 
-    List<File> getMatchingFiles(File parentFolder, String pattern) {
-        List<File> foundFiles = FileUtils.listFiles(parentFolder, null, true)
-        return foundFiles.findAll { file ->
-            file.getCanonicalPath() ==~ /${pattern}/
+    List<Path> getMatchingFiles(Path parentFolder, String pattern) {
+        List<File> foundFiles = FileUtils.listFiles(parentFolder.toFile(), null, true)
+        List<Path> foundPaths = [ ]
+        foundFiles.each { File file ->
+            if (file.absolutePath ==~ /${pattern}/) {
+                foundPaths.add(file.toPath())
+            }
         }
+        return foundPaths
     }
 }

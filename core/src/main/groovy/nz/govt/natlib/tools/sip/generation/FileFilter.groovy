@@ -1,5 +1,7 @@
 package nz.govt.natlib.tools.sip.generation
 
+import java.nio.file.Path
+
 interface FileFilter {
-    boolean matches(File file)
+    boolean matches(Path file)
 }

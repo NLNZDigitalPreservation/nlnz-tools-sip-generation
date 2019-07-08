@@ -1,5 +1,7 @@
 package nz.govt.natlib.tools.sip
 
+import java.nio.file.Files
+import java.nio.file.Path
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -73,9 +75,9 @@ class SipTestHelper {
         String text
         InputStream inputStream = SipTestHelper.class.getResourceAsStream(filename)
         if (inputStream == null) {
-            File inputFile = new File(localPath)
-            if (!inputFile.exists()) {
-                inputFile = new File(new File(""), localPath)
+            Path inputFile = Path.of(localPath)
+            if (!Files.exists(inputFile)) {
+                inputFile = Path.of("").resolve(localPath)
             }
             text = inputFile.text
         } else {
@@ -94,19 +96,19 @@ class SipTestHelper {
      * @param resourcesFolder
      * @return
      */
-    static File getFileFromResourceOrFile(String filename, String resourcesFolder = RESOURCES_FOLDER) {
+    static Path getFileFromResourceOrFile(String filename, String resourcesFolder = RESOURCES_FOLDER) {
         String resourcePath = "${resourcesFolder}/${filename}"
         String localPath = "src/test/resources/${resourcePath}"
 
         URL resourceURL = SipTestHelper.class.getResource(filename)
-        File resourceFile
+        Path resourceFile
         if (resourceURL != null) {
-            resourceFile = new File(resourceURL.getFile())
+            resourceFile = Path.of(resourceURL.toURI())
         }
-        if (resourceFile != null && (resourceFile.isFile() || resourceFile.isDirectory())) {
+        if (resourceFile != null && (Files.isRegularFile(resourceFile) || Files.isDirectory(resourceFile))) {
             return resourceFile
         } else {
-            File returnFile = new File(localPath)
+            Path returnFile = Path.of(localPath)
             return returnFile
         }
     }
@@ -144,7 +146,7 @@ class SipTestHelper {
         while (fileIndex < 4) {
             Sip.FileWrapper fileWrapper = new Sip.FileWrapper()
             fileWrapper.mimeType = SIP_FILE_MIME_TYPE
-            fileWrapper.file = new File("${SIP_FILE_BASE}${fileIndex}")
+            fileWrapper.file = Path.of("${SIP_FILE_BASE}${fileIndex}")
             fileWrapper.fileOriginalPath = "${SIP_FILE_ORIGINAL_PATH_BASE}${fileIndex}"
             fileWrapper.fileOriginalName = "${SIP_FILE_ORIGINAL_NAME_BASE}${fileIndex}"
             fileWrapper.label = "${SIP_FILE_LABEL_BASE}${fileIndex}"
@@ -183,7 +185,7 @@ class SipTestHelper {
         Sip.FileWrapper fileWrapper1 = sip.fileWrappers.get(0)
         assertThat("fileWrapper1.creationDate", fileWrapper1.creationDate, is(SIP_FILE_CREATION_DATE))
         if (checkFileWrapperFiles) {
-            assertThat("fileWrapper1.file", fileWrapper1.file.getCanonicalPath(), is(new File((String) "${SIP_FILE_BASE}1").getCanonicalPath()))
+            assertThat("fileWrapper1.file", fileWrapper1.file.normalize(), is(Path.of((String) "${SIP_FILE_BASE}1").normalize()))
         }
         assertThat("fileWrapper1.fileOriginalName", fileWrapper1.fileOriginalName, is((String) "${SIP_FILE_ORIGINAL_NAME_BASE}1"))
         assertThat("fileWrapper1.fileOriginalPath", fileWrapper1.fileOriginalPath, is((String) "${SIP_FILE_ORIGINAL_PATH_BASE}1"))
@@ -197,7 +199,7 @@ class SipTestHelper {
         Sip.FileWrapper fileWrapper3 = sip.fileWrappers.get(2)
         assertThat("fileWrapper3.creationDate", fileWrapper3.creationDate, is(SIP_FILE_CREATION_DATE))
         if (checkFileWrapperFiles) {
-            assertThat("fileWrapper3.file", fileWrapper3.file.getCanonicalPath(), is(new File((String) "${SIP_FILE_BASE}3").getCanonicalPath()))
+            assertThat("fileWrapper3.file", fileWrapper3.file.normalize(), is(Path.of((String) "${SIP_FILE_BASE}3").normalize()))
         }
         assertThat("fileWrapper3.fileOriginalName", fileWrapper3.fileOriginalName, is((String) "${SIP_FILE_ORIGINAL_NAME_BASE}3"))
         assertThat("fileWrapper3.fileOriginalPath", fileWrapper3.fileOriginalPath, is((String) "${SIP_FILE_ORIGINAL_PATH_BASE}3"))

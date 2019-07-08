@@ -15,6 +15,7 @@ import org.apache.logging.log4j.core.layout.PatternLayout
 import org.apache.logging.log4j.core.util.KeyValuePair
 
 import java.nio.charset.StandardCharsets
+import java.nio.file.Path
 import java.text.SimpleDateFormat
 import java.util.concurrent.locks.ReentrantLock
 
@@ -48,9 +49,9 @@ class PerThreadLogFileAppender {
      * This must be called on the thread to start logging.
      * The uniqueID means that the appender name is unique and not re-used.
      */
-    static File startWithGeneratedFilename(File sourceFolder, String filenamePrefix, UUID uniqueId = null) {
+    static Path startWithGeneratedFilename(Path sourceFolder, String filenamePrefix, UUID uniqueId = null) {
         OPERATIONAL_LOCK.lock()
-        File logFile
+        Path logFile
         try {
             String postFix = "${LOG_FILE_DATE_FORMATTER.format(new Date())}${FILE_SUFFIX}"
             String filename = "${filenamePrefix}_${postFix}"
@@ -66,8 +67,8 @@ class PerThreadLogFileAppender {
      * This must be called on the thread to start logging.
      * The uniqueID means that the appender name is unique and not re-used.
      */
-    static File start(File sourceFolder, String filename, UUID uniqueID = null) {
-        File logFile = new File(sourceFolder, filename)
+    static Path start(Path sourceFolder, String filename, UUID uniqueID = null) {
+        Path logFile = sourceFolder.resolve(filename)
         OPERATIONAL_LOCK.lock()
 
         try {
@@ -120,7 +121,7 @@ class PerThreadLogFileAppender {
         }
     }
 
-    static void setupAppenderForFile(File logFile, String logAppenderName) {
+    static void setupAppenderForFile(Path logFile, String logAppenderName) {
         OPERATIONAL_LOCK.lock()
         try {
             final LoggerContext loggerContext = (LoggerContext) LogManager.getContext(false)
@@ -149,7 +150,7 @@ class PerThreadLogFileAppender {
 
             Appender appender = FileAppender.newBuilder()
                     .setName(logAppenderName)
-                    .withFileName(logFile.getCanonicalPath())
+                    .withFileName(logFile.normalize().toString())
                     .withAppend(true)
                     .withLocking(false)
                     .withImmediateFlush(true)
@@ -179,7 +180,7 @@ class PerThreadLogFileAppender {
     }
 
     static String logAppenderName(UUID uuid) {
-        String threadName = Thread.currentThread().getName()
+        String threadName = Thread.currentThread().name
 
         return uuid == null ? "FILE-${threadName}" : "FILE-${threadName}-${uuid}"
     }

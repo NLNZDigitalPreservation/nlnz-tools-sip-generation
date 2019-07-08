@@ -8,6 +8,8 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 
+import java.nio.file.Path
+
 import static org.hamcrest.core.Is.is
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNull
@@ -20,6 +22,7 @@ import static org.junit.Assert.assertTrue
 class PdfValidatorPdfBoxTest {
     static final String SPLIT_MARK = "SPLIT_MARK"
     static final String TEST_FILE_LOCATION = FilenameUtils.separatorsToSystem("src/test/resources/nz/govt/natlib/tools/sip/pdf/pdfbox/")
+    static final Path TEST_FILE_LOCATION_PATH = Path.of(TEST_FILE_LOCATION)
 
     static final String PDF_MIDDLE_CONTROL_CHAR = "PDFAMetaDataValidationTestMiddleControlChar.pdf"
     static final String PDF_MIDDLE_CONTROL_CHAR_REASON_PATH = FilenameUtils.separatorsToSystem("src/test/resources/nz/govt/natlib/tools/sip/pdf/pdfbox/PDFAMetaDataValidationTestMiddleControlChar.pdf")
@@ -60,8 +63,8 @@ class PdfValidatorPdfBoxTest {
 
     @Test
     void middleControlCharIsInvalidWithCorrectMessage() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_MIDDLE_CONTROL_CHAR)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_MIDDLE_CONTROL_CHAR)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNotNull("PDF validation produced an exception", sipProcessingException)
 
@@ -75,8 +78,8 @@ class PdfValidatorPdfBoxTest {
 
     @Test
     void middleNullIsInvalidWithCorrectMessage() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_MIDDLE_NULL)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_MIDDLE_NULL)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNotNull("PDF validation produced an exception", sipProcessingException)
 
@@ -90,8 +93,8 @@ class PdfValidatorPdfBoxTest {
 
     @Test
     void trailingControlCharIsInvalidWithCorrectMessage() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_TRAILING_CONTROL_CHAR)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_TRAILING_CONTROL_CHAR)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNotNull("PDF validation produced an exception", sipProcessingException)
 
@@ -105,8 +108,8 @@ class PdfValidatorPdfBoxTest {
 
     @Test
     void trailingNullIsValid() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_TRAILING_NULL)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_TRAILING_NULL)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNull("PDF validation did not produce an exception", sipProcessingException)
     }
@@ -116,16 +119,16 @@ class PdfValidatorPdfBoxTest {
             // this test.
             // TODO Maybe we need a test of 'PDF is renderable', rather than valid/invalid.
     void a3PortraitRotated90IsValid() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_ROTATED_90_VALID)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_ROTATED_90_VALID)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNull("PDF validation did not produce an exception", sipProcessingException)
     }
 
     @Test
     void trailingSpacesIsInvalidWithCorrectMessage() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_TRAILING_SPACES)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_TRAILING_SPACES)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNotNull("PDF validation produced an exception", sipProcessingException)
 

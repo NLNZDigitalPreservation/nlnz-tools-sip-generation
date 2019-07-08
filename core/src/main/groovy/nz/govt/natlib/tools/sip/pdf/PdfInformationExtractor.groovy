@@ -5,17 +5,18 @@ import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDDocumentInformation
 import org.apache.pdfbox.text.PDFTextStripper
 
+import java.nio.file.Path
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 @Log4j2
 class PdfInformationExtractor {
 
-    static Map<String, String> extractMetadata(File pdfFile) {
+    static Map<String, String> extractMetadata(Path pdfFile) {
         Map<String, String> metadataMap = [ : ]
         PDDocument pdDocument
         try {
-            pdDocument = PDDocument.load(pdfFile)
+            pdDocument = PDDocument.load(pdfFile.toFile())
             PDDocumentInformation info = pdDocument.getDocumentInformation()
 
             metadataMap.put("Page Count", "${pdDocument.getNumberOfPages()}")
@@ -38,11 +39,11 @@ class PdfInformationExtractor {
         return metadataMap
     }
 
-    static String extractText(File pdfFile) {
+    static String extractText(Path pdfFile) {
         String text = ""
         PDDocument pdDocument
         try {
-            pdDocument = PDDocument.load(pdfFile)
+            pdDocument = PDDocument.load(pdfFile.toFile())
             PDFTextStripper stripper = new PDFTextStripper()
 
             text = stripper.getText(pdDocument)
@@ -55,12 +56,12 @@ class PdfInformationExtractor {
         return text
     }
 
-    static List<String> matchText(File pdfFile, String regexPattern) {
-        log.info("matchText regexPattern=${regexPattern} for pdfFile=${pdfFile.getCanonicalPath()}")
+    static List<String> matchText(Path pdfFile, String regexPattern) {
+        log.info("matchText regexPattern=${regexPattern} for pdfFile=${pdfFile.normalize()}")
         List<String> matchingLines = [ ]
         PDDocument pdDocument
         try {
-            pdDocument = PDDocument.load(pdfFile)
+            pdDocument = PDDocument.load(pdfFile.toFile())
             PDFTextStripper stripper = new PDFTextStripper()
 
             String text = stripper.getText(pdDocument)

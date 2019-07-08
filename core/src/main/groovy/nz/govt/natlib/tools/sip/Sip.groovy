@@ -2,6 +2,8 @@ package nz.govt.natlib.tools.sip
 
 import groovy.transform.AutoClone
 import groovy.transform.Canonical
+
+import java.nio.file.Path
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -48,7 +50,7 @@ class Sip {
     @AutoClone
     static class FileWrapper {
         String mimeType
-        File file
+        Path file
         String fileOriginalPath
         String fileOriginalName
         String label
@@ -98,6 +100,6 @@ class Sip {
 
     LocalDate getLocalDate() {
         // Note that the month-of-year is 1-based, not 0-based (java.util.Date is 0-based)
-        return new LocalDate(this.year, this.month, this.dayOfMonth)
+        return LocalDate.of(this.year, this.month, this.dayOfMonth)
     }
 }

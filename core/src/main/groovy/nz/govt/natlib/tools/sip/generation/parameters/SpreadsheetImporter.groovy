@@ -3,16 +3,18 @@ package nz.govt.natlib.tools.sip.generation.parameters
 import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.regex.Pattern
 
 @Log4j2
 class SpreadsheetImporter {
 
-    static Spreadsheet extractSpreadsheet(File spreadsheetSourceFile, String idColumnName, String separator = ",",
+    static Spreadsheet extractSpreadsheet(Path spreadsheetSourceFile, String idColumnName, String separator = ",",
                                           boolean allowDuplicateIds = false, boolean allowRowsWithoutIds = false)
             throws SipProcessingException {
-        if (!spreadsheetSourceFile.exists() || !spreadsheetSourceFile.isFile()) {
-            throw new SipProcessingException("Spreasheet-source-file=${spreadsheetSourceFile.getCanonicalPath()} does not exist or is not a file. Extraction cannot continue")
+        if (!Files.exists(spreadsheetSourceFile) || !Files.isRegularFile(spreadsheetSourceFile)) {
+            throw new SipProcessingException("Spreasheet-source-file=${spreadsheetSourceFile.normalize().toString()} does not exist or is not a file. Extraction cannot continue")
         }
         return extractSpreadsheet(spreadsheetSourceFile.newInputStream(), idColumnName, separator, allowDuplicateIds,
                 allowRowsWithoutIds)

@@ -10,6 +10,8 @@ import gov.loc.mets.FileType
 import gov.loc.mets.MetsType
 import nz.govt.natlib.tools.sip.Sip
 
+import java.nio.file.Path
+
 class SipXmlGenerator {
     private Sip sip
     private IEParser ieParser
@@ -94,7 +96,7 @@ class SipXmlGenerator {
         sip.fileWrappers.each { Sip.FileWrapper fileWrapper ->
             // Add file and DNX metadata on file
             String mimeType = fileWrapper.getMimeType()
-            File file = fileWrapper.getFile()
+            Path file = fileWrapper.getFile()
             FileType fileType = ieParser.addNewFile(fileGroup, mimeType, fileWrapper.getFileOriginalName(), "XXX-TO-REPLACE-test file")
 
             // File DNX construction

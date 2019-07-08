@@ -12,7 +12,7 @@ class ThreadedTimekeeper implements Timekeeper {
 
     static Timekeeper forCurrentThread(boolean createIfNull = true) {
         operationLock.lock()
-        String threadName = Thread.currentThread().getName()
+        String threadName = Thread.currentThread().name
         Timekeeper currentThreadTimekeeper = TIMEKEEPER_BY_THREAD.get(threadName)
         if (currentThreadTimekeeper == null && createIfNull) {
             currentThreadTimekeeper = new ThreadedTimekeeper()
@@ -43,7 +43,7 @@ class ThreadedTimekeeper implements Timekeeper {
         operationLock.lock()
         if (realTimekeeper != null) {
             realTimekeeper.reset()
-            String threadName = Thread.currentThread().getName()
+            String threadName = Thread.currentThread().name
             TIMEKEEPER_BY_THREAD.put(threadName, null)
         }
         operationLock.unlock()

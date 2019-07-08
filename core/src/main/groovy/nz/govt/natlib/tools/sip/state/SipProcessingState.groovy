@@ -19,12 +19,12 @@ class SipProcessingState {
     List<SipProcessingException> exceptions = [ ]
     Path processingOutputPath
 
-    List<File> sipFiles = [ ]
-    List<File> thumbnailPageFiles = [ ]
-    List<File> validFiles = [ ]
-    List<File> invalidFiles = [ ]
-    List<File> ignoredFiles = [ ]
-    List<File> unrecognizedFiles = [ ]
+    List<Path> sipFiles = [ ]
+    List<Path> thumbnailPageFiles = [ ]
+    List<Path> validFiles = [ ]
+    List<Path> invalidFiles = [ ]
+    List<Path> ignoredFiles = [ ]
+    List<Path> unrecognizedFiles = [ ]
 
     int totalFilesProcessed
 
@@ -119,14 +119,14 @@ class SipProcessingState {
         return stringBuilder.toString()
     }
 
-    private void appendFileList(String typeTitle, String initialOffset, List<File> files, StringBuilder stringBuilder) {
+    private void appendFileList(String typeTitle, String initialOffset, List<Path> files, StringBuilder stringBuilder) {
         stringBuilder.append("${initialOffset}    ${typeTitle}=${files.size()}")
         if (files.size() > 0) {
             stringBuilder.append(":")
         }
         stringBuilder.append(System.lineSeparator())
-        files.each { File file ->
-            stringBuilder.append("${initialOffset}        ${file.canonicalPath}")
+        files.each { Path file ->
+            stringBuilder.append("${initialOffset}        ${file.normalize().toString()}")
             stringBuilder.append(System.lineSeparator())
         }
     }
