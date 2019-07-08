@@ -47,6 +47,11 @@ class PdfValidatorPdfBoxTest {
     static final String PDF_TRAILING_SPACES_REASON =
             "The given file=${SPLIT_MARK}${PDF_TRAILING_SPACES_REASON_PATH} is an invalid PDF. Validation failure(s)=errorCode=7.2, details=Error on MetaData, Author present in the document catalog dictionary doesn\'t match with XMP information.".toString()
 
+    static final String PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS = "minimal-valid-used-for-fairfax-scenarios.pdf"
+    static final String PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS_REASON_PATH = FilenameUtils.separatorsToSystem("src/test/resources/nz/govt/natlib/tools/sip/pdf/pdfbox/minimal-valid-used-for-fairfax-scenarios.pdf")
+    static final String PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS_REASON =
+            "The given file=${SPLIT_MARK}${PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS_REASON_PATH} is an invalid PDF. Validation failure(s)=errorCode=1.4.1, details=Trailer Syntax error, The trailer dictionary doesn't contain ID | errorCode=3.1.1, details=Invalid Font definition, Times-Roman: some required fields are missing from the Font dictionary: firstChar, lastChar, widths. | errorCode=3.1.3, details=Invalid Font definition, Times-Roman: FontFile entry is missing from FontDescriptor | errorCode=2.4.3, details=Invalid Color space, /DeviceGray default for operator \"Tj\" can't be used without Color Profile, pageNumber=0 | errorCode=7.1, details=Error on MetaData, Missing Metadata Key in catalog."
+
     PdfValidatorPdfBox underTest
 
     @Before
@@ -111,7 +116,22 @@ class PdfValidatorPdfBoxTest {
         Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_TRAILING_NULL)
         SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
-        assertNull("PDF validation did not produce an exception", sipProcessingException)
+        assertNull("PDF validation for file=${pdfFile} did not produce an exception", sipProcessingException)
+    }
+
+    @Test
+    void pdfMinimalValidFairfaxScenariosIsInvalid() {
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
+
+        assertNotNull("PDF validation produced an exception", sipProcessingException)
+
+        assertThat("sipProcessingException has correct number of reasons",
+                sipProcessingException.reasons.size(), is((Integer) 1))
+
+        SipProcessingExceptionReason reason1 = sipProcessingException.reasons.first()
+        assertThat("reason1 is INVALID_PDF", reason1.reasonType, is(SipProcessingExceptionReasonType.INVALID_PDF))
+        checkReasonMatches(reason1.toString(), PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS_REASON, SPLIT_MARK)
     }
 
     @Test
@@ -144,7 +164,7 @@ class PdfValidatorPdfBoxTest {
         List<String> splits = expectedReason.split(splitMark)
         String prefix = splits.first()
         String suffix = splits.last()
-        assertTrue("Reason starts with expected value", actualReason.startsWith(prefix))
-        assertTrue("Reason ends with expected value", actualReason.endsWith(suffix))
+        assertTrue("Reason starts with expected value actual=${actualReason} expected prefix=${prefix}", actualReason.startsWith(prefix))
+        assertTrue("Reason ends with expected value actual=${actualReason} expected suffix=${suffix}", actualReason.endsWith(suffix))
     }
 }

@@ -22,6 +22,7 @@ class PdfValidatorJhoveTest {
     static final Path TEST_FILE_LOCATION_PATH = Path.of(TEST_FILE_LOCATION)
 
     static final String PDF_MINIMAL_VALID = "T00_000_minimal-valid.pdf"
+    static final String PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS = "minimal-valid-used-for-fairfax-scenarios.pdf"
     static final String PDF_ROTATED_90_VALID = "A3-portrait-dimensioned-rotated-90.pdf"
 
     static final String PDF_HEADER_INVALID_MAJOR_VERSION = "T01_001_header-invalid-major-version.pdf"
@@ -64,7 +65,15 @@ class PdfValidatorJhoveTest {
         Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_MINIMAL_VALID)
         SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
-        assertNull("PDF validation did not produce an exception", sipProcessingException)
+        assertNull("PDF validation for file=${pdfFile} did not produce an exception", sipProcessingException)
+    }
+
+    @Test
+    void pdfMinimalValidFairfaxScenariosIsValid() {
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_MINIMAL_VALID_FAIRFAX_SCENARIOS)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
+
+        assertNull("PDF validation for file=${pdfFile} did not produce an exception", sipProcessingException)
     }
 
     @Test
