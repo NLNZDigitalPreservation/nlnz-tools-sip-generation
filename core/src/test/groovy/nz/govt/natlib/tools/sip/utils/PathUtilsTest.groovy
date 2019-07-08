@@ -146,8 +146,8 @@ class PathUtilsTest {
         String osPrefix = getOsPrefix()
         // Can't really test ZERO_SEGMENT_FILE, since it will automatically have its parent because of how File is constructed.
         // For ZERO_SEGMENT_FILE_SLASH, it's treated as the root folder, which means it is a blank
-        assertThat("Full=${ZERO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is='${osPrefix}'",
-                PathUtils.filePathAsSafeString(ZERO_SEGMENT_FILE_SLASH, totalSegments), is("${osPrefix}".toString()))
+        assertThat("Full=${ZERO_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=''",
+                PathUtils.filePathAsSafeString(ZERO_SEGMENT_FILE_SLASH, totalSegments), is("".toString()))
         assertThat("Full=${ONE_SEGMENT_FILE} with totalSegments=${totalSegments} is=filename.txt",
                 PathUtils.filePathAsSafeString(ONE_SEGMENT_FILE, totalSegments), is("filename.txt"))
         assertThat("Full=${ONE_SEGMENT_FILE_SLASH} with totalSegments=${totalSegments} is=${expected}",
@@ -340,7 +340,7 @@ class PathUtilsTest {
     static String getOsPrefix() {
         String osPrefix
         if (SystemUtils.IS_OS_WINDOWS) {
-            Path testFile = Path.of("abc.txt")
+            Path testFile = Path.of("")
             List<String> splitPath = testFile.normalize().toString().split(Pattern.quote(File.separator))
             osPrefix = splitPath.first().replace(":", "_")
         } else {
