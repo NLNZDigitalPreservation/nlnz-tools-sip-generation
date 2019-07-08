@@ -2,6 +2,7 @@ package nz.govt.natlib.tools.sip.pdf.thumbnail
 
 import groovy.util.logging.Log4j2
 
+import java.nio.file.Path
 import java.util.concurrent.Semaphore
 import java.util.concurrent.locks.ReentrantLock
 
@@ -37,7 +38,7 @@ class ThreadedThumbnailGenerator {
         }
     }
 
-    static void writeThumbnailPage(List<File> pdfFiles, ThumbnailParameters parameters, File thumbnailPageFile) {
+    static void writeThumbnailPage(List<Path> pdfFiles, ThumbnailParameters parameters, Path thumbnailPageFile) {
         try {
             // If we're in the process of changing the number of threads, then wait until that lock is released.
             if (CHANGE_NUMBER_OF_THREADS_LOCK.locked) {

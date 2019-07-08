@@ -1,5 +1,7 @@
 package nz.govt.natlib.tools.sip
 
+import java.nio.file.Path
+
 import static org.hamcrest.core.Is.is
 import static org.junit.Assert.assertNull
 import static org.junit.Assert.assertThat
@@ -20,7 +22,7 @@ import java.time.LocalDateTime
  */
 class SipFileWrapperFactoryTest {
 
-    File testFile
+    Path testFile
 
     Sip.FileWrapper testFileWrapper
 

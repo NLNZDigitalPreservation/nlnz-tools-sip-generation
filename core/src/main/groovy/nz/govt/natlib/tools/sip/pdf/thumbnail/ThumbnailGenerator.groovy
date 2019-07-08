@@ -26,6 +26,7 @@ import java.awt.geom.AffineTransform
 import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
 import java.nio.file.Files
+import java.nio.file.Path
 
 @Log4j2
 class ThumbnailGenerator {
@@ -40,19 +41,19 @@ class ThumbnailGenerator {
         ImageIOUtil.writeImage(bufferedImage, path, dpi)
     }
 
-    static void writeThumbnail(File sourcePdfFile, ThumbnailParameters parameters, File thumbnailFile)
+    static void writeThumbnail(Path sourcePdfFile, ThumbnailParameters parameters, Path thumbnailFile)
             throws IOException {
-        List<BufferedImage> thumbnailImages = generateThumbnailImages([sourcePdfFile ], parameters)
-        writeImage(thumbnailImages.first(), thumbnailFile.getCanonicalPath(), parameters.dpi)
+        List<BufferedImage> thumbnailImages = generateThumbnailImages([ sourcePdfFile ], parameters)
+        writeImage(thumbnailImages.first(), thumbnailFile.normalize().toString(), parameters.dpi)
     }
 
-    static void writeThumbnailPage(List<File> pdfFiles, ThumbnailParameters parameters, File thumbnailPageFile) {
+    static void writeThumbnailPage(List<Path> pdfFiles, ThumbnailParameters parameters, Path thumbnailPageFile) {
         BufferedImage thumbnailPageImage = thumbnailPage(pdfFiles, parameters)
 
-        ImageIOUtil.writeImage(thumbnailPageImage, thumbnailPageFile.getCanonicalPath(), parameters.dpi)
+        ImageIOUtil.writeImage(thumbnailPageImage, thumbnailPageFile.normalize().toString(), parameters.dpi)
     }
 
-    static BufferedImage thumbnailPage(List<File> pdfFiles, ThumbnailParameters parameters) {
+    static BufferedImage thumbnailPage(List<Path> pdfFiles, ThumbnailParameters parameters) {
         List<BufferedImage> thumbnailImages = generateThumbnailImages(pdfFiles, parameters)
 
         return thumbnailPageImage(thumbnailImages, parameters)
@@ -132,15 +133,15 @@ class ThumbnailGenerator {
         return pageParameters
     }
 
-    static List<BufferedImage> generateThumbnailImages(List<File> pdfFiles, ThumbnailParameters parameters) {
+    static List<BufferedImage> generateThumbnailImages(List<Path> pdfFiles, ThumbnailParameters parameters) {
         List<BufferedImage> bufferedImages = [ ]
-        pdfFiles.each { File pdfFile ->
+        pdfFiles.each { Path pdfFile ->
             bufferedImages.addAll(generateImagesFromPdf(pdfFile, parameters))
         }
         return bufferedImages
     }
 
-    static List<BufferedImage> generateImagesFromPdf(File pdfFile, ThumbnailParameters parameters) throws IOException {
+    static List<BufferedImage> generateImagesFromPdf(Path pdfFile, ThumbnailParameters parameters) throws IOException {
         List<BufferedImage> images
         if (parameters.generateWithPdftoppm) {
             images = generateImagesFromPdfWithPdftoppm(pdfFile, parameters)
@@ -151,22 +152,22 @@ class ThumbnailGenerator {
         return images
     }
 
-    static List<BufferedImage> generateImagesFromPdfWithRenderer(File pdfFile, ThumbnailParameters parameters)
+    static List<BufferedImage> generateImagesFromPdfWithRenderer(Path pdfFile, ThumbnailParameters parameters)
             throws IOException {
         PdfValidator pdfValidator = PdfValidatorFactory.getValidator(PdfValidatorType.JHOVE_VALIDATOR)
-        SipProcessingException sipProcessingException = pdfValidator.validatePdf(pdfFile.toPath())
+        SipProcessingException sipProcessingException = pdfValidator.validatePdf(pdfFile)
         List<BufferedImage> images = [ ]
         if (sipProcessingException == null) {
             PDDocument document
             try {
-                document = PDDocument.load(pdfFile)
+                document = PDDocument.load(pdfFile.toFile())
                 PDFRenderer pdfRenderer = new PDFRenderer(document)
                 int numberOfPages = document.getNumberOfPages()
                 for (int page = 0; page < numberOfPages; ++page) {
                     BufferedImage pdfImage = pdfRenderer.renderImageWithDPI(page, parameters.dpi, ImageType.RGB)
-                    log.debug("BufferedImage for pdf=${pdfFile.getCanonicalPath()}, page=${page}, width=${pdfImage.width}, height=${pdfImage.height}")
+                    log.debug("BufferedImage for pdf=${pdfFile.normalize()}, page=${page}, width=${pdfImage.width}, height=${pdfImage.height}")
                     String pageNumber = numberOfPages > 1 ? " - ${page}" : ""
-                    String caption = "${pdfFile.getName()}${pageNumber}"
+                    String caption = "${pdfFile.fileName.toString()}${pageNumber}"
                     BufferedImage scaledWithTextImage = scaleAndWriteCaption(pdfImage, parameters, caption)
                     images.add(scaledWithTextImage)
                 }
@@ -179,37 +180,37 @@ class ThumbnailGenerator {
             SipProcessingExceptionReason reason = sipProcessingException.reasons.isEmpty() ? null :
                     sipProcessingException.reasons.first()
             String reasonDescription = reason == null ? "no reason given" : reason.toString()
-            images.add(errorImage(reasonDescription, pdfFile.getName(), parameters))
+            images.add(errorImage(reasonDescription, pdfFile.fileName.toString(), parameters))
         }
         return images
     }
 
-    static List<BufferedImage> generateImagesFromPdfWithPdftoppm(File pdfFile, ThumbnailParameters parameters) {
+    static List<BufferedImage> generateImagesFromPdfWithPdftoppm(Path pdfFile, ThumbnailParameters parameters) {
 
         List<BufferedImage> images = [ ]
-        List<File> thumbnailFiles = [ ]
+        List<Path> thumbnailFiles = [ ]
         try {
-            File tempDirectory = Files.createTempDirectory(FileUtils.tempDirectory.toPath(), "ThumbnailGenerator_").toFile()
-            tempDirectory.deleteOnExit()
+            Path tempDirectory = Files.createTempDirectory(FileUtils.tempDirectory.toPath(), "ThumbnailGenerator_")
+            tempDirectory.toFile().deleteOnExit()
             boolean wouldHaveCaption = true
             boolean throwExceptionOnFailure = true
             thumbnailFiles = CommandLinePdfToThumbnailFileGenerator.generateThumbnails(pdfFile, tempDirectory,
-                    FilenameUtils.removeExtension(pdfFile.name), ".png", parameters, wouldHaveCaption,
+                    FilenameUtils.removeExtension(pdfFile.fileName.toString()), ".png", parameters, wouldHaveCaption,
                     throwExceptionOnFailure)
         } catch (SipProcessingException sipProcessingException) {
             SipProcessingExceptionReason reason = sipProcessingException.reasons.isEmpty() ? null :
                     sipProcessingException.reasons.first()
             String reasonDescription = reason == null ? "no reason given" : reason.toString()
-            images.add(errorImage(reasonDescription, pdfFile.getName(), parameters))
+            images.add(errorImage(reasonDescription, pdfFile.fileName.toString(), parameters))
         }
         int numberOfPages = thumbnailFiles.size()
-        thumbnailFiles.eachWithIndex { File thumbnailFile, int page ->
-            BufferedImage pdfImage = ImageIO.read(thumbnailFile)
+        thumbnailFiles.eachWithIndex { Path thumbnailFile, int page ->
+            BufferedImage pdfImage = ImageIO.read(thumbnailFile.toFile())
             String pageNumber = numberOfPages > 1 ? " - ${page}" : ""
-            String caption = "${pdfFile.getName()}${pageNumber}"
+            String caption = "${pdfFile.fileName.toString()}${pageNumber}"
             BufferedImage scaledWithTextImage = scaleAndWriteCaption(pdfImage, parameters, caption)
             images.add(scaledWithTextImage)
-            thumbnailFile.delete()
+            Files.deleteIfExists(thumbnailFile)
         }
 
         return images

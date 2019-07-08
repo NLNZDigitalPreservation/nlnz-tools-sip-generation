@@ -1,4 +1,4 @@
-package nz.govt.natlib.tools.sip.files
+package nz.govt.natlib.tools.sip.utils
 
 import groovy.io.FileType
 import groovy.util.logging.Log4j2
@@ -9,6 +9,7 @@ import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.PathMatcher
+
 
 /**
  * Finds files using various criteria.
@@ -36,7 +37,7 @@ class FilesFinder {
                             matched = pathMatcher.matches(entry.normalize())
                         }
                     }
-                    //log.info("getPathFilter matched=${matched}, path=${entry.toFile().getCanonicalPath()}")
+                    //log.info("getPathFilter matched=${matched}, path=${entry}")
                     matched
                 }
             }
@@ -67,15 +68,14 @@ class FilesFinder {
                             matched = !pathMatcher.matches(entry.normalize())
                         }
                     }
-                    //log.info("getPathFilter matched=${matched}, path=${entry.toFile().getCanonicalPath()}")
+                    //log.info("getPathFilter matched=${matched}, path=${entry}")
                     matched
                 }
             }
         }
     }
 
-
-    static List<File> getMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+    static List<Path> getMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
                                        boolean sortFiles = true, String... patterns) {
         boolean includeSubdirectories = false
         boolean directoryOnly = false
@@ -86,37 +86,36 @@ class FilesFinder {
     // TODO We may want to unit test this method, however it is composed mostly of java.nio.file methods.
     // If we do decide to write unit tests, use the following as a guide:
     // https://stackoverflow.com/questions/47101232/mocking-directorystreampath-without-mocking-iterator-possible
-    static List<File> getMatchingFilesFull(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+    static List<Path> getMatchingFilesFull(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
                                            boolean sortFiles = true, boolean includeSubdirectories = false,
                                            boolean directoryOnly = false, String... patterns) {
-        List<File> matchingFiles = [ ]
+        List<Path> matchingFiles = [ ]
         DirectoryStream.Filter<Path> pathFilter = getPathFilter(isRegexNotGlob, matchFilenameOnly, directoryOnly, patterns)
 
         matchingFiles = getMatchingFilesWithFilter(filesPath, pathFilter)
 
         if (includeSubdirectories) {
-            File parentFolder = filesPath.toFile()
-            parentFolder.eachFileRecurse(FileType.DIRECTORIES) { File subdirectory ->
-                matchingFiles.addAll(getMatchingFilesWithFilter(subdirectory.toPath(), pathFilter))
+            filesPath.eachFileRecurse(FileType.DIRECTORIES) { Path subdirectory ->
+                matchingFiles.addAll(getMatchingFilesWithFilter(subdirectory, pathFilter))
             }
         }
 
         if (sortFiles) {
-            return matchingFiles.toSorted { File a, File b -> a.getCanonicalPath() <=> b.getCanonicalPath() }
+            return matchingFiles.toSorted { Path a, Path b -> a.normalize() <=> b.normalize() }
         } else {
             return matchingFiles
         }
     }
 
-    static List<File> getMatchingFilesWithFilter(Path filesPath, DirectoryStream.Filter<Path> pathFilter) {
-        List<File> matchingFiles = [ ]
+    static List<Path> getMatchingFilesWithFilter(Path filesPath, DirectoryStream.Filter<Path> pathFilter) {
+        List<Path> matchingFiles = [ ]
 
         // Note that the 'try with resources pattern does not work with this version of groovy (2.4.x). Will work in 2.5.x.
         // This means that we must have a finally block to close the resource
         DirectoryStream directoryStream = Files.newDirectoryStream(filesPath, pathFilter)
         try /*(DirectoryStream directoryStream = Files.newDirectoryStream(filesPath, pattern))*/ {
             for (Path path : directoryStream) {
-                matchingFiles.add(path.toFile())
+                matchingFiles.add(path)
             }
         } catch (IOException e) {
             log.warn("Unexpected exception filtering '${filesPath}': ${e}")
@@ -129,7 +128,7 @@ class FilesFinder {
         return matchingFiles
     }
 
-    static List<File> getNonMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+    static List<Path> getNonMatchingFiles(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
                                           boolean sortFiles = true, String... patterns) {
         boolean includeSubdirectories = false
         boolean directoryOnly = false
@@ -140,24 +139,23 @@ class FilesFinder {
     // TODO We may want to unit test this method, however it is composed mostly of java.nio.file methods.
     // If we do decide to write unit tests, use the following as a guide:
     // https://stackoverflow.com/questions/47101232/mocking-directorystreampath-without-mocking-iterator-possible
-    static List<File> getNonMatchingFilesFull(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
+    static List<Path> getNonMatchingFilesFull(Path filesPath, boolean isRegexNotGlob, boolean matchFilenameOnly,
                                            boolean sortFiles = true, boolean includeSubdirectories = false,
                                            boolean directoryOnly = false, String... patterns) {
-        List<File> nonMatchingFiles = [ ]
+        List<Path> nonMatchingFiles = [ ]
         DirectoryStream.Filter<Path> pathFilter = getNonMatchPathFilter(isRegexNotGlob, matchFilenameOnly,
                 directoryOnly, patterns)
 
         nonMatchingFiles = getMatchingFilesWithFilter(filesPath, pathFilter)
 
         if (includeSubdirectories) {
-            File parentFolder = filesPath.toFile()
-            parentFolder.eachFileRecurse(FileType.DIRECTORIES) { File subdirectory ->
-                nonMatchingFiles.addAll(getMatchingFilesWithFilter(subdirectory.toPath(), pathFilter))
+            filesPath.eachFileRecurse(FileType.DIRECTORIES) { Path subdirectory ->
+                nonMatchingFiles.addAll(getMatchingFilesWithFilter(subdirectory, pathFilter))
             }
         }
 
         if (sortFiles) {
-            return nonMatchingFiles.toSorted { File a, File b -> a.getCanonicalPath() <=> b.getCanonicalPath() }
+            return nonMatchingFiles.toSorted { Path a, Path b -> a.normalize() <=> b.normalize() }
         } else {
             return nonMatchingFiles
         }

@@ -12,6 +12,7 @@ import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import java.awt.image.DataBuffer
 import java.nio.file.Files
+import java.nio.file.Path
 
 import static org.hamcrest.core.Is.is
 import static org.junit.Assert.assertFalse
@@ -40,47 +41,47 @@ class CommandLinePdfToThumbnailFileGeneratorTest {
     static final String EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME_JPEG = "sample-multi-page-a4-pdf-with-images_2_pdftoppm_40q.jpeg"
     static final String EXPECTED_FILE_THUMBNAIL_INVALID_PDF_NAME_PNG = "sample-invalid-pdf_thumbnail.png"
 
-    static File WORKING_DIRECTORY
-    static File RESOURCES_DIRECTORY
-    static File PDF_FILE_SINGLE_A4
-    static File EXPECTED_FILE_THUMBNAIL_SINGLE_A4_PNG
-    static File EXPECTED_FILE_THUMBNAIL_SINGLE_A4_JPEG
-    static File PDF_FILE_WIDE_A3
-    static File EXPECTED_FILE_THUMBNAIL_WIDE_A3_PNG
-    static File EXPECTED_FILE_THUMBNAIL_WIDE_A3_JPEG
-    static File PDF_FILE_MULTIPLE_A4
-    static File EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_PNG
-    static File EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_JPEG
-    static File EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_PNG
-    static File EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_JPEG
-    static File EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_PNG
-    static File EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_JPEG
-    static File EXPECTED_FILE_INVALID_PDF_THUMBNAIL_PNG
+    static Path WORKING_DIRECTORY
+    static Path RESOURCES_DIRECTORY
+    static Path PDF_FILE_SINGLE_A4
+    static Path EXPECTED_FILE_THUMBNAIL_SINGLE_A4_PNG
+    static Path EXPECTED_FILE_THUMBNAIL_SINGLE_A4_JPEG
+    static Path PDF_FILE_WIDE_A3
+    static Path EXPECTED_FILE_THUMBNAIL_WIDE_A3_PNG
+    static Path EXPECTED_FILE_THUMBNAIL_WIDE_A3_JPEG
+    static Path PDF_FILE_MULTIPLE_A4
+    static Path EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_PNG
+    static Path EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_JPEG
+    static Path EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_PNG
+    static Path EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_JPEG
+    static Path EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_PNG
+    static Path EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_JPEG
+    static Path EXPECTED_FILE_INVALID_PDF_THUMBNAIL_PNG
 
     static ThumbnailParameters DEFAULT_PARAMETERS
 
-    List<File> filesToDelete
+    List<Path> filesToDelete
 
     @BeforeClass
     static void setupStatic() {
-        WORKING_DIRECTORY = new File(System.getProperty("user.dir"))
-        RESOURCES_DIRECTORY = new File(WORKING_DIRECTORY, TEST_FILE_RESOURCES_PATH)
+        WORKING_DIRECTORY = Path.of(System.getProperty("user.dir"))
+        RESOURCES_DIRECTORY = WORKING_DIRECTORY.resolve(TEST_FILE_RESOURCES_PATH)
 
-        PDF_FILE_SINGLE_A4 = new File(RESOURCES_DIRECTORY, SINGLE_A4_PAGE_PDF_NAME)
-        PDF_FILE_WIDE_A3 = new File(RESOURCES_DIRECTORY, SINGLE_A3_WIDE_PAGE_PDF_NAME)
-        PDF_FILE_MULTIPLE_A4 = new File(RESOURCES_DIRECTORY, MULTIPLE_A4_PAGE_PDF_NAME)
+        PDF_FILE_SINGLE_A4 = RESOURCES_DIRECTORY.resolve(SINGLE_A4_PAGE_PDF_NAME)
+        PDF_FILE_WIDE_A3 = RESOURCES_DIRECTORY.resolve(SINGLE_A3_WIDE_PAGE_PDF_NAME)
+        PDF_FILE_MULTIPLE_A4 = RESOURCES_DIRECTORY.resolve(MULTIPLE_A4_PAGE_PDF_NAME)
 
-        EXPECTED_FILE_THUMBNAIL_SINGLE_A4_PNG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_SINGLE_A4_NAME_PNG)
-        EXPECTED_FILE_THUMBNAIL_SINGLE_A4_JPEG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_SINGLE_A4_NAME_JPEG)
-        EXPECTED_FILE_THUMBNAIL_WIDE_A3_PNG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_WIDE_A3_NAME_PNG)
-        EXPECTED_FILE_THUMBNAIL_WIDE_A3_JPEG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_WIDE_A3_NAME_JPEG)
-        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_PNG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_NAME_PNG)
-        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_JPEG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_NAME_JPEG)
-        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_PNG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_NAME_PNG)
-        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_JPEG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_NAME_JPEG)
-        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_PNG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME_PNG)
-        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_JPEG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME_JPEG)
-        EXPECTED_FILE_INVALID_PDF_THUMBNAIL_PNG = new File(RESOURCES_DIRECTORY, EXPECTED_FILE_THUMBNAIL_INVALID_PDF_NAME_PNG)
+        EXPECTED_FILE_THUMBNAIL_SINGLE_A4_PNG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_SINGLE_A4_NAME_PNG)
+        EXPECTED_FILE_THUMBNAIL_SINGLE_A4_JPEG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_SINGLE_A4_NAME_JPEG)
+        EXPECTED_FILE_THUMBNAIL_WIDE_A3_PNG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_WIDE_A3_NAME_PNG)
+        EXPECTED_FILE_THUMBNAIL_WIDE_A3_JPEG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_WIDE_A3_NAME_JPEG)
+        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_PNG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_NAME_PNG)
+        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_JPEG = RESOURCES_DIRECTORY.resolve( EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_0_NAME_JPEG)
+        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_PNG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_NAME_PNG)
+        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_JPEG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_1_NAME_JPEG)
+        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_PNG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME_PNG)
+        EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_JPEG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_MULTIPLE_A4_2_NAME_JPEG)
+        EXPECTED_FILE_INVALID_PDF_THUMBNAIL_PNG = RESOURCES_DIRECTORY.resolve(EXPECTED_FILE_THUMBNAIL_INVALID_PDF_NAME_PNG)
 
         DEFAULT_PARAMETERS = new ThumbnailParameters(thumbnailHeight: 250, textHeight: 20, quality: 40)
     }
@@ -95,9 +96,9 @@ class CommandLinePdfToThumbnailFileGeneratorTest {
         // Set to true if you want to keep the created files.
         boolean deleteCreatedFiles = true
         if (deleteCreatedFiles) {
-            filesToDelete.each { File fileToDelete ->
-                if (fileToDelete.exists()) {
-                    fileToDelete.delete()
+            filesToDelete.each { Path fileToDelete ->
+                if (Files.exists(fileToDelete)) {
+                    Files.deleteIfExists(fileToDelete)
                 }
             }
         }
@@ -105,41 +106,41 @@ class CommandLinePdfToThumbnailFileGeneratorTest {
 
     @Test
     void correctIdentifiesFileTypes() {
-        File testFile = new File("abc.jpg")
-        assertTrue("file=${testFile.name} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertFalse("file=${testFile.name} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        Path testFile = Path.of("abc.jpg")
+        assertTrue("file=${testFile.fileName} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertFalse("file=${testFile.fileName} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("abc.jpeg")
-        assertTrue("file=${testFile.name} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertFalse("file=${testFile.name} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("abc.jpeg")
+        assertTrue("file=${testFile.fileName} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertFalse("file=${testFile.fileName} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("abc.JPG")
-        assertTrue("file=${testFile.name} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertFalse("file=${testFile.name} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("abc.JPG")
+        assertTrue("file=${testFile.fileName} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertFalse("file=${testFile.fileName} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("abc.Jpeg")
-        assertTrue("file=${testFile.name} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertFalse("file=${testFile.name} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("abc.Jpeg")
+        assertTrue("file=${testFile.fileName} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertFalse("file=${testFile.fileName} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("abc.JPEG")
-        assertTrue("file=${testFile.name} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertFalse("file=${testFile.name} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("abc.JPEG")
+        assertTrue("file=${testFile.fileName} is jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertFalse("file=${testFile.fileName} is not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("abc.png")
-        assertFalse("file=${testFile.name} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertTrue("file=${testFile.name} is png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("abc.png")
+        assertFalse("file=${testFile.fileName} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertTrue("file=${testFile.fileName} is png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("abc.PNG")
-        assertFalse("file=${testFile.name} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertTrue("file=${testFile.name} is png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("abc.PNG")
+        assertFalse("file=${testFile.fileName} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertTrue("file=${testFile.fileName} is png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("abc.pNg")
-        assertFalse("file=${testFile.name} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertTrue("file=${testFile.name} is png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("abc.pNg")
+        assertFalse("file=${testFile.fileName} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertTrue("file=${testFile.fileName} is png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
 
-        testFile = new File("this-is-not-an-image.file")
-        assertFalse("file=${testFile.name} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.name))
-        assertFalse("file=${testFile.name} not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.name))
+        testFile = Path.of("this-is-not-an-image.file")
+        assertFalse("file=${testFile.fileName} is not jpeg", CommandLinePdfToThumbnailFileGenerator.isJpegFilename(testFile.fileName.toString()))
+        assertFalse("file=${testFile.fileName} not png", CommandLinePdfToThumbnailFileGenerator.isPngFilename(testFile.fileName.toString()))
     }
 
     @Test
@@ -178,8 +179,8 @@ class CommandLinePdfToThumbnailFileGeneratorTest {
     void correctlyThrowsSipProcessingExceptionWhenNonexistentDirectory() {
         ThumbnailParameters parameters = DEFAULT_PARAMETERS.clone()
 
-        File nonexistantFile = new File("this-file-does-not-exist.anywhere")
-        CommandLinePdfToThumbnailFileGenerator.generateThumbnails(nonexistantFile, nonexistantFile.parentFile,
+        Path nonexistantFile = FileUtils.tempDirectory.toPath().resolve("this-file-does-not-exist.anywhere")
+        CommandLinePdfToThumbnailFileGenerator.generateThumbnails(nonexistantFile, nonexistantFile.parent,
                 "there-is-no-file-here", ".png", parameters, true, true)
         assertTrue("This point should not be reached", false)
     }
@@ -188,36 +189,36 @@ class CommandLinePdfToThumbnailFileGeneratorTest {
     void correctlyThrowsSipProcessingExceptionWhenNonexistentFile() {
         ThumbnailParameters parameters = DEFAULT_PARAMETERS.clone()
 
-        File nonexistantFile = new File(FileUtils.tempDirectory,"this-file-does-not-exist.anywhere")
-        CommandLinePdfToThumbnailFileGenerator.generateThumbnails(nonexistantFile, nonexistantFile.parentFile,
+        Path nonexistantFile = FileUtils.tempDirectory.toPath().resolve("this-file-does-not-exist.anywhere")
+        CommandLinePdfToThumbnailFileGenerator.generateThumbnails(nonexistantFile, nonexistantFile.parent,
                 "there-is-no-file-here", ".png", parameters, true, true)
         assertTrue("This point should not be reached", false)
     }
 
-    void verifyGeneratorCreatesExpectedThumbnails(File pdfFile, String suffix, List<File> expectedThumbnails,
+    void verifyGeneratorCreatesExpectedThumbnails(Path pdfFile, String suffix, List<Path> expectedThumbnails,
                                                         ThumbnailParameters parameters, boolean hasCaption) {
-        File tempDirectory = Files.createTempDirectory(FileUtils.tempDirectory.toPath(),
-                "CommandLinePdfToThumbnailFileGeneratorTest_").toFile()
-        tempDirectory.deleteOnExit()
+        Path tempDirectory = Files.createTempDirectory(FileUtils.tempDirectory.toPath(),
+                "CommandLinePdfToThumbnailFileGeneratorTest_")
+        tempDirectory.toFile().deleteOnExit()
 
-        List<File> thumbnailFiles = CommandLinePdfToThumbnailFileGenerator.generateThumbnails(pdfFile,
+        List<Path> thumbnailFiles = CommandLinePdfToThumbnailFileGenerator.generateThumbnails(pdfFile,
                 tempDirectory, "test-thumbnail", suffix, parameters, hasCaption)
         assertThat("Expect numberThumbnails=${expectedThumbnails.size()}", thumbnailFiles.size(),
                 is(expectedThumbnails.size()))
 
         filesToDelete.addAll(thumbnailFiles)
 
-        thumbnailFiles.eachWithIndex{ File thumbnailFile, int index ->
+        thumbnailFiles.eachWithIndex{ Path thumbnailFile, int index ->
             BufferedImage expectedThumbnailImage = loadImage(expectedThumbnails.get(index))
             BufferedImage thumbnailImage = loadImage(thumbnailFile)
-            assertTrue("Generated thumbnail=${thumbnailFile.getName()} matches " +
-                    "expected=${expectedThumbnails.get(index).getName()} for pdfFile=${pdfFile.name}",
+            assertTrue("Generated thumbnail=${thumbnailFile.fileName} matches " +
+                    "expected=${expectedThumbnails.get(index).fileName} for pdfFile=${pdfFile.fileName}",
                     bufferedImagesAreIdentical(expectedThumbnailImage, thumbnailImage))
         }
     }
 
-    static BufferedImage loadImage(File imageFile) {
-        BufferedImage bufferedImage = ImageIO.read(imageFile)
+    static BufferedImage loadImage(Path imageFile) {
+        BufferedImage bufferedImage = ImageIO.read(imageFile.toFile())
         return bufferedImage
     }
 
@@ -244,7 +245,7 @@ class CommandLinePdfToThumbnailFileGeneratorTest {
     @Ignore
     void generateTestPdfThumbnails() {
         ThumbnailParameters parameters = DEFAULT_PARAMETERS.clone()
-        File tempDirectory = FileUtils.tempDirectory
+        Path tempDirectory = FileUtils.tempDirectory.toPath()
 
         CommandLinePdfToThumbnailFileGenerator.generateThumbnails(PDF_FILE_SINGLE_A4, tempDirectory,
                 "THUMBNAIL_SINGLE_A4_pdftoppm", ".png", parameters, true, false)

@@ -22,7 +22,7 @@ class SipTest {
         testSip.dayOfMonth = 22
         testSip.updateFromDateFields()
 
-        LocalDate verifyDate = new LocalDate(2018, 11, 22)
+        LocalDate verifyDate = LocalDate.of(2018, 11, 22)
         assertThat("LocalDate is correct", testSip.getLocalDate(), is(verifyDate))
         assertThat("dcDate converted correctly", testSip.dcDate, is("2018"))
         assertThat("dcTermsAvailable converted correctly", testSip.dcTermsAvailable, is("11"))
@@ -37,7 +37,7 @@ class SipTest {
         testSip.dayOfMonth = 22
         testSip.updateFromDateFields()
 
-        LocalDate verifyDate = new LocalDate(2018, 11, 22)
+        LocalDate verifyDate = LocalDate.of(2018, 11, 22)
         assertThat("LocalDate is correct", testSip.getLocalDate(), is(verifyDate))
         assertThat("dcDate converted correctly", testSip.dcDate, is("2018"))
         assertThat("dcTermsAvailable converted correctly", testSip.dcTermsAvailable, is("11"))
@@ -47,7 +47,7 @@ class SipTest {
     @Test
     void localDateSetsCorrectly() {
         testSip = new Sip()
-        LocalDate setDate = new LocalDate(2018, 11, 22)
+        LocalDate setDate = LocalDate.of(2018, 11, 22)
         testSip.setDate(setDate)
 
         assertThat("year is correct", testSip.year, is(2018))

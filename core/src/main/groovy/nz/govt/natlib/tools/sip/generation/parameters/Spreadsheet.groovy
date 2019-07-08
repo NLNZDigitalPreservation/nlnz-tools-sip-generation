@@ -7,6 +7,8 @@ import groovy.transform.Canonical
 import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.state.SipProcessingException
 
+import java.nio.file.Path
+
 @Log4j2
 @Canonical
 class Spreadsheet {
@@ -25,7 +27,7 @@ class Spreadsheet {
     List<String> columnHeaders = [ ]
     List<Map<String, String>> rows = [ ]
 
-    static Spreadsheet fromJson(String idColumnName, File jsonFile, boolean allowDuplicateIds = false,
+    static Spreadsheet fromJson(String idColumnName, Path jsonFile, boolean allowDuplicateIds = false,
                                 boolean allowRowsWithoutIds = false) throws SipProcessingException {
         return fromJson(idColumnName, jsonFile.text, allowDuplicateIds, allowRowsWithoutIds)
     }

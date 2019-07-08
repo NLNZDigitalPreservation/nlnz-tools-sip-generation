@@ -7,6 +7,8 @@ import org.apache.commons.io.FilenameUtils
 import org.junit.Before
 import org.junit.Test
 
+import java.nio.file.Path
+
 import static org.hamcrest.core.Is.is
 import static org.junit.Assert.assertNotNull
 import static org.junit.Assert.assertNull
@@ -17,6 +19,7 @@ import static org.junit.Assert.assertTrue
 class PdfValidatorJhoveTest {
     static final String SPLIT_MARK = "SPLIT_MARK"
     static final String TEST_FILE_LOCATION = FilenameUtils.separatorsToSystem("src/test/resources/nz/govt/natlib/tools/sip/pdf/jhove/")
+    static final Path TEST_FILE_LOCATION_PATH = Path.of(TEST_FILE_LOCATION)
 
     static final String PDF_MINIMAL_VALID = "T00_000_minimal-valid.pdf"
     static final String PDF_ROTATED_90_VALID = "A3-portrait-dimensioned-rotated-90.pdf"
@@ -58,24 +61,24 @@ class PdfValidatorJhoveTest {
 
     @Test
     void pdfMinimalValidIsValid() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_MINIMAL_VALID)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_MINIMAL_VALID)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNull("PDF validation did not produce an exception", sipProcessingException)
     }
 
     @Test
     void pdfA3PortraitRotated90IsValid() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_ROTATED_90_VALID)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile =  TEST_FILE_LOCATION_PATH.resolve(PDF_ROTATED_90_VALID)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNull("PDF validation did not produce an exception", sipProcessingException)
     }
 
     @Test
     void pdfHeaderInvalidMajorVersionIsInvalidWithCorrectMessage() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_HEADER_INVALID_MAJOR_VERSION)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_HEADER_INVALID_MAJOR_VERSION)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNotNull("PDF validation produced an exception", sipProcessingException)
 
@@ -93,8 +96,8 @@ class PdfValidatorJhoveTest {
 
     @Test
     void pdfDocumentCatalogIncorrectPagesReferenceIsInvalidWithCorrectMessage() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_DOCUMENT_CATALOG_INCORRECT_PAGES_REFERENCE)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_DOCUMENT_CATALOG_INCORRECT_PAGES_REFERENCE)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNotNull("PDF validation produced an exception", sipProcessingException)
 
@@ -112,8 +115,8 @@ class PdfValidatorJhoveTest {
 
     @Test
     void pdfPageTreeNonExistingObjectAsKidIsInvalidWithCorrectMessage() {
-        File pdfFile = new File(TEST_FILE_LOCATION + PDF_PAGE_TREE_NON_EXISTING_OBJECT_AS_KID)
-        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile.toPath())
+        Path pdfFile = TEST_FILE_LOCATION_PATH.resolve(PDF_PAGE_TREE_NON_EXISTING_OBJECT_AS_KID)
+        SipProcessingException sipProcessingException = underTest.validatePdf(pdfFile)
 
         assertNotNull("PDF validation produced an exception", sipProcessingException)
 

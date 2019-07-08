@@ -22,7 +22,7 @@ class PdfValidatorJhove implements PdfValidator {
         JhoveBase jhoveBase = new JhoveBase()
 
         pdfModule.setBase(jhoveBase)
-        RepInfo repInfo = new RepInfo(path.toFile().getName())
+        RepInfo repInfo = new RepInfo(path.toFile().name)
 
         RandomAccessFile randomAccessFile = null
         try {

@@ -41,7 +41,7 @@ class SipJsonGenerator {
 
             fileWrappers(sip.fileWrappers) { Sip.FileWrapper fileWrapper ->
                     mimeType fileWrapper.mimeType
-                    file fileWrapper.file == null ? null : fileWrapper.file.getCanonicalPath()
+                    file fileWrapper.file == null ? null : fileWrapper.file.normalize().toString()
                     fileOriginalPath fileWrapper.fileOriginalPath
                     fileOriginalName fileWrapper.fileOriginalName
                     label fileWrapper.label

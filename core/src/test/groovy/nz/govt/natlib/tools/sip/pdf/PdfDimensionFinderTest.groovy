@@ -4,6 +4,7 @@ import org.junit.Test
 
 import java.awt.Point
 import java.awt.geom.Point2D
+import java.nio.file.Path
 
 import static org.hamcrest.core.Is.is
 import static org.hamcrest.Matchers.lessThan
@@ -16,9 +17,9 @@ class PdfDimensionFinderTest {
     static final String TEST_A3_LANDSCAPE_FILENAME = "A3-landscape-dimensioned.pdf"
     static final String TEST_A3_PORTRAIT_ROTATED_90_FILENAME = "A3-portrait-dimensioned-rotated-90.pdf"
     static final String TEST_A4_PORTRAIT_FILENAME = "A4-portrait-dimensioned.pdf"
-    File TEST_A3_LANDSCAPE_FILE = new File(TEST_FILE_LOCATION + File.separator + TEST_A3_LANDSCAPE_FILENAME)
-    File TEST_A3_PORTRAIT_ROTATED_90_FILE = new File(TEST_FILE_LOCATION + File.separator + TEST_A3_PORTRAIT_ROTATED_90_FILENAME)
-    File TEST_A4_PORTRAIT_FILE = new File(TEST_FILE_LOCATION + File.separator + TEST_A4_PORTRAIT_FILENAME)
+    Path TEST_A3_LANDSCAPE_FILE = Path.of(TEST_FILE_LOCATION + File.separator + TEST_A3_LANDSCAPE_FILENAME)
+    Path TEST_A3_PORTRAIT_ROTATED_90_FILE = Path.of(TEST_FILE_LOCATION + File.separator + TEST_A3_PORTRAIT_ROTATED_90_FILENAME)
+    Path TEST_A4_PORTRAIT_FILE = Path.of(TEST_FILE_LOCATION + File.separator + TEST_A4_PORTRAIT_FILENAME)
 
     static final Point EXPECTED_A3_LANDSCAPE_DIMENSIONS = new Point(1190, 841)
     static final Point EXPECTED_A3_PORTRAIT_ROTATED_90_DIMENSIONS = new Point(1190, 841)
@@ -44,7 +45,7 @@ class PdfDimensionFinderTest {
         fileDimensionedCorrectly(TEST_A4_PORTRAIT_FILE, EXPECTED_A4_PORTRAIT_DIMENSIONS)
     }
 
-    void fileDimensionedCorrectly(File testFile, Point expectedDimensions) {
+    void fileDimensionedCorrectly(Path testFile, Point expectedDimensions) {
         Point dimensions = PdfDimensionFinder.getDimensions(testFile, 0)
 
         assertThat("PDF dimensions=${dimensions}", dimensions, is(expectedDimensions))
@@ -74,7 +75,7 @@ class PdfDimensionFinderTest {
                 EXPECTED_A4_TO_A4_RATIOS, 0.01)
     }
 
-    void ratiosCorrectlyDetermined(File firstPdfFile, File secondPdfFile, int firstPageNumber, int secondPageNumber,
+    void ratiosCorrectlyDetermined(Path firstPdfFile, Path secondPdfFile, int firstPageNumber, int secondPageNumber,
                                    Point2D.Double expectedRatio, double minimumRatioDifference) {
         Point2D.Double ratios = PdfDimensionFinder.getDimensionalRatio(firstPdfFile, secondPdfFile,
                 firstPageNumber, secondPageNumber)
