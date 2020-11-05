@@ -9,6 +9,7 @@ import com.exlibris.dps.sdk.deposit.IEParserFactory
 import gov.loc.mets.FileType
 import gov.loc.mets.MetsType
 import nz.govt.natlib.tools.sip.Sip
+import org.dom4j.Namespace
 
 import java.nio.file.Path
 
@@ -116,6 +117,17 @@ class SipXmlGenerator {
 
             // In order for document construction to work correctly, the dnxDocument must be added AFTER it has been populated
             ieParser.setFileDnx(fileDocumentHelper.getDocument(), fileType.getID())
+
+            // If the file is double page then create a dmdSec (DublinCore) with dcterms:hsaFormat using fileType ID as the ID
+            if (fileWrapper.fileOriginalName.toLowerCase().contains("dpslh")) {
+                DublinCore newDC = new DublinCore()
+                ArrayList content = newDC.getDocument().node(0).getProperties().get("content")
+
+                newDC.addElement("dcterms:hasFormat", "Double")
+                content.add(new Namespace("mods","http://www.loc.gov/mods/v3"))
+                ieParser.setDublinCore(newDC, fileType.getID())
+            }
+
         }
 
         // ieParser can generate checksums as well
