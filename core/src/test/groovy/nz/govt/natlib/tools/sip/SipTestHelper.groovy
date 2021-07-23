@@ -52,7 +52,7 @@ class SipTestHelper {
 
     static final String TEST_SIP_XML_1_FILENAME = "test-sip-1.xml"
     static final String TEST_SIP_XML_ACHN_ACTUAL_FILENAME = "test-sip-auckland-city-harbour-news-2015-07-29-actual.xml"
-    static final String TEST_SIP_XML_ACHN_EXPECTED_FILENAME = "test-sip-auckland-city-harbour-news-2015-07-29-actual.xml"
+    static final String TEST_SIP_XML_ACHN_EXPECTED_FILENAME = "test-sip-auckland-city-harbour-news-2015-07-29-expected.xml"
 
     static final String TEST_PDF_FILE_1_FILENAME = "test-pdf-1.pdf"
     static final String TEST_PDF_FILE_1_MD5_HASH = "b8b673eeaa076ff19501318a27f85e9c"
@@ -217,7 +217,7 @@ class SipTestHelper {
         assertThat("month", sip.month, is(7))
         assertThat("dayOfMonth", sip.dayOfMonth, is(29))
         assertThat("dcDate", sip.dcDate, is("2015"))
-        assertThat("dcTermsAvailable", sip.dcTermsAvailable, is("7"))
+        assertThat("dcTermsAvailable", sip.dcTermsAvailable, is("07"))
         assertThat("dcCoverage", sip.dcCoverage, is("29"))
         assertThat("ieEntityType", sip.ieEntityType, is(IEEntityType.NewspaperIE))
         assertThat("objectIdentifierType", sip.objectIdentifierType, is("ALMAMMS"))
