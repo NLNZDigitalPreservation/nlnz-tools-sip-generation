@@ -91,7 +91,7 @@ class CommandLinePdfToThumbnailFileGenerator {
     static String createPdftoppmPngCommand(Path pdfFile, String targetFilePrefix, ThumbnailParameters parameters,
                                            boolean wouldHaveCaption = true) {
         return "pdftoppm -f 1 -scale-to-y ${parameters.adjustedThumbnailHeight(wouldHaveCaption)} -scale-to-x -1 -png " +
-                "'${pdfFile.normalize()}' '${targetFilePrefix}'"
+                "\"${pdfFile.normalize()}\" \"${targetFilePrefix}\""
     }
 
     static String createPdftoppmJpegCommand(Path pdfFile, String targetFilePrefix, ThumbnailParameters parameters,
@@ -102,7 +102,7 @@ class CommandLinePdfToThumbnailFileGenerator {
             actualQuality = actualQuality > 100 ? 100 : actualQuality
         }
         return "pdftoppm -f 1 -scale-to-y ${parameters.adjustedThumbnailHeight(wouldHaveCaption)} " +
-                "-scale-to-x -1 -jpeg -jpegopt \"quality=${actualQuality}\" '${pdfFile.normalize()}' '${targetFilePrefix}'"
+                "-scale-to-x -1 -jpeg -jpegopt \"quality=${actualQuality}\" \"${pdfFile.normalize()}\" \"${targetFilePrefix}\""
     }
 
     static boolean isPngFilename(String filename) {
