@@ -94,8 +94,8 @@ class Sip {
 
     void updateFromDateFields() {
         this.dcDate = "${this.year}".toString()
-        this.dcTermsAvailable = "${this.month}".toString()
-        this.dcCoverage = "${this.dayOfMonth}".toString()
+        this.dcTermsAvailable = String.format("%02d", this.month)
+        this.dcCoverage = String.format("%02d", this.dayOfMonth)
     }
 
     LocalDate getLocalDate() {
