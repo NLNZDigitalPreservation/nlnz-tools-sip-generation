@@ -5,7 +5,7 @@
                 <dc:record xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <dc:title>Auckland City Harbour News</dc:title>
                     <dc:date>2015</dc:date>
-                    <dcterms:available>7</dcterms:available>
+                    <dcterms:available>07</dcterms:available>
                     <dc:coverage>29</dc:coverage>
                 </dc:record>
             </mets:xmlData>
