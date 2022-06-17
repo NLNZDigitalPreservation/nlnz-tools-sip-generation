@@ -6,6 +6,7 @@ import com.exlibris.digitool.common.dnx.DnxDocument
 import com.exlibris.digitool.common.dnx.DnxDocumentHelper
 import com.exlibris.dps.sdk.deposit.IEParser
 import com.exlibris.dps.sdk.deposit.IEParserFactory
+import com.google.common.net.UrlEscapers
 import gov.loc.mets.FileType
 import gov.loc.mets.MetsType
 import nz.govt.natlib.tools.sip.Sip
@@ -98,7 +99,8 @@ class SipXmlGenerator {
             // Add file and DNX metadata on file
             String mimeType = fileWrapper.getMimeType()
             Path file = fileWrapper.getFile()
-            FileType fileType = ieParser.addNewFile(fileGroup, mimeType, fileWrapper.getFileOriginalName(), "XXX-TO-REPLACE-test file")
+            String encodedLocation = UrlEscapers.urlFragmentEscaper().escape(fileWrapper.fileOriginalName)
+            FileType fileType = ieParser.addNewFile(fileGroup, mimeType, encodedLocation, "XXX-TO-REPLACE-test file")
 
             // File DNX construction
             DnxDocument dnxDocumentFile = ieParser.getFileDnx(fileType.getID())

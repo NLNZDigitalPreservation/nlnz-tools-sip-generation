@@ -1,5 +1,7 @@
 package nz.govt.natlib.tools.sip.generation
 
+import org.xmlunit.diff.Difference
+
 import static org.junit.Assert.assertFalse
 
 import nz.govt.natlib.tools.sip.Sip
@@ -52,6 +54,14 @@ class SipXmlGeneratorTest {
                 .ignoreComments()
                 .normalizeWhitespace()
                 .build()
+
+        if (theDiff.hasDifferences()) {
+            StringBuffer buffer = new StringBuffer();
+            for (Difference d: theDiff.getDifferences()) {
+                buffer.append(d.toString());
+            }
+            print(buffer)
+        }
 
         assertFalse("XML for SipTestHelper.sipOne() is the same as generated", theDiff.hasDifferences())
     }

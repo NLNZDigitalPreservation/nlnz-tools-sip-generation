@@ -2,6 +2,7 @@ package nz.govt.natlib.tools.sip
 
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -75,9 +76,9 @@ class SipTestHelper {
         String text
         InputStream inputStream = SipTestHelper.class.getResourceAsStream(filename)
         if (inputStream == null) {
-            Path inputFile = Path.of(localPath)
+            Path inputFile = Paths.get(localPath)
             if (!Files.exists(inputFile)) {
-                inputFile = Path.of("").resolve(localPath)
+                inputFile = Paths.get("").resolve(localPath)
             }
             text = inputFile.text
         } else {
@@ -103,12 +104,12 @@ class SipTestHelper {
         URL resourceURL = SipTestHelper.class.getResource(filename)
         Path resourceFile
         if (resourceURL != null) {
-            resourceFile = Path.of(resourceURL.toURI())
+            resourceFile = Paths.get(resourceURL.toURI())
         }
         if (resourceFile != null && (Files.isRegularFile(resourceFile) || Files.isDirectory(resourceFile))) {
             return resourceFile
         } else {
-            Path returnFile = Path.of(localPath)
+            Path returnFile = Paths.get(localPath)
             return returnFile
         }
     }
@@ -146,7 +147,7 @@ class SipTestHelper {
         while (fileIndex < 4) {
             Sip.FileWrapper fileWrapper = new Sip.FileWrapper()
             fileWrapper.mimeType = SIP_FILE_MIME_TYPE
-            fileWrapper.file = Path.of("${SIP_FILE_BASE}${fileIndex}")
+            fileWrapper.file = Paths.get("${SIP_FILE_BASE}${fileIndex}")
             fileWrapper.fileOriginalPath = "${SIP_FILE_ORIGINAL_PATH_BASE}${fileIndex}"
             fileWrapper.fileOriginalName = "${SIP_FILE_ORIGINAL_NAME_BASE}${fileIndex}"
             fileWrapper.label = "${SIP_FILE_LABEL_BASE}${fileIndex}"
