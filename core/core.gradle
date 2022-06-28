@@ -85,6 +85,9 @@ dependencies {
     compile "org.openpreservation.jhove:jhove-core:1.22.1"
     compile "org.openpreservation.jhove:jhove-modules:1.20.1"
 
+    // For URL encoding
+    compile 'com.google.guava:guava:31.1-jre'
+
     // No longer part of the JDK (i.e. not in OpenJDK 11)
     compile "com.sun.activation:javax.activation:1.2.0"
     compile "javax.xml.bind:jaxb-api:2.3.1"
