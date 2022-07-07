@@ -99,16 +99,17 @@ class SipXmlGenerator {
             // Add file and DNX metadata on file
             String mimeType = fileWrapper.getMimeType()
             Path file = fileWrapper.getFile()
-            String encodedLocation = UrlEscapers.urlFragmentEscaper().escape(fileWrapper.fileOriginalName)
-            FileType fileType = ieParser.addNewFile(fileGroup, mimeType, encodedLocation, "XXX-TO-REPLACE-test file")
+            String encodedFileOriginalName = UrlEscapers.urlFragmentEscaper().escape(fileWrapper.fileOriginalName)
+            String encodedFileOriginalPath = UrlEscapers.urlFragmentEscaper().escape(fileWrapper.fileOriginalPath)
+            FileType fileType = ieParser.addNewFile(fileGroup, mimeType, encodedFileOriginalName, "XXX-TO-REPLACE-test file")
 
             // File DNX construction
             DnxDocument dnxDocumentFile = ieParser.getFileDnx(fileType.getID())
             DnxDocumentHelper fileDocumentHelper = new DnxDocumentHelper(dnxDocumentFile)
             fileDocumentHelper.getGeneralFileCharacteristics().setFileCreationDate(Sip.LOCAL_DATE_TIME_FORMATTER.format(fileWrapper.creationDate))
             fileDocumentHelper.getGeneralFileCharacteristics().setFileModificationDate(Sip.LOCAL_DATE_TIME_FORMATTER.format(fileWrapper.modificationDate))
-            fileDocumentHelper.getGeneralFileCharacteristics().setFileOriginalName(fileWrapper.fileOriginalName)
-            fileDocumentHelper.getGeneralFileCharacteristics().setFileOriginalPath(fileWrapper.fileOriginalPath)
+            fileDocumentHelper.getGeneralFileCharacteristics().setFileOriginalName(encodedFileOriginalName)
+            fileDocumentHelper.getGeneralFileCharacteristics().setFileOriginalPath(encodedFileOriginalPath)
             fileDocumentHelper.getGeneralFileCharacteristics().setFileSizeBytes(fileWrapper.fileSizeBytes.toString())
             fileDocumentHelper.getGeneralFileCharacteristics().setLabel(fileWrapper.label)
 
