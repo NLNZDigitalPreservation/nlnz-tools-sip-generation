@@ -194,6 +194,11 @@ class SipXmlExtractor {
         return extractFirstNodeWithAttribute("id", "usageType") as String
     }
 
+    Integer extractIssueNumber() {
+        String revisionString = extractFirstNodeWithAttribute("id", "RevisionNumber") as String
+        return Integer.parseInt(revisionString)
+    }
+
     Integer extractRevisionNumber() {
         String revisionString = extractFirstNodeWithAttribute("id", "RevisionNumber") as String
         return Integer.parseInt(revisionString)
