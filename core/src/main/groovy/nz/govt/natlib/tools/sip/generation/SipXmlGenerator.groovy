@@ -36,6 +36,9 @@ class SipXmlGenerator {
             dublinCore.addElement("dc:date", sip.dcDate)
             dublinCore.addElement("dcterms:available", sip.dcTermsAvailable)
             dublinCore.addElement("dc:coverage", sip.dcCoverage)
+            if (sip.issued != null && sip.issued != "") {
+                dublinCore.addElement("dcterms:issued", sip.issued)
+            }
 
             ieParser.setIEDublinCore(dublinCore)
 

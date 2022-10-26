@@ -35,7 +35,7 @@ class Sip {
     String dcCoverage
 
     // Optional issue number
-    Integer issued
+    String issued
 
     // Type and policy
     IEEntityType ieEntityType
