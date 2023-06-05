@@ -16,19 +16,17 @@ Contents of this document
 
 Following this introduction, the Release Notes includes the following sections:
 
--   **Changes since 1.0.0** - Changes since the last official release *1.0.0*.
+-   **1.0.3-SNAPSHOT**.
 
 -   **1.0.0** - Release 1.0.0.
 
 -   **1.0.0-SNAPSHOT** - Current 1.0.0 development.
 
 
-Changes since 1.0.0
-===================
+1.0.3-SNAPSHOT
+==============
 
-This is a placeholder for changes since the official *2.0.1* release. Please add notes here for changes and fixes as
-they are released into the master branch.
-
+Adds an optional 'issued' field to sips
 
 1.0.0
 =====

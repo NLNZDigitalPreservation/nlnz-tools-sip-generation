@@ -1,6 +1,7 @@
 package nz.govt.natlib.tools.sip.generation
 
 import groovy.json.JsonBuilder
+import groovy.json.JsonGenerator
 
 //import groovy.json.JsonGenerator
 //import groovy.json.JsonGenerator.Converter
@@ -15,7 +16,11 @@ class SipJsonGenerator {
 
     static String toJson(Sip sip, boolean prettyPrint = false) {
         // groovy 2.5.x u
-        JsonBuilder jsonBuilder = new JsonBuilder()
+        def generator = new JsonGenerator.Options()
+            .excludeNulls()
+            .build()
+
+        JsonBuilder jsonBuilder = new JsonBuilder(generator)
         Map<String, Object> jsonRoot = jsonBuilder {
             title sip.title
 
@@ -27,6 +32,8 @@ class SipJsonGenerator {
 
             dayOfMonth sip.dayOfMonth
             dcCoverage sip.dcCoverage
+
+            issued sip.issued
 
             ieEntityType sip.ieEntityType.getFieldValue()
             objectIdentifierType sip.objectIdentifierType

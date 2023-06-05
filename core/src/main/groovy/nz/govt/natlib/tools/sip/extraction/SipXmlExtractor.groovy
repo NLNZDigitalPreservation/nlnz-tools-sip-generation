@@ -34,6 +34,8 @@ class SipXmlExtractor {
         sip.dayOfMonth = extractDayOfMonth()
         sip.updateFromDateFields()
 
+        sip.issued = extractIssueNumber()
+
         sip.ieEntityType = extractIEEntityType()
         sip.objectIdentifierType = extractObjectIdentifierType()
         sip.objectIdentifierValue = extractObjectIdentifierValue()
@@ -192,6 +194,11 @@ class SipXmlExtractor {
 
     String extractUsageType() {
         return extractFirstNodeWithAttribute("id", "usageType") as String
+    }
+
+    String extractIssueNumber() {
+        String dcTermsIssuedString = extractIeDmdRecord().'dcterms:issued' as String
+        return dcTermsIssuedString != null ? dcTermsIssuedString : null
     }
 
     Integer extractRevisionNumber() {

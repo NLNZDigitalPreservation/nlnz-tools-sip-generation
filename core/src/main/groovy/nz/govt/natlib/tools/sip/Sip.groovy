@@ -34,6 +34,9 @@ class Sip {
     Integer dayOfMonth
     String dcCoverage
 
+    // Optional issue number
+    String issued
+
     // Type and policy
     IEEntityType ieEntityType
     String objectIdentifierType
