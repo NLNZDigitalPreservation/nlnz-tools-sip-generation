@@ -1,6 +1,6 @@
 plugins {
     // required for jacoco test coverage checks
-    id 'com.github.kt3k.coveralls' version '2.6.3'
+    id 'com.github.kt3k.coveralls' version '2.12.2'
 }
 
 project.ext {
@@ -23,8 +23,8 @@ apply plugin: 'groovy'
 
 apply plugin: 'java'
 // this needs to be set after the 'java' plugin has been applied
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+sourceCompatibility = 1.17
+targetCompatibility = 1.17
 
 apply plugin: 'jacoco'
 jacoco {
@@ -33,7 +33,7 @@ jacoco {
 }
 
 // run the findBugs checks with 'gradle check' or 'gradle findBugsMain' or 'gradle findBugsTest'
-apply plugin: 'findbugs'
+//apply plugin: 'findbugs'
 
 // run the pmd source code analyzer with 'gradle check' or 'gradle pmdMain' or 'gradle pmdTest'
 apply plugin: 'pmd' // source code analyzer
@@ -41,9 +41,9 @@ apply plugin: 'pmd' // source code analyzer
 setVersion(project.ext.versionNumber)
 
 dependencies {
-    compile project(':sip-generation-core')
+    implementation project(':sip-generation-core')
 
-    compile gradleApi()
+    implementation gradleApi()
 }
 
 jar {
@@ -51,22 +51,22 @@ jar {
 }
 
 task jarSources(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     includeEmptyDirs = false
 
     from sourceSets.main.allSource
 }
 
-tasks.withType(FindBugs) {
-    // Unfortunately FindBugs will find a lot of problems with Groovy classes. We could filter out groovy source files,
-    // but since FindBugs operates on .class files, that filtering will be ineffective. Currently there are no java
-    // classes but that could change in the future.
-    // See https://stackoverflow.com/questions/22037499/using-excludes-config-in-findbugs-and-checkstyle-plugin-in-gradle
-    exclude '**/*.groovy'
-    classes = classes.filter {
-        !it.path.contains(new File("classes/groovy/main").path)
-    }
-}
+//tasks.withType(FindBugs) {
+//    // Unfortunately FindBugs will find a lot of problems with Groovy classes. We could filter out groovy source files,
+//    // but since FindBugs operates on .class files, that filtering will be ineffective. Currently there are no java
+//    // classes but that could change in the future.
+//    // See https://stackoverflow.com/questions/22037499/using-excludes-config-in-findbugs-and-checkstyle-plugin-in-gradle
+//    exclude '**/*.groovy'
+//    classes = classes.filter {
+//        !it.path.contains(new File("classes/groovy/main").path)
+//    }
+//}
 
 artifacts {
     publishableArtifacts jar, jarSources

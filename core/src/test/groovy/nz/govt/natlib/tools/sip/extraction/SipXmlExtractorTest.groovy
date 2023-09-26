@@ -1,6 +1,6 @@
 package nz.govt.natlib.tools.sip.extraction
 
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.slurpersupport.GPathResult
 import nz.govt.natlib.tools.sip.IEEntityType
 import nz.govt.natlib.tools.sip.Sip
 import nz.govt.natlib.tools.sip.SipTestHelper

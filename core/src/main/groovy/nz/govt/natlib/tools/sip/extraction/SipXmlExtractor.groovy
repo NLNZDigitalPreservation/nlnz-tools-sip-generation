@@ -1,7 +1,8 @@
 package nz.govt.natlib.tools.sip.extraction
 
 import groovy.util.logging.Log4j2
-import groovy.util.slurpersupport.GPathResult
+import groovy.xml.XmlSlurper
+import groovy.xml.slurpersupport.GPathResult
 import nz.govt.natlib.tools.sip.IEEntityType
 import nz.govt.natlib.tools.sip.Sip
 

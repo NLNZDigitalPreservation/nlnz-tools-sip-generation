@@ -1,6 +1,6 @@
 package nz.govt.natlib.tools.sip.processing
 
-import groovy.ui.SystemOutputInterceptor
+import groovy.console.ui.SystemOutputInterceptor
 
 import java.nio.file.Path
 
