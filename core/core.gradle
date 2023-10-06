@@ -48,8 +48,8 @@ setVersion(project.ext.versionNumber)
 dependencies {
     // This project now requires Gradle 2.5.x (build failure under 2.4.x: java.lang.ExceptionInInitializerError).
     // Note that Groovy 2.5.x supports JsonGenerator.
-//    compile localGroovy()
-    implementation 'org.apache.groovy:groovy-all:4.0.12'
+    implementation localGroovy()
+//    implementation 'org.apache.groovy:groovy-all:4.0.12'
 
     // The latest version.
     implementation 'com.google.guava:guava:30.0-jre'

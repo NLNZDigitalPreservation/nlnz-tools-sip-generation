@@ -297,7 +297,7 @@ class PathUtils {
             GeneralUtils.markElapsed(theTimekeeper,
                     "sourceDirectory=${sourceDirectory.fileName}, temporaryTargetDirectory=${temporaryTargetDirectory}",
                     "Copy completed")
-            renameSuccessful = temporaryTargetDirectory.renameTo(targetDirectory.toUri())
+            renameSuccessful = temporaryTargetDirectory.toFile().renameTo(targetDirectory.toFile())
             GeneralUtils.markElapsed(theTimekeeper,
                     "sourceDirectory=${sourceDirectory.fileName}, targetDirectory=${targetDirectory}",
                     "Rename completed")
@@ -388,7 +388,7 @@ class PathUtils {
         if (doCopy) {
             Files.copy(sourceFile, temporaryDestinationFile, StandardCopyOption.COPY_ATTRIBUTES)
             GeneralUtils.markElapsed(theTimekeeper, "sourceFile=${sourceFile.fileName}", "Copy completed")
-            renameSuccessful = temporaryDestinationFile.renameTo(targetFile.toUri())
+            renameSuccessful = temporaryDestinationFile.toFile().renameTo(targetFile.toFile())
             GeneralUtils.markElapsed(theTimekeeper, "sourceFile=${sourceFile.fileName}", "Rename completed")
             if (renameSuccessful) {
                 if (deleteSourceFile) {
