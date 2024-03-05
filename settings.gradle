@@ -14,4 +14,4 @@ rootProject.children.each { child ->
 // local repository. If all artifacts are published as expected, there is nothing else to do. If the published artifacts
 // change unexpectedly, please see the migration guide for more details:
 // https://docs.gradle.org/4.10.2/userguide/publishing_maven.html#publishing_maven:deferred_configuration.
-enableFeaturePreview('STABLE_PUBLISHING')
+//enableFeaturePreview('STABLE_PUBLISHING')

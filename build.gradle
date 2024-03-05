@@ -12,10 +12,10 @@ subprojects {
     project.ext {
         vendor = "National Library of New Zealand"
 
-        versionNumber = "1.0.3-SNAPSHOT"
+        versionNumber = "1.0.5-SNAPSHOT"
     }
 
-    apply plugin: 'maven'
+//    apply plugin: 'maven'
     apply plugin: 'maven-publish'
 
     configurations {

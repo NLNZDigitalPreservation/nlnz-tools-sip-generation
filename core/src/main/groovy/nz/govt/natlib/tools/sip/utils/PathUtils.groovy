@@ -5,6 +5,7 @@ import groovy.util.logging.Log4j2
 import nz.govt.natlib.tools.sip.logging.DefaultTimekeeper
 import nz.govt.natlib.tools.sip.logging.Timekeeper
 import nz.govt.natlib.tools.sip.state.SipProcessingException
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 
 import java.nio.file.*
@@ -297,7 +298,7 @@ class PathUtils {
             GeneralUtils.markElapsed(theTimekeeper,
                     "sourceDirectory=${sourceDirectory.fileName}, temporaryTargetDirectory=${temporaryTargetDirectory}",
                     "Copy completed")
-            renameSuccessful = temporaryTargetDirectory.renameTo(targetDirectory.toUri())
+            renameSuccessful = temporaryTargetDirectory.toFile().renameTo(targetDirectory.toFile())
             GeneralUtils.markElapsed(theTimekeeper,
                     "sourceDirectory=${sourceDirectory.fileName}, targetDirectory=${targetDirectory}",
                     "Rename completed")
@@ -388,7 +389,7 @@ class PathUtils {
         if (doCopy) {
             Files.copy(sourceFile, temporaryDestinationFile, StandardCopyOption.COPY_ATTRIBUTES)
             GeneralUtils.markElapsed(theTimekeeper, "sourceFile=${sourceFile.fileName}", "Copy completed")
-            renameSuccessful = temporaryDestinationFile.renameTo(targetFile.toUri())
+            renameSuccessful = temporaryDestinationFile.toFile().renameTo(targetFile.toFile())
             GeneralUtils.markElapsed(theTimekeeper, "sourceFile=${sourceFile.fileName}", "Rename completed")
             if (renameSuccessful) {
                 if (deleteSourceFile) {
@@ -444,7 +445,7 @@ class PathUtils {
 
     static String generateMD5(Path file) {
         MessageDigest digest = MessageDigest.getInstance("MD5")
-        file.eachByte(4096) { byte[] buffer, int length ->
+        file.toFile().eachByte(4096) { byte[] buffer, int length ->
             digest.update(buffer, 0, length)
         }
         return digest.digest().encodeHex() as String
@@ -475,7 +476,7 @@ class PathUtils {
                                                   String resourceName, Path parentDirectory = null,
                                                   boolean deleteOnExit = true) {
         Path actualParentDirectory = parentDirectory == null ?
-                org.apache.commons.io.FileUtils.tempDirectory.toPath() :
+                FileUtils.tempDirectory.toPath() :
                 parentDirectory
 
         Path temporaryDirectory = Files.createTempDirectory(actualParentDirectory, temporaryDirectoryPrefix)

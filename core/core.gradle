@@ -24,18 +24,18 @@ apply plugin: 'groovy'
 
 apply plugin: 'java'
 // this needs to be set after the 'java' plugin has been applied
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+//sourceCompatibility = 1.17
+//targetCompatibility = 1.17
 
-apply plugin: 'jacoco'
-jacoco {
-    // This version is necessary to run under JDK 1.11
-    toolVersion = "0.8.2"
-}
+//apply plugin: 'jacoco'
+//jacoco {
+//    // This version is necessary to run under JDK 1.11
+//    toolVersion = "0.8.2"
+//}
 
 // this needs to be set after the 'java' plugin has been applied
-sourceCompatibility = 1.11
-targetCompatibility = 1.11
+sourceCompatibility = 1.17
+targetCompatibility = 1.17
 
 // run the findBugs checks with 'gradle check' or 'gradle findBugsMain' or 'gradle findBugsTest'
 //apply plugin: 'findbugs'
@@ -48,29 +48,30 @@ setVersion(project.ext.versionNumber)
 dependencies {
     // This project now requires Gradle 2.5.x (build failure under 2.4.x: java.lang.ExceptionInInitializerError).
     // Note that Groovy 2.5.x supports JsonGenerator.
-    compile localGroovy()
+    implementation localGroovy()
+//    implementation 'org.apache.groovy:groovy-all:4.0.12'
 
     // The latest version.
-    compile "com.google.guava:guava:28.0-jre"
+    implementation 'com.google.guava:guava:30.0-jre'
     // The latest version.
-    compile "org.apache.commons:commons-lang3:3.9"
+    implementation "org.apache.commons:commons-lang3:3.9"
     // The latest version.
-    compile "commons-io:commons-io:2.6"
+    implementation 'commons-io:commons-io:2.7'
 
     // The latest version.
-    compile 'org.apache.logging.log4j:log4j-api:2.11.2'
-    compile 'org.apache.logging.log4j:log4j-core:2.11.2'
+    implementation 'org.apache.logging.log4j:log4j-api:2.19.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.19.0'
     // Ensure that other logging APIs use log4j2
-    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.2'
-    compile 'org.apache.logging.log4j:log4j-jcl:2.11.2'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.2'
+    implementation 'org.apache.logging.log4j:log4j-jcl:2.11.2'
 
     // Current version used in production by the National Library of New Zealand.
-    compile "com.exlibris.dps:dps-sdk-fat-all:5.5.0"
+    implementation "com.exlibris.dps:dps-sdk-fat-all:5.5.0"
 
     // For PDF processing/validation using PDFBox.
-    compile "org.apache.pdfbox:pdfbox:2.0.15"
-    compile "org.apache.pdfbox:preflight:2.0.15"
-    compile "org.apache.pdfbox:pdfbox-tools:2.0.15"
+    implementation 'org.apache.pdfbox:pdfbox:2.0.24'
+    implementation "org.apache.pdfbox:preflight:2.0.15"
+    implementation "org.apache.pdfbox:pdfbox-tools:2.0.15"
 
     // For PDF processing using Droid.
     // Note that Droid uses signature files to identify different types of files. It does not validate the integrity of
@@ -82,38 +83,38 @@ dependencies {
     //compile "org.apache.ant:ant-compress:1.5"
 
     // For PDF processing/validation using Jhove.
-    compile "org.openpreservation.jhove:jhove-core:1.22.1"
-    compile "org.openpreservation.jhove:jhove-modules:1.20.1"
+    implementation "org.openpreservation.jhove:jhove-core:1.22.1"
+    implementation "org.openpreservation.jhove:jhove-modules:1.20.1"
 
     // For URL encoding
-    compile 'com.google.guava:guava:31.1-jre'
+    implementation 'com.google.guava:guava:31.1-jre'
 
     // No longer part of the JDK (i.e. not in OpenJDK 11)
-    compile "com.sun.activation:javax.activation:1.2.0"
-    compile "javax.xml.bind:jaxb-api:2.3.1"
-    compile "com.sun.xml.bind:jaxb-impl:2.3.2"
+    implementation "com.sun.activation:javax.activation:1.2.0"
+    implementation "javax.xml.bind:jaxb-api:2.3.1"
+    implementation "com.sun.xml.bind:jaxb-impl:2.3.2"
 
     // For command-line processing
-    compile "nz.govt.natlib.m11n.tools:automation-core:1.0.0-SNAPSHOT"
+    implementation "nz.govt.natlib.m11n.tools:automation-core:1.0.0-SNAPSHOT"
 
     // The latest version.
-    testCompile "junit:junit:4.12"
+    testImplementation 'junit:junit:4.13.1'
 
     // latest version
-    testCompile 'org.hamcrest:hamcrest-core:2.1'
+    testImplementation 'org.hamcrest:hamcrest-core:2.1'
 
     // latest version
-    testCompile 'org.mockito:mockito-core:2.23.4'
+    testImplementation 'org.mockito:mockito-core:2.23.4'
 
     // The latest version.
-    testCompile "org.powermock:powermock-module-junit4:1.7.4"
-    testCompile "org.powermock:powermock-api-mockito2:1.7.4"
+    testImplementation "org.powermock:powermock-module-junit4:1.7.4"
+    testImplementation "org.powermock:powermock-api-mockito2:1.7.4"
 
     // Use gson for comparing JSON strings.
-    testCompile "com.google.code.gson:gson:2.8.5"
+    testImplementation 'com.google.code.gson:gson:2.8.9'
 
     // Use xmlunit for comparing XML strings.
-    testCompile "org.xmlunit:xmlunit-core:2.6.2"
+    testImplementation "org.xmlunit:xmlunit-core:2.6.2"
 }
 
 jar {
@@ -121,7 +122,7 @@ jar {
 }
 
 task jarSources(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier  = 'sources'
     includeEmptyDirs = false
 
     from sourceSets.main.allSource

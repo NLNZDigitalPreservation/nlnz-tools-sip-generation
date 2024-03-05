@@ -47,7 +47,7 @@ class MD5Generator {
     static String calculateMd5Hash(Path file) throws SipProcessingException {
         if (isValidSourceFile(file)) {
             MessageDigest messageDigest = MessageDigest.getInstance(MD5_ALGORITHM)
-            file.eachByte(DEFAULT_MD5_DIGEST_BUFFER_LENGTH) { byte[] buffer, Integer length ->
+            file.toFile().eachByte(DEFAULT_MD5_DIGEST_BUFFER_LENGTH) { byte[] buffer, Integer length ->
                 messageDigest.update(buffer, 0, length)
             }
             return messageDigest.digest().encodeHex() as String

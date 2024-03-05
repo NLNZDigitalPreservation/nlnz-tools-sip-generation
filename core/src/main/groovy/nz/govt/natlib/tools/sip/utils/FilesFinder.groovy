@@ -95,8 +95,8 @@ class FilesFinder {
         matchingFiles = getMatchingFilesWithFilter(filesPath, pathFilter)
 
         if (includeSubdirectories) {
-            filesPath.eachFileRecurse(FileType.DIRECTORIES) { Path subdirectory ->
-                matchingFiles.addAll(getMatchingFilesWithFilter(subdirectory, pathFilter))
+            filesPath.toFile().eachFileRecurse(FileType.DIRECTORIES) { File subdirectory ->
+                matchingFiles.addAll(getMatchingFilesWithFilter(subdirectory.toPath(), pathFilter))
             }
         }
 
@@ -149,8 +149,8 @@ class FilesFinder {
         nonMatchingFiles = getMatchingFilesWithFilter(filesPath, pathFilter)
 
         if (includeSubdirectories) {
-            filesPath.eachFileRecurse(FileType.DIRECTORIES) { Path subdirectory ->
-                nonMatchingFiles.addAll(getMatchingFilesWithFilter(subdirectory, pathFilter))
+            filesPath.toFile().eachFileRecurse(FileType.DIRECTORIES) { File subdirectory ->
+                nonMatchingFiles.addAll(getMatchingFilesWithFilter(subdirectory.toPath(), pathFilter))
             }
         }
 
